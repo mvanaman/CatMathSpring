@@ -38,30 +38,42 @@ $$f (x) = \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}, $$
 $$A = -\frac {x^2}{2}, \ \ f(x) = \dfrac {1} {\sqrt{2 \pi}} e^A $$
 $$A' = \dfrac {d}{dx} \Big( -\dfrac{x^2}{2} \Big) \\ = - \dfrac {1}{2} \Big(2x^{2-1}) \\ = - \dfrac {2x^{2-1}}{2} \\ = -x. $$
 $$ \dfrac {1} {\sqrt{2 \pi}} e^A \Big(-x \Big) = \dfrac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}. $$
+
 #### Second Derivative
 
 Because the first derivative was multiplicative, we need the product to get the second derivative. \newline
 Product rule: $f''(x) = g'(x) f(x) + g(x) f'(x).$ \newline
-$f(x) =  \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$ \newline
-$f'(x) = \dfrac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$ \newline
-$g(x) = -x. $
+$f(x) =  \frac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$ \newline
+$f'(x) = \frac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$ \newline
+$g(x) = -x.$\newline
 $g'(x) = \frac {d}{dx}(-x) = -1 .$
 
-$$f''(x) = \bigg( \dfrac {x^2} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg) - \bigg( \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}} \bigg) \\ = \bigg( \dfrac {x^2 - 1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg). $$
+$$f''(x) =  - 1 \bigg( \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}} \bigg) - x \bigg( \dfrac {-x^2} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg)$$ 
+$$= -\bigg( \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}} \bigg) +  \bigg( \dfrac {x^2} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg)$$
+$$= \bigg( \dfrac {x^2 - 1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg).$$
 
 #### Plug in 0 for each version
 
 $$f(0) = \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {1}{\sqrt{2 \pi}}. $$
 $$f'(0) = \dfrac {0^2} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = 0. $$
-$$f''(0) = \dfrac {0^2 - 1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {-1} {\sqrt{2 \pi}}. $$
+$$f''(0) = \dfrac {0^2 - 1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {-1} {\sqrt{2 \pi}}. $$\newline
 Taylor approximation - just plug in what we found:
 $$f(x) \approx \dfrac {1}{\sqrt{2 \pi}} + 0x + \dfrac {-1 / \sqrt{2 \pi}} {2}x^2.$$
-Which if we clean up and rearrange to the more recognizable quadratic form, looks like:
 $$f''(x) \approx \dfrac {-1}{\sqrt{8 \pi}}x^2 + \dfrac {1} {\sqrt{2 \pi}}. $$
 
 ## (b)
 
 ```{r, echo=FALSE}
-
+x <- seq(-3, 3, length=1000)
+norm <- dnorm(x, mean=0, sd=1)
+taylor <- (-1/sqrt(8*c(pi)))*x^2 + (1/sqrt(2*c(pi)))
+df <- as.data.frame(cbind(x,norm,taylor))
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm, color = "Normal")) +
+  geom_line(aes(y = taylor, color = "Taylor\nApproximation")) +
+  ylab("") + xlab("") +
+  labs(color = "Function") +
+  theme_minimal()
 ```
 
+Taylor series seems most accurate between about -1 and 1.
