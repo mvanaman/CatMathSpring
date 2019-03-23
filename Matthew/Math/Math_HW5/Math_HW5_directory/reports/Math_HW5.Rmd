@@ -1,7 +1,7 @@
 ---
-title: "Math HW"
+title: "Math HW5"
 author: "Matthew Vanaman"
-date: "03/20/19"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
 monofont: Courier New
 output:
   pdf_document: 
@@ -22,3 +22,46 @@ knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
+
+4.8, 4.9, 5.1, 5.2, 5.3
+
+# 4.8
+## (a)
+
+
+
+### Work 
+
+#### First Derivative:
+The only layer here is in the exponent of $e$; everything else is constant.
+$$f (x) = \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}, $$
+$$A = -\frac {x^2}{2}, \ \ f(x) = \dfrac {1} {\sqrt{2 \pi}} e^A $$
+$$A' = \dfrac {d}{dx} \Big( -\dfrac{x^2}{2} \Big) \\ = - \dfrac {1}{2} \Big(2x^{2-1}) \\ = - \dfrac {2x^{2-1}}{2} \\ = -x. $$
+$$ \dfrac {1} {\sqrt{2 \pi}} e^A \Big(-x \Big) = \dfrac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}. $$
+#### Second Derivative
+
+Because the first derivative was multiplicative, we need the product to get the second derivative. \newline
+Product rule: $f''(x) = g'(x) f(x) + g(x) f'(x).$ \newline
+$f(x) =  \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$ \newline
+$f'(x) = \dfrac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$ \newline
+$g(x) = -x. $
+$g'(x) = \frac {d}{dx}(-x) = -1 .$
+
+$$f''(x) = \bigg( \dfrac {x^2} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg) - \bigg( \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}} \bigg) \\ = \bigg( \dfrac {x^2 - 1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg). $$
+
+#### Plug in 0 for each version
+
+$$f(0) = \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {1}{\sqrt{2 \pi}}. $$
+$$f'(0) = \dfrac {0^2} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = 0. $$
+$$f''(0) = \dfrac {0^2 - 1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {-1} {\sqrt{2 \pi}}. $$
+Taylor approximation - just plug in what we found:
+$$f(x) \approx \dfrac {1}{\sqrt{2 \pi}} + 0x + \dfrac {-1 / \sqrt{2 \pi}} {2}x^2.$$
+Which if we clean up and rearrange to the more recognizable quadratic form, looks like:
+$$f''(x) \approx \dfrac {-1}{\sqrt{8 \pi}}x^2 + \dfrac {1} {\sqrt{2 \pi}}. $$
+
+## (b)
+
+```{r, echo=FALSE}
+
+```
+
