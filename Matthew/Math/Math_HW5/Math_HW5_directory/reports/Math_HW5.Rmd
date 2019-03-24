@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-4.8, 4.9, 5.1, 5.2, 5.3
+4.9, 5.1, 5.2, 5.3
 
 # 4.8
 ## (a)
@@ -77,3 +77,22 @@ ggplot(df, aes(x)) +
 ```
 
 Taylor series seems most accurate between about -1 and 1.
+
+
+# 4.9
+## (a)
+
+Start with
+$$\ln \bigg(\prod_{i = 1}^{N} p^{y_{i}} (1 - p)^{1 - y_{i}} \bigg), $$
+$$\sum_{i = 1}^{N} \ln \bigg( p^{y_{i}} (1 - p)^{1-y_i} \bigg), $$
+$$\sum_{i = 1}^{N} \bigg( \ln \big( p^{y_{i}} \big) + \ln\big( (1 - p)^{1-y_i} \big) \bigg), $$
+$$\sum_{i = 1}^{N} \bigg( (y_i) \ln \big(p \big) + \ln\big( (1 - p)^{1-y_i} \big) \bigg), $$
+$$\sum_{i = 1}^{N} \bigg( (y_i) \ln \big(p \big) + (1-y_i) \ln (1 - p) \bigg), $$
+$$\sum_{i = 1}^{N} (y_i) \ln \big(p \big) + \sum_{i = 1}^{N}(1-y_i) \ln (1 - p), $$
+$$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \sum_{i = 1}^{N}(1-y_i), $$
+$$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(\sum_{i = 1}^{N}1\bigg)- \bigg(\sum_{i = 1}^{N}y_i\bigg), $$
+$$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(N - \sum_{i = 1}^{N}y_i\bigg). $$
+
+
+## (b)
+
