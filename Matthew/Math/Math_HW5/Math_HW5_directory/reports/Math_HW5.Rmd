@@ -175,6 +175,7 @@ This funciton gives you the instantaneous rate of change for a given x value. Th
 
 ## (a)
 
+
 Take derivative:
 $$f(x) = 3x^4 - 4x^3 - 36x^2, $$
 $$f'(x) = (4)3x^{4 -1} - (3)4x^{3-1} - (2)36x^{2-1} = 12x^3 - 12x^2 - 72x.$$
@@ -231,3 +232,30 @@ $$f(-2) = 3(-2)^4 - 4(-2)^3 - 36(-2)^2 = -64. $$
 3*(-2)^4 - 4*(-2)^3 - 36*(-2)^2
 ```
 Output of function is lowest at x = (3), therefore this is the global minimum. Output of function is highest at x = -4, therefore this is global maximum. 
+
+
+
+## (b)
+*lower boundary approaches 0.
+
+$$g'(x) = \dfrac {d}{dx} (x \ln (x) - x),$$
+$$= \dfrac {d}{dx} \big(x \ln (x)\big) - \dfrac {d}{dx}(x),$$
+$$= (x) \dfrac {d}{dx} \ln (x) - 1,$$
+$$= (x) \dfrac {1}{x} + \ln (x) - 1,$$
+$$= 1 + \ln (x) - 1,$$
+$$= \ln (x).$$
+Set derivative equal to zero:
+$$0 = \ln (x) \ \text {when} \ x = 1.$$
+Is critical point positive or negative?
+$$g''(x) = \dfrac {x}{dx} \Big(\ln(x)\Big) = \dfrac {1}{x}, $$
+$$g''(x) = \dfrac {x}{dx} \Big(\ln(1)\Big) = \dfrac {1}{1} = 1. $$
+Positve, therefore local minimum. Now compare critical point $x = 1$ with boundary point in original function:
+$$f(1) = (1) \ln(1) - 1 = -1. $$
+```{r}
+1 * log(1) - 1
+```
+$$f(3) = (3) \ln(3) - 3 = 2.30 $$
+```{r}
+(3) * log(3) - 3
+```
+Critical point $x = 1$ is global minimum (-1) and $x = 3$ is global maximum (2.30). 
