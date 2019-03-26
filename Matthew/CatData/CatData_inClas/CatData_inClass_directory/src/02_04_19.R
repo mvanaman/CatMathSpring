@@ -8,9 +8,32 @@ for (dataset in project.info$data)
   print(head(get(dataset)))
 }
 
+### 03/25/19
+## beta blocker data
+# poission
+beta_long <- matrix(c(0,0,1,1,
+                      0,1,1,0,
+                      787,152,98,847),
+                    nrow = 4, ncol = 3)
+colnames(beta_long) <- c("trial", "death", "count")
+beta_long <- as.data.frame(beta_long)
+(beta_fit_poisson <- glm(count ~ trial *death , data =  beta_long, family = poisson(link="log")))
+
+# run as bournoulli with counts as weights
+(beta_fit_binom <- glm(death ~ trial, data = beta_long, weights = count, family = binomial(link="logit")))
+
+## soccer data
+soccer_rates <- cbind(soccer, as.data.frame(soccer$arrests / soccer$attendance))
+# poisson
+socc_poss <- summary(glm(arrests ~ log(attendance), soccer_rates, family = poisson(link = "log")))
+# negative binomial
+(socc_negbin <- summary(glm(arrests ~ attendance, soccer_rates, family = negative.binomial(theta = 1.75))))
+
+
+
 ### 03/18/19
 
-fit_sal <- glm(observed ~ doseofquinoline + logd, data = salmonella, family = poisson(link = "log"))
+fit_sal <- glm(observed ~ doseofquinoline + logd, data = salmonella.Sheet1, family = poisson(link = "log"))
 fit_sal_sum <- summary(fit_sal)
 fit_sal$
 fit_sal_sum
