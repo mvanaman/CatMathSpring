@@ -148,3 +148,25 @@ $$p = \dfrac {1}{1 + e^{-(0.2 + 0.5(-3))}} = 0.21. $$
 
 ## (e)
 
+Predicted probabilities (?):
+
+$$p' = \dfrac {d}{dx}  \bigg( \dfrac {1}{1 + e^{-(0.2 + 0.5x_i)}} \bigg). $$
+Need chain rule...
+$$p = \dfrac{1}{A}, \ \ A = 1 + e^B, \ \ B = -(0.2 + 0.5x_i). $$
+$$p' = \dfrac {d}{dp} \bigg( \dfrac{1}{A} \bigg) = - \dfrac {1}{A^2}. $$
+$$A' = \dfrac{d}{dA} (1 + e^B) = \dfrac{d}{dA}(1) + \dfrac{d}{dA}(e^B) = 0 + e^B = e^B. $$
+$$ B' = \dfrac{d}{dB} [-(0.2 + 0.5x_i)] = \dfrac{d}{dB}(-0.2) + (-0.5)\dfrac{d}{dB}(x_i) = 0 - 0.5 \times 1 = -0.5. $$
+$$\dfrac {(-1) (e^B)(-0.5)}{A^2} = \dfrac {(0.5)e^B}{A^2}, $$
+$$\dfrac {(0.5)e^B}{A^2} = \dfrac {(0.5)e^B}{(1 + e^B)^2}, $$
+$$\dfrac {(0.5)e^B}{(1 + e^B)^2} = \dfrac {0.5e^{-(0.2 + 0.5x_i)}} {(1 + e ^{-(0.2 + 0.5x_i)})^2}.$$
+Plug in zero:
+$$\dfrac {0.5e^{-(0.2 + 0.5(0))}} {(1 + e ^{-(0.2 + 0.5(0))})^2} = 0.124.$$
+```{r}
+# calculation
+0.5 * exp(1)^-(0.2+(0.5 * 0)) / (1 + exp(1)^-(0.2+(0.5 * 0)))^2
+```
+
+## (f)
+
+
+
