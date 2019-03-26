@@ -106,3 +106,45 @@ $$ \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) = \bigg(\dfrac {1}{1 - p}\bigg)\dfrac
 $$\dfrac {1}{p} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {-1}{1- p} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
 $$\dfrac {1}{p} \Bigg(\dfrac {\sum_{i = 1}^{N} (y_i)}{1} \Bigg) + \dfrac {-1}{1- p} \Bigg(\dfrac {N - \sum_{i = 1}^{N}y_i}{1} \Bigg), $$
 $$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} - \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}. $$
+
+## (c)
+
+$$0 = \dfrac {\sum_{i = 1}^{N} (y_i)}{p} - \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}, $$
+$$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} = \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}, $$
+$$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} = \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}, $$
+$$ \sum_{i = 1}^{N} y_i(1 -p) = p \bigg(N - \sum_{i = 1}^{N}y_i \bigg), $$
+$$ \sum_{i = 1}^{N} y_i - \sum_{i = 1}^{N} y_i (p) = (p)N - (p)\sum_{i = 1}^{N}y_i, $$
+$$ \sum_{i = 1}^{N} y_i = (p)N, $$
+$$\dfrac {\sum_{i = 1}^{N} y_i}{N} = p. $$
+In the maximum likelihood framework, the proportion observed in the data tracks the probability of in the population, assuming assumptions hold. In this case, we have a sample where we add up all of the y values, the divide by the number of values. This gives us the sample proportion (or mean), which is an estimate of the probability.
+
+## (d)
+
+If $ p = \frac {\sum_{i = 1}^{N} y_i}{N} $, and we're given a function that gives us p, then all we have to do is substitute the function for p, then substitute $x_i$ into that function.
+$$p = \dfrac {1}{1 + e^{-(0.2 + 0.5x_i)}}. $$
+Very Conservative:
+$$p = \dfrac {1}{1 + e^{-(0.2 + 0.53)}} = 0.85. $$
+```{r}
+## calculations
+# get euler's number
+exp(1)
+# get p for Very conservative:
+1 / (1 + exp(1)^-(0.2 + (0.5*3)))
+```
+Moderate:
+$$p = \dfrac {1}{1 + e^{-(0.2 + 0.5(0))}} = 0.55. $$
+```{r}
+## calculations
+# get p for Moderate:
+1 / (1 + exp(1)^-(0.2 + (0.5*0)))
+```
+Very Liberal:
+$$p = \dfrac {1}{1 + e^{-(0.2 + 0.5(-3))}} = 0.21. $$
+```{r}
+## calculations
+# get p for Very Liberal:
+1 / (1 + exp(1)^-(0.2 + (0.5*(-3))))
+```
+
+## (e)
+
