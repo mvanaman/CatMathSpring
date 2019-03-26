@@ -120,7 +120,7 @@ In the maximum likelihood framework, the proportion observed in the data tracks 
 
 ## (d)
 
-If $ p = \frac {\sum_{i = 1}^{N} y_i}{N} $, and we're given a function that gives us p, then all we have to do is substitute the function for p, then substitute $x_i$ into that function.
+If $p = \frac {\sum_{i = 1}^{N} y_i}{N}$, and we're given a function that gives us p, then all we have to do is substitute the function for p, then substitute $x_i$ into that function.
 $$p = \dfrac {1}{1 + e^{-(0.2 + 0.5x_i)}}. $$
 Very Conservative:
 $$p = \dfrac {1}{1 + e^{-(0.2 + 0.53)}} = 0.85. $$
@@ -316,3 +316,47 @@ $$f(4) = 4^3 - \dfrac {15}{2} 4^2 + 12(4) + 8 = 0.$$
 ```
 Critical points x = 4 and x = 6 are the locations of the global minimum and maximum, respectively. 
 
+## (b)
+Starting at 2:
+```{r, echo=FALSE}
+# make some functions
+f_p <- function (x) {3*x^2 - 15*x + 12}
+f_pp <- function (x) {6*x - 15}
+f_nr <- function (x) {x - (3*x^2 - 15*x + 12) / (6*x - 15)}
+# make a matrix with iteration 0
+iter_0 <- matrix(c(0, 2, f_p(2), f_pp(2), f_nr(2)), nrow = 1, ncol=5)
+colnames(iter_0) <- c("Iteration", "x", "fp(x)", "fpp(x)", "fNR")
+# see what iteration 0 was, plug into functions
+iter_1 <- rbind(iter_0, matrix(c(1, f_nr(2), f_p(f_nr(2)), f_pp(f_nr(2)), f_nr(f_nr(2))), nrow = 1, ncol=5))
+# see what iteration 1 was, etc...
+iter_2 <- rbind(iter_1, matrix(c(2, 0.8, f_p(0.8), f_pp(0.8), f_nr(0.8)), nrow = 1, ncol=5))
+
+iter_3 <- rbind(iter_2, matrix(c(3, 0.9882353, f_p(0.9882353), f_pp(0.9882353), f_nr(0.9882353)), nrow = 1, ncol=5))
+
+iter_4 <- rbind(iter_3, matrix(c(4, 0.9999542, f_p(0.9999542), f_pp(0.9999542), f_nr(0.9999542)), nrow = 1, ncol=5))
+
+iter_5 <- rbind(iter_4, matrix(c(5, 1, f_p(1), f_pp(1), f_nr(1)), nrow = 1, ncol=5))
+# Probably an easier way to do this, but gets the job done...
+knitr::kable(iter_5)
+```
+
+Converges after 5, at root 1.
+
+Starting at 5:
+```{r, echo=FALSE}
+# make a matrix with iteration 0
+iter_0 <- matrix(c(0, 5, f_p(5), f_pp(5), f_nr(5)), nrow = 1, ncol=5)
+colnames(iter_0) <- c("Iteration", "x", "fp(x)", "fpp(x)", "fNR")
+# see what iteration 0 was, plug into functions
+iter_1 <- rbind(iter_0, matrix(c(1, f_nr(5), f_p(f_nr(5)), f_pp(f_nr(5)), f_nr(f_nr(5))), nrow = 1, ncol=5))
+# see what iteration 1 was, etc...
+iter_2 <- rbind(iter_1, matrix(c(2, 4.011765, f_p(4.011765), f_pp(4.011765), f_nr(4.011765)), nrow = 1, ncol=5))
+
+iter_3 <- rbind(iter_2, matrix(c(3, 4.000046, f_p(4.000046), f_pp(4.000046), f_nr(4.000046)), nrow = 1, ncol=5))
+
+iter_4 <- rbind(iter_3, matrix(c(4, 4, f_p(4), f_pp(4), f_nr(4)), nrow = 1, ncol=5))
+# Meh, only took 5 seconds this time
+knitr::kable(iter_4)
+```
+
+Converges after 4, at root 4.
