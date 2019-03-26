@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-4.9, 5.1, 5.2, 5.3
+5.1, 5.2, 5.3
 
 # 4.8
 ## (a)
@@ -170,3 +170,64 @@ $$\dfrac {0.5e^{-(0.2 + 0.5(0))}} {(1 + e ^{-(0.2 + 0.5(0))})^2} = 0.124.$$
 
 This funciton gives you the instantaneous rate of change for a given x value. This means that for a moderate voter (x = 0), the instantaneous rate of change in probability of voting for the incumbant is 0.124. In other words, it is the slope of the line at a given point of x. 
 
+
+# 5.1
+
+## (a)
+
+Take derivative:
+$$f(x) = 3x^4 - 4x^3 - 36x^2, $$
+$$f'(x) = (4)3x^{4 -1} - (3)4x^{3-1} - (2)36x^{2-1} = 12x^3 - 12x^2 - 72x.$$
+$$0 = 12x^3 - 12x^2 - 72x$$
+$$= 12(x^3 - x^2 - 6x)$$
+$$= 12x(x^2 - x - 6)$$
+$$= 12x(x - 3)(x + 2).$$
+Critical points are when x equals 3, -2, or 0. Using second derivitive test, use the critical points rules:
+$$f''(x) = (3)12x^{3-1} - (2)12x^{2-1} - 72x^{1-1} = 36x^2 - 24x - 72. $$
+For x = -2:
+$$36(-2)^2 - 24(-2) - 72 = 120 $$
+```{r}
+# calculation
+36 * (-2)^2 - 24 * (-2) - 72
+```
+For x = 3
+$$36(3)^2 - 24(3) - 72 = 180$$
+```{r}
+36*3^2 - 24 * 3 - 72
+```
+For x = 0:
+$$36(0)^2 - 24(0) - 72 = -72$$
+```{r}
+36*0^2 - 24 * 0 - 72
+```
+According to the second derivative test, a critical point is a local maximum if $f''(x) < 0$, a local minimum if $f''(x) > 0$, and is a saffle point when $f''(x) = 0$. This means critical points x = 3 and -2 are local minimums while x = 0 is a local maximum. \newline
+to find global max and min, first plug in the boundary points into the original function.\newline
+Lower boundary:
+$$f(-4) = 3(-4)^4 - 4(-4)^3 - 36(-4)^2 = 448$$
+```{r}
+# calculation
+3*(-4)^4 - 4*(-4)^3 - 36*(-4)^2
+```
+Upper boundary:
+$$f(4) = 3(4)^4 - 4(4)^3 - 36(4)^2 = -64$$
+```{r}
+# calculation
+3*(4)^4 - 4*(4)^3 - 36*(4)^2
+```
+Finally, compare these to the local minimum and maximum points:\newline
+local maximum: 
+$$f(0) = 3(0)^4 - 4(0)^3 - 36(0)^2 = 0. $$
+```{r}
+3*(0)^4 - 4*(0)^3 - 36*(0)^2
+```
+
+Local minima:
+$$f(3) = 3(3)^4 - 4(3)^3 - 36(3)^2 = -189. $$
+$$f(-2) = 3(-2)^4 - 4(-2)^3 - 36(-2)^2 = -64. $$
+```{r}
+3*(3)^4 - 4*(3)^3 - 36*(3)^2
+```
+```{r}
+3*(-2)^4 - 4*(-2)^3 - 36*(-2)^2
+```
+Output of function is lowest at x = (3), therefore this is the global minimum. Output of function is highest at x = -4, therefore this is global maximum. 
