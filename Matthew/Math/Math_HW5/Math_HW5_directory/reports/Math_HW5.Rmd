@@ -96,3 +96,13 @@ $$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(N - \sum_{i = 1}^
 
 ## (b)
 
+$$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(N - \sum_{i = 1}^{N}y_i\bigg) \Bigg), $$
+$$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p) \bigg(N - \sum_{i = 1}^{N}y_i\bigg) \Bigg), $$
+$$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \Bigg) \dfrac {d}{dp} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) \dfrac {d}{dp} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
+$$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \Bigg) \dfrac {d}{dp} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) \dfrac {d}{dp} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
+$$\dfrac {1}{p} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg). $$
+Gotta use the chain rule:
+$$ \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) = \bigg(\dfrac {1}{1 - p}\bigg)\dfrac {d}{dp}(1 - p) = \dfrac{ \frac {d}{dp}(1) - \frac {d}{dp}(p)} {1 - p} = \dfrac {0-1}{1-p} = -\dfrac {-1}{1-p}. $$
+$$\dfrac {1}{p} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {-1}{1- p} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
+$$\dfrac {1}{p} \Bigg(\dfrac {\sum_{i = 1}^{N} (y_i)}{1} \Bigg) + \dfrac {-1}{1- p} \Bigg(\dfrac {N - \sum_{i = 1}^{N}y_i}{1} \Bigg), $$
+$$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} - \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}. $$
