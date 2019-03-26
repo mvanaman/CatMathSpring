@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-5.1, 5.2, 5.3
+5.2, 5.3
 
 # 4.8
 ## (a)
@@ -259,3 +259,9 @@ $$f(3) = (3) \ln(3) - 3 = 2.30 $$
 (3) * log(3) - 3
 ```
 Critical point $x = 1$ is global minimum (-1) and $x = 3$ is global maximum (2.30). 
+
+
+# 5.2
+
+## (a)
+
