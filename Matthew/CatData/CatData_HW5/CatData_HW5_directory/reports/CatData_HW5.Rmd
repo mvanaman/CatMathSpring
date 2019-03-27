@@ -83,3 +83,9 @@ pchisq(6.720059, df=1, lower.tail = FALSE)
 
 ## (c)
 
+The confidence intervals from the negative binomial model are around an additive, linear effect (because negative binomials are a special mixture of Poisson distributions). To get confidence intervals around a multiplicative effect, you exponentiate the intervals:
+```{r}
+c(exp(-0.060), exp(-0.008))
+```
+
+
