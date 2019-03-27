@@ -23,20 +23,196 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
+*All work and code are shown in the appendix.*
+
+# 4.8
+
+## (a)
+
+**Answer:**\newline
+
+$f''(x) \approx \dfrac {-1}{\sqrt{8 \pi}}x^2 + \dfrac {1} {\sqrt{2 \pi}}.$
+
+## (b)
+**Answer:**\newline
+```{r, echo=FALSE}
+x <- seq(-3, 3, length=1000)
+norm <- dnorm(x, mean=0, sd=1)
+taylor <- (-1/sqrt(8*c(pi)))*x^2 + (1/sqrt(2*c(pi)))
+df <- as.data.frame(cbind(x,norm,taylor))
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm, color = "Normal")) +
+  geom_line(aes(y = taylor, color = "Taylor\nApproximation")) +
+  ylab("") + xlab("") +
+  labs(color = "Function") +
+  theme_minimal()
+```
+
+Taylor series seems most accurate between about -1 and 1.
+
+# 4.9
+## (a)
+**Answer:**\newline
+Start with
+$$\ln \bigg(\prod_{i = 1}^{N} p^{y_{i}} (1 - p)^{1 - y_{i}} \bigg), $$
+$$\sum_{i = 1}^{N} \ln \bigg( p^{y_{i}} (1 - p)^{1-y_i} \bigg), $$
+$$\sum_{i = 1}^{N} \bigg( \ln \big( p^{y_{i}} \big) + \ln\big( (1 - p)^{1-y_i} \big) \bigg), $$
+$$\sum_{i = 1}^{N} \bigg( (y_i) \ln \big(p \big) + \ln\big( (1 - p)^{1-y_i} \big) \bigg), $$
+$$\sum_{i = 1}^{N} \bigg( (y_i) \ln \big(p \big) + (1-y_i) \ln (1 - p) \bigg), $$
+$$\sum_{i = 1}^{N} (y_i) \ln \big(p \big) + \sum_{i = 1}^{N}(1-y_i) \ln (1 - p), $$
+$$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \sum_{i = 1}^{N}(1-y_i), $$
+$$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(\sum_{i = 1}^{N}1\bigg)- \bigg(\sum_{i = 1}^{N}y_i\bigg),$$
+$$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(N - \sum_{i = 1}^{N}y_i\bigg).$$
+
+
+## (b)
+**Answer:**\newline
+$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} - \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}.$
+
+## (c)
+**Answer:**\newline
+$\dfrac {\sum_{i = 1}^{N} y_i}{N} = p.$\newline
+\newline
+In the maximum likelihood framework, the proportion observed in the data tracks the probability of in the population, assuming assumptions hold. In this case, we have a sample where we add up all of the y values, the divide by the number of values. This gives us the sample proportion (or mean), which is an estimate of the probability.
+
+## (d)
+**Answer:**\newline
+Very conservative: 0.85\newline
+Moderate: 0.55\newline
+Very liberal: 0.21\newline
+
+## (e)
+**Answer:**\newline
+Plug in zero: \newline
+$\dfrac {0.5e^{-(0.2 + 0.5(0))}} {(1 + e ^{-(0.2 + 0.5(0))})^2} = 0.124.$
+
+## (f)
+**Answer:**\newline
+This funciton gives you the instantaneous rate of change for a given x value. This means that for a moderate voter (x = 0), the instantaneous rate of change in probability of voting for the incumbant is 0.124. In other words, it is the slope of the line at a given point of x. 
+
+# 5.1
+
+## (a)
+**Answer:**\newline
+Output of function is lowest at x = 3 (-189), therefore this is the global minimum. Output of function is highest at x = -4 (448), therefore this is global maximum. 
+
+## (b)
+**Answer:**\newline
+Critical point $x = 1$ is global minimum (-1) and $x = 3$ is global maximum (2.30). 
+
+# 5.2
+
+## (a)
+**Answer:**\newline
+Critical points x = 4 and x = 6 are the locations of the global minimum and maximum, respectively. 
+
+## (b)
+**Answer:**\newline
+Starting at 2:
+
+```{r, echo=FALSE}
+# make some functions
+f_p <- function (x) {3*x^2 - 15*x + 12}
+f_pp <- function (x) {6*x - 15}
+f_nr <- function (x) {x - (3*x^2 - 15*x + 12) / (6*x - 15)}
+# make a matrix with iteration 0
+iter_0 <- matrix(c(0, 2, f_p(2), f_pp(2), f_nr(2)), nrow = 1, ncol=5)
+colnames(iter_0) <- c("Iteration", "x", "fp(x)", "fpp(x)", "fNR")
+# see what iteration 0 was, plug into functions
+iter_1 <- rbind(iter_0, matrix(c(1, f_nr(2), f_p(f_nr(2)), f_pp(f_nr(2)), f_nr(f_nr(2))), nrow = 1, ncol=5))
+# see what iteration 1 was, etc...
+iter_2 <- rbind(iter_1, matrix(c(2, 0.8, f_p(0.8), f_pp(0.8), f_nr(0.8)), nrow = 1, ncol=5))
+iter_3 <- rbind(iter_2, matrix(c(3, 0.9882353, f_p(0.9882353), f_pp(0.9882353), f_nr(0.9882353)), nrow = 1, ncol=5))
+iter_4 <- rbind(iter_3, matrix(c(4, 0.9999542, f_p(0.9999542), f_pp(0.9999542), f_nr(0.9999542)), nrow = 1, ncol=5))
+iter_5 <- rbind(iter_4, matrix(c(5, 1, f_p(1), f_pp(1), f_nr(1)), nrow = 1, ncol=5))
+# Probably an easier way to do this, but gets the job done...
+knitr::kable(iter_5)
+```
+
+Converges after 5, at root 1.
+
+Starting at 5:
+```{r, echo=FALSE}
+# make a matrix with iteration 0
+iter_0 <- matrix(c(0, 5, f_p(5), f_pp(5), f_nr(5)), nrow = 1, ncol=5)
+colnames(iter_0) <- c("Iteration", "x", "fp(x)", "fpp(x)", "fNR")
+# see what iteration 0 was, plug into functions
+iter_1 <- rbind(iter_0, matrix(c(1, f_nr(5), f_p(f_nr(5)), f_pp(f_nr(5)), f_nr(f_nr(5))), nrow = 1, ncol=5))
+# see what iteration 1 was, etc...
+iter_2 <- rbind(iter_1, matrix(c(2, 4.011765, f_p(4.011765), f_pp(4.011765), f_nr(4.011765)), nrow = 1, ncol=5))
+
+iter_3 <- rbind(iter_2, matrix(c(3, 4.000046, f_p(4.000046), f_pp(4.000046), f_nr(4.000046)), nrow = 1, ncol=5))
+
+iter_4 <- rbind(iter_3, matrix(c(4, 4, f_p(4), f_pp(4), f_nr(4)), nrow = 1, ncol=5))
+# Meh, only took 5 seconds this time
+knitr::kable(iter_4)
+```
+
+Converges after 4, at root 4.
+
+## (c)
+**Answer:**\newline
+One problem is that there could be more than one root. If you don't know this, you may have missed out on another convergence point and come to the wrong conclusion that the convergence point was the only root, or the best root (on substantive grounds). Unfortuntaly there's no way to tell unless you try out different starting values. \newline
+
+Another problem is that the convergence point is itself limited in the information it gives you. If there are multiple convergence points, that could speak to the type of curve that function produces e.g. a cubic function has a local maximum and global maximum, but you don't necessarily know whether the convergence point arrived at the local or global maximum. You could potentially misunderstand what the function is telling you. 
+
+# 5.3
+
+## (a)
+**Answer:**\newline
+Repubs should wait 11.76 days before reactivating the government.
+
+**Demonstrate that answer represents the global maximum:** \newline
+You could plug numbers into the function and get close the maximizing point, but that would be time consuming and would give a imprecise answer.\newline
+Istead, we could try to find the global maximum. \newline
+Take the first derivative:
+$$f'(t) = \dfrac {d}{dt} (30 \ln (t + 1)) - \dfrac {d}{dt} \bigg(\dfrac {t^2}{10}\bigg), $$
+$$f'(t) = (30) \dfrac {1}{t + 1} \bigg(\dfrac {d}{dt}\bigg) \big(t + 1\big) - \dfrac {2t}{10}, $$
+$$f'(t) = \dfrac {30}{t + 1} - \dfrac {t}{5}. $$
+Get the critical points:
+$$0 = \dfrac {30}{t + 1} - \dfrac {t}{5}, $$
+$$ \dfrac {30}{t + 1} = \dfrac {t}{5},$$
+$$ \dfrac {150}{t + 1} = t,$$
+$$ 150 = t(t + 1),$$
+$$ 0 = t^2 + t - 150.$$
+If Ax^2 + Bx + C = 0, then:\newline 
+$$x = \frac {- Bx \pm \sqrt{B^2 - 4AC}} {2A}.$$
+Plugging in, we get the critical points of x:
+```{r}
+(-1 + sqrt((1^2) - 4 * 1 * - 150)) / (2 * 1)
+(-1 - sqrt(1^2 - (4 * 1) * (- 150))) / (2 * 1)
+```
+If t standas for number of days, the negative critical point doesn't help us make a decision. But does 11.75 represent a local or global maximum? To the left:
+```{r}
+(30 / (10.76 + 1)) - (10.76 / 5)
+```
+Positive. \newline
+To the right:
+```{r}
+(30 / (12.76 + 1)) - (12.76 / 5)
+```
+Negative. Therefore, using the efirst derivative test, 11.76 is a maximum. All we have left to compare that to is 0 plugged into the original function:
+```{r}
+30 * log(0 + 1) - (0^2 / 10)
+```
+Which makes sense; Repubs can't benefit after zero time has passed. Because the only two points to consider are 11.76 and 0, 11.76 must therefore be the global maximum. Repubs should wait 11.76 days before reactivating the government. \newpage
+
+\begin{center}
+\newpage
+\LARGE\bfseries Appendix
+\end{center}
 
 # 4.8
 ## (a)
-
-
 
 ### Work 
 
 #### First Derivative:
 The only layer here is in the exponent of $e$; everything else is constant.
 $$f (x) = \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}, $$
-$$A = -\frac {x^2}{2}, \ \ f(x) = \dfrac {1} {\sqrt{2 \pi}} e^A $$
-$$A' = \dfrac {d}{dx} \Big( -\dfrac{x^2}{2} \Big) \\ = - \dfrac {1}{2} \Big(2x^{2-1}) \\ = - \dfrac {2x^{2-1}}{2} \\ = -x. $$
-$$ \dfrac {1} {\sqrt{2 \pi}} e^A \Big(-x \Big) = \dfrac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}. $$
+$$A = -\frac {x^2}{2}, \ \ f(x) = \dfrac {1} {\sqrt{2 \pi}} e^A,$$
+$$A' = \dfrac {d}{dx} \Big( -\dfrac{x^2}{2} \Big) \\ = - \dfrac {1}{2} \Big(2x^{2-1}) \\ = - \dfrac {2x^{2-1}}{2} \\ = -x.$$
+$$\dfrac {1} {\sqrt{2 \pi}} e^A \Big(-x \Big) = \dfrac {-x} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}.$$
 
 #### Second Derivative
 
@@ -54,15 +230,15 @@ $$= \bigg( \dfrac {x^2 - 1} {\sqrt{2 \pi}} e^{-\frac {x^2}{2}}\bigg).$$
 #### Plug in 0 for each version
 
 $$f(0) = \dfrac {1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {1}{\sqrt{2 \pi}}. $$
-$$f'(0) = \dfrac {0^2} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = 0. $$
-$$f''(0) = \dfrac {0^2 - 1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {-1} {\sqrt{2 \pi}}. $$\newline
+$$f'(0) = \dfrac {0^2} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = 0.$$
+$$f''(0) = \dfrac {0^2 - 1} {\sqrt{2 \pi}} e^{-\frac {0^2}{2}} = \dfrac {-1} {\sqrt{2 \pi}}.$$\newline
 Taylor approximation - just plug in what we found:
 $$f(x) \approx \dfrac {1}{\sqrt{2 \pi}} + 0x + \dfrac {-1 / \sqrt{2 \pi}} {2}x^2.$$
-$$f''(x) \approx \dfrac {-1}{\sqrt{8 \pi}}x^2 + \dfrac {1} {\sqrt{2 \pi}}. $$
+$$f''(x) \approx \dfrac {-1}{\sqrt{8 \pi}}x^2 + \dfrac {1} {\sqrt{2 \pi}}.$$
 
 ## (b)
-
-```{r, echo=FALSE}
+**Work:**
+```{r, results = "hide", fig.show="hide"}
 x <- seq(-3, 3, length=1000)
 norm <- dnorm(x, mean=0, sd=1)
 taylor <- (-1/sqrt(8*c(pi)))*x^2 + (1/sqrt(2*c(pi)))
@@ -80,7 +256,7 @@ Taylor series seems most accurate between about -1 and 1.
 
 # 4.9
 ## (a)
-
+**Work:** \newline
 Start with
 $$\ln \bigg(\prod_{i = 1}^{N} p^{y_{i}} (1 - p)^{1 - y_{i}} \bigg), $$
 $$\sum_{i = 1}^{N} \ln \bigg( p^{y_{i}} (1 - p)^{1-y_i} \bigg), $$
@@ -94,20 +270,22 @@ $$\ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(N - \sum_{i = 1}^
 
 
 ## (b)
-
+**Work:** 
 $$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \sum_{i = 1}^{N} (y_i) +  \ln (1 - p) \bigg(N - \sum_{i = 1}^{N}y_i\bigg) \Bigg), $$
 $$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p) \bigg(N - \sum_{i = 1}^{N}y_i\bigg) \Bigg), $$
 $$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \Bigg) \dfrac {d}{dp} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) \dfrac {d}{dp} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
 $$\dfrac {d}{dp} \Bigg( \ln \big(p \big) \Bigg) \dfrac {d}{dp} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) \dfrac {d}{dp} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
 $$\dfrac {1}{p} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg). $$
 Gotta use the chain rule:
-$$ \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg) = \bigg(\dfrac {1}{1 - p}\bigg)\dfrac {d}{dp}(1 - p) = \dfrac{ \frac {d}{dp}(1) - \frac {d}{dp}(p)} {1 - p} = \dfrac {0-1}{1-p} = -\dfrac {-1}{1-p}. $$
+$$ \dfrac {d}{dp} \Bigg( \ln (1 - p)\Bigg)$$ 
+$$= \bigg(\dfrac {1}{1 - p}\bigg)\dfrac {d}{dp}(1 - p),$$ 
+$$= \dfrac{ \frac {d}{dp}(1) - \frac {d}{dp}(p)} {1 - p} = \dfrac {0-1}{1-p} = -\dfrac {-1}{1-p}.$$
 $$\dfrac {1}{p} \Bigg(\sum_{i = 1}^{N} (y_i) \Bigg) + \dfrac {-1}{1- p} \Bigg(N - \sum_{i = 1}^{N}y_i \Bigg), $$
 $$\dfrac {1}{p} \Bigg(\dfrac {\sum_{i = 1}^{N} (y_i)}{1} \Bigg) + \dfrac {-1}{1- p} \Bigg(\dfrac {N - \sum_{i = 1}^{N}y_i}{1} \Bigg), $$
 $$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} - \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}. $$
 
 ## (c)
-
+**Work:** 
 $$0 = \dfrac {\sum_{i = 1}^{N} (y_i)}{p} - \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}, $$
 $$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} = \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}, $$
 $$\dfrac {\sum_{i = 1}^{N} (y_i)}{p} = \dfrac {N - \sum_{i = 1}^{N}y_i}{1 - p}, $$
@@ -118,7 +296,7 @@ $$\dfrac {\sum_{i = 1}^{N} y_i}{N} = p. $$
 In the maximum likelihood framework, the proportion observed in the data tracks the probability of in the population, assuming assumptions hold. In this case, we have a sample where we add up all of the y values, the divide by the number of values. This gives us the sample proportion (or mean), which is an estimate of the probability.
 
 ## (d)
-
+**Work:** \newline
 If $p = \frac {\sum_{i = 1}^{N} y_i}{N}$, and we're given a function that gives us p, then all we have to do is substitute the function for p, then substitute $x_i$ into that function.
 $$p = \dfrac {1}{1 + e^{-(0.2 + 0.5x_i)}}. $$
 Very Conservative:
@@ -146,15 +324,15 @@ $$p = \dfrac {1}{1 + e^{-(0.2 + 0.5(-3))}} = 0.21. $$
 ```
 
 ## (e)
-
-Predicted probabilities (?):
-
+**Work:** \newline
 $$p' = \dfrac {d}{dx}  \bigg( \dfrac {1}{1 + e^{-(0.2 + 0.5x_i)}} \bigg). $$
 Need chain rule...
 $$p = \dfrac{1}{A}, \ \ A = 1 + e^B, \ \ B = -(0.2 + 0.5x_i). $$
 $$p' = \dfrac {d}{dp} \bigg( \dfrac{1}{A} \bigg) = - \dfrac {1}{A^2}. $$
 $$A' = \dfrac{d}{dA} (1 + e^B) = \dfrac{d}{dA}(1) + \dfrac{d}{dA}(e^B) = 0 + e^B = e^B. $$
-$$ B' = \dfrac{d}{dB} [-(0.2 + 0.5x_i)] = \dfrac{d}{dB}(-0.2) + (-0.5)\dfrac{d}{dB}(x_i) = 0 - 0.5 \times 1 = -0.5. $$
+$$ B' = \dfrac{d}{dB} [-(0.2 + 0.5x_i)],$$ 
+$$= \dfrac{d}{dB}(-0.2) + (-0.5)\dfrac{d}{dB}(x_i),$$,
+$$= 0 - 0.5 \times 1 = -0.5.$$
 $$\dfrac {(-1) (e^B)(-0.5)}{A^2} = \dfrac {(0.5)e^B}{A^2}, $$
 $$\dfrac {(0.5)e^B}{A^2} = \dfrac {(0.5)e^B}{(1 + e^B)^2}, $$
 $$\dfrac {(0.5)e^B}{(1 + e^B)^2} = \dfrac {0.5e^{-(0.2 + 0.5x_i)}} {(1 + e ^{-(0.2 + 0.5x_i)})^2}.$$
@@ -166,15 +344,14 @@ $$\dfrac {0.5e^{-(0.2 + 0.5(0))}} {(1 + e ^{-(0.2 + 0.5(0))})^2} = 0.124.$$
 ```
 
 ## (f)
-
-This funciton gives you the instantaneous rate of change for a given x value. This means that for a moderate voter (x = 0), the instantaneous rate of change in probability of voting for the incumbant is 0.124. In other words, it is the slope of the line at a given point of x. 
+**Work:** \newline
+N/A
 
 
 # 5.1
 
 ## (a)
-
-
+**Work:** \newline
 Take derivative:
 $$f(x) = 3x^4 - 4x^3 - 36x^2, $$
 $$f'(x) = (4)3x^{4 -1} - (3)4x^{3-1} - (2)36x^{2-1} = 12x^3 - 12x^2 - 72x.$$
@@ -183,7 +360,8 @@ $$= 12(x^3 - x^2 - 6x)$$
 $$= 12x(x^2 - x - 6)$$
 $$= 12x(x - 3)(x + 2).$$
 Critical points are when x equals 3, -2, or 0. Using second derivitive test, use the critical points rules:
-$$f''(x) = (3)12x^{3-1} - (2)12x^{2-1} - 72x^{1-1} = 36x^2 - 24x - 72. $$
+$$f''(x) = (3)12x^{3-1} - (2)12x^{2-1} - 72x^{1-1},$$ 
+$$= 36x^2 - 24x - 72. $$
 For x = -2:
 $$36(-2)^2 - 24(-2) - 72 = 120 $$
 ```{r}
@@ -232,9 +410,8 @@ $$f(-2) = 3(-2)^4 - 4(-2)^3 - 36(-2)^2 = -64. $$
 ```
 Output of function is lowest at x = (3), therefore this is the global minimum. Output of function is highest at x = -4, therefore this is global maximum. 
 
-
-
 ## (b)
+**Work:** \newline
 *lower boundary approaches 0.
 
 $$g'(x) = \dfrac {d}{dx} (x \ln (x) - x),$$
@@ -263,7 +440,7 @@ Critical point $x = 1$ is global minimum (-1) and $x = 3$ is global maximum (2.3
 # 5.2
 
 ## (a)
-
+**Work:** \newline
 Take the derivative:
 $$f'(x) = 3x^2 - 15x + 12,$$
 $$= 3(x^2 - 5 + 4),$$
@@ -316,8 +493,9 @@ $$f(4) = 4^3 - \dfrac {15}{2} 4^2 + 12(4) + 8 = 0.$$
 Critical points x = 4 and x = 6 are the locations of the global minimum and maximum, respectively. 
 
 ## (b)
+**Work:** \newline
 Starting at 2:
-```{r, echo=FALSE}
+```{r, results = "hide"}
 # make some functions
 f_p <- function (x) {3*x^2 - 15*x + 12}
 f_pp <- function (x) {6*x - 15}
@@ -326,15 +504,21 @@ f_nr <- function (x) {x - (3*x^2 - 15*x + 12) / (6*x - 15)}
 iter_0 <- matrix(c(0, 2, f_p(2), f_pp(2), f_nr(2)), nrow = 1, ncol=5)
 colnames(iter_0) <- c("Iteration", "x", "fp(x)", "fpp(x)", "fNR")
 # see what iteration 0 was, plug into functions
-iter_1 <- rbind(iter_0, matrix(c(1, f_nr(2), f_p(f_nr(2)), f_pp(f_nr(2)), f_nr(f_nr(2))), nrow = 1, ncol=5))
+iter_1 <- rbind(iter_0, matrix(c(1, f_nr(2), f_p(f_nr(2)), f_pp(f_nr(2)), 
+                                 f_nr(f_nr(2))), 
+                                 nrow = 1, ncol=5))
 # see what iteration 1 was, etc...
-iter_2 <- rbind(iter_1, matrix(c(2, 0.8, f_p(0.8), f_pp(0.8), f_nr(0.8)), nrow = 1, ncol=5))
-
-iter_3 <- rbind(iter_2, matrix(c(3, 0.9882353, f_p(0.9882353), f_pp(0.9882353), f_nr(0.9882353)), nrow = 1, ncol=5))
-
-iter_4 <- rbind(iter_3, matrix(c(4, 0.9999542, f_p(0.9999542), f_pp(0.9999542), f_nr(0.9999542)), nrow = 1, ncol=5))
-
-iter_5 <- rbind(iter_4, matrix(c(5, 1, f_p(1), f_pp(1), f_nr(1)), nrow = 1, ncol=5))
+iter_2 <- rbind(iter_1, matrix(c(2, 0.8, f_p(0.8), f_pp(0.8), f_nr(0.8)), 
+                               nrow = 1, ncol=5))
+iter_3 <- rbind(iter_2, matrix(c(3, 0.9882353, f_p(0.9882353), 
+                                 f_pp(0.9882353), f_nr(0.9882353)), 
+                                 nrow = 1, 
+                                 ncol=5))
+iter_4 <- rbind(iter_3, matrix(c(4, 0.9999542, f_p(0.9999542), 
+                                 f_pp(0.9999542), f_nr(0.9999542)), 
+                                 nrow = 1, ncol=5))
+iter_5 <- rbind(iter_4, matrix(c(5, 1, f_p(1), f_pp(1), f_nr(1)), 
+                                nrow = 1, ncol=5))
 # Probably an easier way to do this, but gets the job done...
 knitr::kable(iter_5)
 ```
@@ -342,18 +526,25 @@ knitr::kable(iter_5)
 Converges after 5, at root 1.
 
 Starting at 5:
-```{r, echo=FALSE}
+```{r, results = "hide"}
 # make a matrix with iteration 0
-iter_0 <- matrix(c(0, 5, f_p(5), f_pp(5), f_nr(5)), nrow = 1, ncol=5)
+iter_0 <- matrix(c(0, 5, f_p(5), f_pp(5), f_nr(5)), 
+                 nrow = 1, ncol=5)
 colnames(iter_0) <- c("Iteration", "x", "fp(x)", "fpp(x)", "fNR")
 # see what iteration 0 was, plug into functions
-iter_1 <- rbind(iter_0, matrix(c(1, f_nr(5), f_p(f_nr(5)), f_pp(f_nr(5)), f_nr(f_nr(5))), nrow = 1, ncol=5))
+iter_1 <- rbind(iter_0, matrix(c(1, f_nr(5), f_p(f_nr(5)), 
+                                 f_pp(f_nr(5)), f_nr(f_nr(5))), 
+                                 nrow = 1, ncol=5))
 # see what iteration 1 was, etc...
-iter_2 <- rbind(iter_1, matrix(c(2, 4.011765, f_p(4.011765), f_pp(4.011765), f_nr(4.011765)), nrow = 1, ncol=5))
-
-iter_3 <- rbind(iter_2, matrix(c(3, 4.000046, f_p(4.000046), f_pp(4.000046), f_nr(4.000046)), nrow = 1, ncol=5))
-
-iter_4 <- rbind(iter_3, matrix(c(4, 4, f_p(4), f_pp(4), f_nr(4)), nrow = 1, ncol=5))
+iter_2 <- rbind(iter_1, matrix(c(2, 4.011765, f_p(4.011765), 
+                                 f_pp(4.011765), f_nr(4.011765)), 
+                                 nrow = 1, ncol=5))
+iter_3 <- rbind(iter_2, matrix(c(3, 4.000046, f_p(4.000046), 
+                                 f_pp(4.000046), f_nr(4.000046)), 
+                                 nrow = 1, ncol=5))
+iter_4 <- rbind(iter_3, matrix(c(4, 4, f_p(4), f_pp(4), 
+                                 f_nr(4)), 
+                                 nrow = 1, ncol=5))
 # Meh, only took 5 seconds this time
 knitr::kable(iter_4)
 ```
@@ -361,44 +552,11 @@ knitr::kable(iter_4)
 Converges after 4, at root 4.
 
 ## (c)
-
-One problem is that there could be more than one root. If you don't know this, you may have missed out on another convergence point and come to the wrong conclusion that the convergence point was the only root, or the best root (on substantive grounds). Unfortuntaly there's no way to tell unless you try out different starting values. \newline
-
-Another problem is that the convergence point is itself limited in the information it gives you. If there are multiple convergence points, that could speak to the type of curve that function produces e.g. a cubic function has a local maximum and global maximum, but you don't necessarily know whether the convergence point arrived at the local or global maximum. You could potentially misunderstand what the function is telling you. 
+**Work:** \newline
+N/A
 
 # 5.3
 
 ## (a)
-
-You could plug numbers into the function and get close the maximizing point, but that would be time consuming and would give a imprecise answer.\newline
-Istead, we could try to find the global maximum. \newline
-Take the first derivative:
-$$f'(t) = \dfrac {d}{dt} (30 \ln (t + 1)) - \dfrac {d}{dt} \bigg(\dfrac {t^2}{10}\bigg), $$
-$$f'(t) = (30) \dfrac {1}{t + 1} \bigg(\dfrac {d}{dt}\bigg) \big(t + 1\big) - \dfrac {2t}{10}, $$
-$$f'(t) = \dfrac {30}{t + 1} - \dfrac {t}{5}. $$
-Get the critical points:
-$$0 = \dfrac {30}{t + 1} - \dfrac {t}{5}, $$
-$$ \dfrac {30}{t + 1} = \dfrac {t}{5},$$
-$$ \dfrac {150}{t + 1} = t,$$
-$$ 150 = t(t + 1),$$
-$$ 0 = t^2 + t - 150.$$
-If Ax^2 + Bx + C = 0, then $x = \frac {- Bx \pm \sqrt{B^2 - 4AC}} {2A}.$
-Plugging in, we get the critical points of x:
-```{r}
-(-1 + sqrt((1^2) - 4 * 1 * - 150)) / (2 * 1)
-(-1 - sqrt(1^2 - (4 * 1) * (- 150))) / (2 * 1)
-```
-If t standas for number of days, the negative critical point doesn't really help us. But does 11.75 represent a local or global maximum? To the left:
-```{r}
-(30 / (10.76 + 1)) - (10.76 / 5)
-```
-Positive. \newline
-To the right:
-```{r}
-(30 / (12.76 + 1)) - (12.76 / 5)
-```
-Negative. Therefore, using th efirst derivative test, 11.76 is a maximum. All we have left to compare that to is 0 plugged into the original function:
-```{r}
-30 * log(0 + 1) - (0^2 / 10)
-```
-Which makes sense; Repubs can't benefit after zero time has passed. Because the only two points to consider are 11.76 and 0, 11.76 must therefore be the global maximum. Repubs should wait 11.76 days before reactivating the government.
+**Work:** \newline
+N/A (shown in answer)
