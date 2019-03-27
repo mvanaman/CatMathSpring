@@ -73,3 +73,13 @@ The deviance approximates a chi-squared distribution when samples are large. Get
 pchisq(11.60185, df=1, lower.tail = FALSE)
 ```
 
+
+## (b)
+Get the likelihood $\chi^2$, or $z^2$, and p-value with 1 degree of freedom:
+```{r}
+(-0.0337/ 0.0130)^2
+pchisq(6.720059, df=1, lower.tail = FALSE)
+```
+
+## (c)
+
