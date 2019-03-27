@@ -1,5 +1,5 @@
 ---
-title: "Temporary Name"
+title: "CatData HW5"
 author: "Matthew Vanaman"
 date: '`r format(Sys.Date(), "%m-%d-%Y")`'
 monofont: Courier New
