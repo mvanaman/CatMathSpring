@@ -23,7 +23,6 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-5.2, 5.3
 
 # 4.8
 ## (a)
@@ -366,3 +365,40 @@ Converges after 4, at root 4.
 One problem is that there could be more than one root. If you don't know this, you may have missed out on another convergence point and come to the wrong conclusion that the convergence point was the only root, or the best root (on substantive grounds). Unfortuntaly there's no way to tell unless you try out different starting values. \newline
 
 Another problem is that the convergence point is itself limited in the information it gives you. If there are multiple convergence points, that could speak to the type of curve that function produces e.g. a cubic function has a local maximum and global maximum, but you don't necessarily know whether the convergence point arrived at the local or global maximum. You could potentially misunderstand what the function is telling you. 
+
+# 5.3
+
+## (a)
+
+You could plug numbers into the function and get close the maximizing point, but that would be time consuming and would give a imprecise answer.\newline
+Istead, we could try to find the global maximum. \newline
+Take the first derivative:
+$$f'(t) = \dfrac {d}{dt} (30 \ln (t + 1)) - \dfrac {d}{dt} \bigg(\dfrac {t^2}{10}\bigg), $$
+$$f'(t) = (30) \dfrac {1}{t + 1} \bigg(\dfrac {d}{dt}\bigg) \big(t + 1\big) - \dfrac {2t}{10}, $$
+$$f'(t) = \dfrac {30}{t + 1} - \dfrac {t}{5}. $$
+Get the critical points:
+$$0 = \dfrac {30}{t + 1} - \dfrac {t}{5}, $$
+$$ \dfrac {30}{t + 1} = \dfrac {t}{5},$$
+$$ \dfrac {150}{t + 1} = t,$$
+$$ 150 = t(t + 1),$$
+$$ 0 = t^2 + t - 150.$$
+If Ax^2 + Bx + C = 0, then $x = \frac {- Bx \pm \sqrt{B^2 - 4AC}} {2A}.$
+Plugging in, we get the critical points of x:
+```{r}
+(-1 + sqrt((1^2) - 4 * 1 * - 150)) / (2 * 1)
+(-1 - sqrt(1^2 - (4 * 1) * (- 150))) / (2 * 1)
+```
+If t standas for number of days, the negative critical point doesn't really help us. But does 11.75 represent a local or global maximum? To the left:
+```{r}
+(30 / (10.76 + 1)) - (10.76 / 5)
+```
+Positive. \newline
+To the right:
+```{r}
+(30 / (12.76 + 1)) - (12.76 / 5)
+```
+Negative. Therefore, using th efirst derivative test, 11.76 is a maximum. All we have left to compare that to is 0 plugged into the original function:
+```{r}
+30 * log(0 + 1) - (0^2 / 10)
+```
+Which makes sense; Repubs can't benefit after zero time has passed. Because the only two points to consider are 11.76 and 0, 11.76 must therefore be the global maximum. Repubs should wait 11.76 days before reactivating the government.
