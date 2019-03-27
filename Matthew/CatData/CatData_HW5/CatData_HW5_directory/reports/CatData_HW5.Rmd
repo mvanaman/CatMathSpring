@@ -22,3 +22,54 @@ knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
+
+3.19, 3,20, 3,21, 3.22
+
+# 3.19
+
+## (a)
+
+```{r, echo=FALSE}
+trainData <- as.data.frame(matrix(c(2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995, 
+                      1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 
+                      1985, 1984, 1983, 1982, 1981, 1980, 1979, 1978, 1977, 
+                      1976, 1975,
+                      
+                      518, 516, 508, 503, 505, 487, 463, 437, 423, 415, 
+                      425, 430, 439, 431, 436, 443, 397, 414, 418, 389, 
+                      401, 372, 417, 430, 426, 430, 425, 426, 436,
+                      
+                      0, 1, 0, 1, 1, 0, 1, 2, 1, 2, 
+                      0, 1, 2, 1, 4, 2, 1, 2, 0, 5, 
+                      2, 2, 2, 2, 3, 2, 1, 2, 5,
+                      
+                      3, 3, 4, 3, 2, 4, 1, 2, 2, 4, 
+                      4, 4, 6, 2, 4, 4, 6, 13, 5, 3, 
+                      7, 3, 2, 2, 3, 4, 8, 12, 2), 
+                    
+                      nrow = 29, ncol = 4))
+colnames(trainData) <- c("Year", "TrainKm", 
+                         "TrainCollisions", "TrainRoadCollisions")
+```
+
+```{r, echo=FALSE}
+mod_intercept_only <- glm(TrainCollisions ~ 1, offset = log(TrainKm), data=trainData, family = poisson)
+mod_with_time <- glm(TrainCollisions ~ Year, offset = log(TrainKm), data=trainData, family = poisson)
+```
+Confirm the sizes of the deviances:
+```{r, echo=FALSE}
+mod_intercept_only$formula
+mod_intercept_only$deviance
+mod_with_time$formula
+mod_with_time$deviance
+```
+Get the difference in deviances and residual df between the models:
+```{r}
+mod_intercept_only$deviance - mod_with_time$deviance
+mod_intercept_only$df.residual - mod_with_time$df.residual
+```
+The deviance approximates a chi-squared distribution when samples are large. Get the p-value for $\Delta \chi^2$:
+```{r}
+pchisq(11.60185, df=1, lower.tail = FALSE)
+```
+
