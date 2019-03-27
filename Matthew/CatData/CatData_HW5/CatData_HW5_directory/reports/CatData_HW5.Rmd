@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-3.19, 3,20, 3,21, 3.22
+3,20, 3,21, 3.22
 
 # 3.19
 
@@ -88,4 +88,38 @@ The confidence intervals from the negative binomial model are around an additive
 c(exp(-0.060), exp(-0.008))
 ```
 
+
+# 3.20
+
+## (a)
+
+```{r, echo=FALSE}
+deadData <- as.data.frame(matrix(c("35-44", "45-54", "55-64", "65-74", "75-84",
+                     18793, 10673, 5710, 2585, 1462,
+                     52407, 43248, 28612, 12663, 5317,
+                     2, 12, 28, 28, 31,
+                     32, 104, 206, 186, 102), nrow = 5, ncol = 5))
+colnames(deadData) <- c("Age", "PY_nonSmokers", "PY_Smokers", "CD_nonSmokers", "CD_Smokers")
+deathrates <- as.data.frame(matrix(c("35-44", "45-54", "55-64", "65-74", "75-84",
+                       2/(18793/1000), 12/(10673/1000), 28/(5710/1000), 28/(2585/1000), 
+                       31/(1462/1000),
+                       
+                       32/(52407/1000), 104/(43248/1000), 206/(28612/1000),
+                       186/(12663/1000), 102/(5317/1000),
+                       
+                       (2/(18793/1000))/(32/(52407/1000)), (12/(10673/1000)/(104/(43248/1000))),
+                       (28/(5710/1000)/(206/(28612/1000))), (28/(2585/1000)/(186/(12663/1000))), 
+                       (31/(1462/1000)/(102/(5317/1000)))), 
+                       ncol = 4, nrow = 5))
+colnames(deathrates) <- c("Age", "DeathRate_nonSmokers", "DeathRate_Smokers", "Ratio")
+deathrates
+```
+
+Deathrates for smokers and non-smokers alike increase with age, as one would expect. Of interest is the fact that the ratio of death rats also increases, such that as people age, the death rates between those who smoke and those who don't approaches a 1:1 ratio (which would mean no effect of smoking on death rate beyond age) before exceeding a 1:1 ratio after age 75. This implies curvilinear relationship between smoking and age. You stand greater risk of death up until you are 75, but if you make it to 75 you may benefit from being smoker.
+
+
+
+```{r}
+class(deathrates$DeathRate_nonSmokers)
+```
 
