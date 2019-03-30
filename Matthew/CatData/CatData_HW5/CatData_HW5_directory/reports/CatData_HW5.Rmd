@@ -17,7 +17,7 @@ library(ProjectTemplate); load.project()
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
-options(scipen = 999)
+options(digits = 3, scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
@@ -92,34 +92,179 @@ c(exp(-0.060), exp(-0.008))
 # 3.20
 
 ## (a)
-
+**Answer:** \newline
 ```{r, echo=FALSE}
-deadData <- as.data.frame(matrix(c("35-44", "45-54", "55-64", "65-74", "75-84",
-                     18793, 10673, 5710, 2585, 1462,
-                     52407, 43248, 28612, 12663, 5317,
-                     2, 12, 28, 28, 31,
-                     32, 104, 206, 186, 102), nrow = 5, ncol = 5))
-colnames(deadData) <- c("Age", "PY_nonSmokers", "PY_Smokers", "CD_nonSmokers", "CD_Smokers")
-deathrates <- as.data.frame(matrix(c("35-44", "45-54", "55-64", "65-74", "75-84",
-                       2/(18793/1000), 12/(10673/1000), 28/(5710/1000), 28/(2585/1000), 
-                       31/(1462/1000),
+deathrates <- cbind(data.frame(c("35-44", "45-54", "55-64", "65-74", "75-84")),
                        
-                       32/(52407/1000), 104/(43248/1000), 206/(28612/1000),
-                       186/(12663/1000), 102/(5317/1000),
+                       matrix(c(0.1064226, 1.124332, 4.903678, 10.83172, 21.20383,
                        
-                       (2/(18793/1000))/(32/(52407/1000)), (12/(10673/1000)/(104/(43248/1000))),
-                       (28/(5710/1000)/(206/(28612/1000))), (28/(2585/1000)/(186/(12663/1000))), 
-                       (31/(1462/1000)/(102/(5317/1000)))), 
-                       ncol = 4, nrow = 5))
+                       0.6106055, 2.404735 ,7.199776 ,14.68846 ,19.18375,
+                       
+                       0.1742903 ,0.4675493 ,0.6810875 ,0.7374306, 1.105302), 
+                       ncol = 3, nrow = 5))
 colnames(deathrates) <- c("Age", "DeathRate_nonSmokers", "DeathRate_Smokers", "Ratio")
-deathrates
+deathrates[,-1] <- round(deathrates[,-1], 2)
+knitr::kable(deathrates)
 ```
 
 Deathrates for smokers and non-smokers alike increase with age, as one would expect. Of interest is the fact that the ratio of death rats also increases, such that as people age, the death rates between those who smoke and those who don't approaches a 1:1 ratio (which would mean no effect of smoking on death rate beyond age) before exceeding a 1:1 ratio after age 75. This implies curvilinear relationship between smoking and age. You stand greater risk of death up until you are 75, but if you make it to 75 you may benefit from being smoker.
 
+**Work:** \newline
+Calculations for deathrates:
 
-
+#### nonsmokers
 ```{r}
-class(deathrates$DeathRate_nonSmokers)
+2/(18793/1000) # age 35-44
+12/(10673/1000) # age 45-54
+28/(5710/1000) # age 55 - 64
+28/(2585/1000) # age 65 - 74
+31/(1462/1000) # age 75 - 84
 ```
+#### smokers 
+```{r}
+32/(52407/1000) # age 35-44
+104/(43248/1000) # age 45-54
+206/(28612/1000) # age 55 - 64
+186/(12663/1000)  # age 65 - 74
+102/(5317/1000) # age 75 - 84
+```
+#### ratio 
+```{r}
+2/(18793/1000)/(32/(52407/1000))  # age 35-44
+12/(10673/1000)/(104/(43248/1000)) # age 45-54
+28/(5710/1000)/(206/(28612/1000)) # age 55 - 64
+28/(2585/1000)/(186/(12663/1000)) # age 65 - 74
+31/(1462/1000)/(102/(5317/1000)) # age 75 - 84
+```
+
+
+
+## (b)
+
+```{r, echo=FALSE}
+deadData <- data.frame(Age = c("35-44", "35-44", "45-54", "45-54", 
+                               "55-64", "55-64", "65-74", "65-74", 
+                               "75-84", "75-84"), 
+                       
+                             Smoking = c("no", "yes", "no", "yes", "no",
+                                         "yes", "no", "yes", "no", "yes")) 
+                  
+mat <- as.data.frame(matrix(c(18793, 52407, 10673, 43248, 5710, 28612,
+                              2585, 12663, 1462, 5317,
+                              
+                              2, 32, 12, 104, 28, 206, 28, 186, 31, 102
+                              ), nrow = 10, ncol = 2))
+colnames(mat) <- c("PersonYears", "Deaths")
+deadData <- as.data.frame(cbind(deadData, mat))
+knitr::kable(deadData)
+main_effects_only <- glm(Deaths ~ Age + Smoking, offset = log(PersonYears), deadData, family = poisson)
+```
+
+The specified model would be:
+```{r, echo=FALSE}
+print(main_effects_only$formula)
+```
+with Age and Smoking as dummy variables. In other words:
+```{r, echo=FALSE, warning=FALSE}
+knitr::kable(tidy(model.matrix(main_effects_only)))
+```
+
+A change in the ratio of deaths between smokers and non smokers across levels of age would suggest an interaction (the effect of smoking does vary by level of age). This goes the other way too: main-effects only model assumes that the effect of age does not vary across categories of smoking (yes or no). By leaving out the interaction term, you are assuming the model is complete without it, which in our case is probably false because the ratio does change across age levels. 
+
+
+## (c)
+
+You can see from the ratios in part (a) that they do linearly increase with age, which suggests an interaction. 
+
+```{r, echo=FALSE}
+interaction <- glm(Deaths ~ Age * Smoking, offset = log(PersonYears), deadData, family = poisson)
+print(interaction$formula)
+knitr::kable(tidy(interaction))
+```
+
+In poisson regression with dummy variable predictors, the coeficient of each level of age shows the unique effect of that level of age against the reference category. Each level of age (x) is coded as 1 when all the others are 0. As you move up in age, the beta coefficient increases, meaning the log ratio (the output of this model) will also increase. The interaction terms also linearly increase with age. Therefore, if you aggregate the effect of age, of smoking, and of being both a certain age and smoking, you see that as you move up each level of age, the output of the model will increase linearly.\newline
+You can also estimate for the non-smokers as well. In that case, you would add the effect of each age level while omitting the effect of smoking and smoking + age (they would be cancel out because they are coded as 0). This will also be linear because the effect of age by itself is linear. 
+
+
+
+
+
+## (d)
+```{r, echo=FALSE}
+print(main_effects_only$formula)
+knitr::kable(tidy(main_effects_only))
+```
+
+We could rank ages by scoring them as 1, 2, 3, 4, and 5.
+
+```{r, echo=FALSE}
+deadData2 <- data.frame(Age = c(1, 1,2, 2, 3, 3, 4, 4, 5, 5), 
+                       
+                             Smoking = c("no", "yes", "no", "yes", "no",
+                                         "yes", "no", "yes", "no", "yes")) 
+                  
+mat2 <- as.data.frame(matrix(c(18793, 52407, 10673, 43248, 5710, 28612,
+                              2585, 12663, 1462, 5317,
+                              
+                              2, 32, 12, 104, 28, 206, 28, 186, 31, 102
+                              ), nrow = 10, ncol = 2))
+colnames(mat2) <- c("PersonYears", "Deaths")
+deadData2 <- as.data.frame(cbind(deadData2, mat2))
+
+scored_interaction <- glm(Deaths ~ Age * Smoking, offset = log(PersonYears), deadData2, family = poisson)
+print(scored_interaction$formula)
+knitr::kable(tidy(scored_interaction))
+```
+
+
+The deviances and degrees of freedom, respectively, for each model are:
+```{r, echo=FALSE}
+print(scored_interaction$formula)
+scored_interaction$deviance
+scored_interaction$df.residual 
+print(main_effects_only$formula)
+main_effects_only$deviance
+main_effects_only$df.residual
+```
+The deviance approximates a chi-squared distribution when samples are large. The p-value for $\Delta \chi^2$ is:
+```{r, echo=FALSE}
+pchisq(47.5, df=2, lower.tail = FALSE)
+```
+
+We're firmly rejecting the null here, meaning that the interaction model has better fit to the data. It also makes some sense of a weird trend in the data. Before you include smoking, it seems Age has a quadratic relationship with the predicted probability of death: \newline
+```{r, echo=FALSE}
+poisson.link.pred <- predict(main_effects_only, type="link")
+poisson.prob.pred <- gtools::inv.logit(poisson.link.pred)
+scored_interaction %>% 
+  ggplot() +
+  aes(x = Age, y = poisson.prob.pred) +
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.y = mean, geom = "line") + 
+  ggtitle("Predicted Probabilities: Main Effects Only") +
+  ylab("Predicted Probability")  +
+  scale_x_discrete("Age", 
+                   labels = c("35-44", "45-54", "55-64", "65-74", "75-84"),
+                   limits = 1:5) +
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+That is not what one would expect. The data make more sense when we include smoking: there is a clean linear relationship between age and the probability of death for non-smokers, but the probability of death is high for all smokers regardless of age group. This is much more likely. 
+```{r, echo=FALSE}
+poisson.link.pred <- predict(scored_interaction, type="link")
+poisson.prob.pred <- gtools::inv.logit(poisson.link.pred)
+scored_interaction %>% 
+  ggplot() +
+  aes(x = Age, color = Smoking, group = Smoking, shape = Smoking, y = poisson.prob.pred) +
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.y = mean, geom = "line") +
+  ggtitle("Predicted Probabilities: Age x Smoking Interaction") +
+  ylab("Predicted Probability") +
+  scale_x_discrete("Age", 
+                   labels = c("35-44", "45-54", "55-64", "65-74", "75-84"),
+                   limits = 1:5) +
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
 
