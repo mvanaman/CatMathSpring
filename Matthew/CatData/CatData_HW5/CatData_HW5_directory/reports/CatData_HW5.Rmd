@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-3,20, 3,21, 3.22
+3.22
 
 # 3.19
 
@@ -268,3 +268,8 @@ scored_interaction %>%
 ```
 
 
+# 3.21
+
+Fitting model with $t$: you could fit this model because holding $x$ constant, $\mu$ will increase (or decrease) proportionately with $t$. If $\mu$ were gun deaths in a city and $t$ were population size of a city, gun deaths will rise with population size. If one is interested in this effect only, one doesn't need any other variables in the model. This model would be $\mu = t$, where the mean is modeled directly from an explanatory variable.
+
+Fitting a model with $tx$: If $\mu$ were gun deaths, $t$ were population size, and $x$ were gun ownership, you could fit a gun ownership * population size model where there is a multiplicative effect such that as population size increases, so too does the number of gun owners. In this case, you'd have the effect of population itself as the reference variable and a population by gun ownership interaction term. This might be the model you'd use if you wanted a gun ownership variable that was "adjusted" for population size: $\mu = t + \beta (tx)$.
