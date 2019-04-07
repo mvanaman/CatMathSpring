@@ -8,6 +8,22 @@ for (dataset in project.info$data)
   print(head(get(dataset)))
 }
 
+### 04/01/19
+leaveclass <- as.data.frame(matrix(c(1,1,0,0,
+                      1,0,1,0,
+                      96,220,609,1060), 
+                     ncol = 3, nrow = 4))
+colnames(leaveclass) <- c("SFC", "IA", "Count")
+(class_mod_log <- glm(SFC ~ IA, weights =  Count, leaveclass, family = binomial(link = "logit")))
+(class_mod_prob <- glm(SFC ~ IA, weights =  Count, leaveclass, family = binomial(link = "probit")))
+# note that the fit is not that different
+logLik(class_mod_log)
+logLik(class_mod_prob)
+
+## elisa data
+(summary(glm(hiv ~ mar, weights = count, elisa_test_roc, family = binomial())))
+logLik((glm(hiv ~ mar, weights = count, elisa_test_roc, family = binomial())))
+
 ### 03/25/19
 ## beta blocker data
 # poission

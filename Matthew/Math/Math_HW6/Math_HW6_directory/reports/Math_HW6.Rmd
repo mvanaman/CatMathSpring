@@ -1,0 +1,168 @@
+---
+title: "Math HW6"
+author: "Matthew Vanaman"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+monofont: Courier New
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{tikz,xcolor,listings,setspace}
+indent: false
+---
+`r knitr::opts_knit$set(root.dir='..')`
+
+```{r, include=FALSE}
+library(ProjectTemplate); load.project()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+options(digits = 3, scipen = 999)
+knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+```
+
+6.1, 6.2, 6.3a, 6.4a, 6.5a, 6.6
+
+# 6.1
+
+## (a)
+
+$$f(x) = \int_{-1.96}^{1.96} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5^2} dx$$
+
+### Left
+```{r, echo=FALSE, fig.height=3}
+# Variables
+x <- seq(-3, 3, by=0.1)
+norm <- dnorm(x, mean=0, sd=1)
+df <- as.data.frame(cbind(x,norm))
+# plot
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm)) +
+  ylab("f(x)") + xlab("x") +
+  labs(color = "Function") +
+  theme_minimal() +
+  scale_x_continuous(breaks=c(-1.96,1.96)) 
+```
+
+### Right
+```{r, echo=FALSE, fig.height=3}
+# Variables
+x <- seq(-3, 3, by=0.1)
+norm <- dnorm(x, mean=0, sd=1)
+df <- as.data.frame(cbind(x,norm))
+# plot
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm)) +
+  ylab("f(x)") + xlab("x") +
+  labs(color = "Function") +
+  theme_minimal() +
+  scale_x_continuous(breaks=c(-1.96,1.96)) 
+```
+
+### Midpoint
+```{r, echo=FALSE, fig.height=3}
+# Variables
+x <- seq(-3, 3, by=0.1)
+norm <- dnorm(x, mean=0, sd=1)
+df <- as.data.frame(cbind(x,norm))
+# plot
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm)) +
+  ylab("f(x)") + xlab("x") +
+  labs(color = "Function") +
+  theme_minimal() +
+  scale_x_continuous(breaks=c(-1.96,1.96)) 
+```
+
+### Trapezoidal
+```{r, echo=FALSE, fig.height=3}
+# Variables
+x <- seq(-3, 3, by=0.1)
+norm <- dnorm(x, mean=0, sd=1)
+df <- as.data.frame(cbind(x,norm))
+# plot
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm)) +
+  ylab("f(x)") + xlab("x") +
+  labs(color = "Function") +
+  theme_minimal() +
+  scale_x_continuous(breaks=c(-1.96,1.96)) 
+```
+
+
+## (b)
+
+## Left
+
+**Answer:** \newline
+$A \approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=0}^{9} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$\newline
+
+
+**Work:** \newline
+The left Riemann Sum formula is:
+$$A \approx \sum_{i=0}^{n-1} f\Big(a + \dfrac {(b-a)i}{n} \Big).$$
+We want to find the sums for 10 partitions between -1.96 and 1.96. Which means that n = 10, a = -1.96, and  = 1.96. We also plug in the pdf for f. The Reimann Sum formula gets substituted in for x in f(x):
+$$A \approx  \sum_{i=0}^{n-1} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5\Bigg(a + \frac {(b-a)i}{n} \Big( \frac{b - a}{n}\Big)\Bigg)^2} ,$$
+$$\approx  \sum_{i=0}^{10-1} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Bigg(-1.96 + \frac {(1.96-(-1.96))i}{10} \Big(  \frac{1.96 - (-1.96)}{10}\Big)\Bigg)^2} ,$$
+$$\approx \sum_{i=0}^{9} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big((0.392i - 1.96)  0.392 \Big)^2} ,$$
+
+0.392 does not depend on index, and neither does the constant $\frac{1}{\sqrt(2\pi)}$:
+
+$$\approx \dfrac{1}{\sqrt{2 \pi}} (0.392) \Bigg( \sum_{i=0}^{9}  e^{-0.5 \Big((0.392i - 1.96)  0.392 \Big)^2}\Bigg),$$
+$$\approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=0}^{9} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$$
+
+```{r}
+# calculation:
+(1.96 + 1.96) / 10
+```
+
+## Right:
+
+**Answer:** \newline
+$A \approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=1}^{10} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$\newline
+
+**Work:** \newline
+Do the same thing here except the index is from $1$ to $n$ instead of from $0$ to $n-1$.
+$$A \approx  \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Bigg(-1.96 + \frac {1.96-(-1.96)}{10} i \Big(  \frac{1.96 - (-1.96)}{10}\Big)\Bigg)^2}  \Bigg),$$
+$$\approx \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big((0.392i - 1.96)  0.392 \Big)^2},$$
+$$\approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=1}^{10} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$$
+
+
+## Midpoint:
+
+**Answer:** \newline
+$A \approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-2.16 + 0.392i)\Big)^2}  \Bigg).$ \newline
+
+**Work:** \newline
+$$A \approx \sum_{i=0}^{n-1} f\Big(a + \dfrac {(b-a)(i - 0.5)}{n} \Big).$$
+We want to find the sums for 10 partitions between -1.96 and 1.96. Which means that n = 10, a = -1.96, and  = 1.96. We also plug in the pdf for f. The Reimann Sum formula gets substituted in for x in f(x):
+$$A \approx  \Bigg( \sum_{i=0}^{n-1} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5\Bigg(a + \frac {(b-a)(i - 0.5)}{n} \Big( \frac{b - a}{n}\Big)\Bigg)^2} \Bigg),$$
+$$\approx  \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Bigg(-1.96 + \frac {1.96-(-1.96)}{10} \Big(\frac{(i - 0.5)}{1}\Big) \Big(  \frac{1.96 - (-1.96)}{10}\Big)\Bigg)^2}  \Bigg),$$
+$$\approx  \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-1.96 + 0.392 (i - 0.5) (0.392)\Big)^2}  \Bigg),$$
+$$\approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-1.96 + 0.392i - 0.196)\Big)^2}  \Bigg),$$
+$$\approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-2.16 + 0.392i)\Big)^2}  \Bigg),$$
+$$\approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-2.16 + 0.392i)\Big)^2}  \Bigg).$$
+
+```{r}
+# Calculations
+0.392 * 0.5
+-1.96 - 0.196
+```
+
+## Trapezoidal
+
+**Answer:** \newline
+$A \approx  \Big(\dfrac {0.196}{\sqrt{2\pi}}\Big) \sum_{i=0}^{9} \dfrac{ e^{-0.5(0.392i - 1.96)^2} + e^{-0.5(0.392i - 0.564)^2} } {2}.$ \newline
+
+**Work:**
+$$A \approx \sum_{i=0}^{n-1} \dfrac {b - a}{n} \dfrac{\dfrac{1}{\sqrt{2 \pi}} e^{  \Big(a + \frac {(b-a)i}{n} \Big)^2} + \dfrac {1}{\sqrt{2\pi}} e^{  \Big(a + \frac {(b-a)i+1}{n} \Big)^2} } {2} \dfrac {b-a}{n},$$
+$$\approx \sum_{i=0}^{10-1} \dfrac {1.96 - (-1.96)}{10} \dfrac{\dfrac{1}{\sqrt{2 \pi}} e^{  \Big((-1.96) + \frac {(1.96-(-1.96))i}{10} \Big)^2} + \dfrac {1}{\sqrt{2\pi}} e^{  \Big((-1.96) + \frac {(1.96-(-1.96))i+1}{10} \Big)^2} } {2},$$
+$$\approx \sum_{i=0}^{9} (0.392) \dfrac{\dfrac{1}{\sqrt{2 \pi}} e^{-0.5(0.392i - 1.96)^2} + \dfrac {1}{\sqrt{2\pi}} e^{-0.5(0.392i - 0.564)^2} } {2}, $$
+$$\approx \dfrac {0.392}{2} \Big(\dfrac {1}{\sqrt{2\pi}}\Big) \sum_{i=0}^{9} \dfrac{ e^{-0.5(0.392i - 1.96)^2} + e^{-0.5(0.392i - 0.564)^2} } {2}, $$
+$$\approx  \Big(\dfrac {0.196}{\sqrt{2\pi}}\Big) \sum_{i=0}^{9} \dfrac{ e^{-0.5(0.392i - 1.96)^2} + e^{-0.5(0.392i - 0.564)^2} } {2}.$$
+
+```{r}
+0.392 /2
+```
+
