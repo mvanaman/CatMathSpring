@@ -278,9 +278,19 @@ e <- exp(1) # get euler's number
 
 ## (a)
 
-**Answer:** \newline
-
+**Answer:** \newline 
+\newline
+$= \dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{1.39} + c.$ \newline
 
 **Work:**\newline
 
-$$\int x^{100} + 3e^x - 7(4^x)dx,$$
+$$F(x) = \int x^{100} + 3e^x - 7(4^x)dx,$$
+$$= \int x^{100}dx + \int 3e^xdx - \int 7(4^x)dx,$$
+$$= \dfrac {x^{100 + 1}} {100 + 1} + \int 3e^xdx - \int 7(4^x)dx,$$
+$$= \dfrac {x^{101}} {101} + 3 \int e^xdx - 7 \int (4^x)dx,$$
+$$= \dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{\ln(4)} + c,$$
+$$= \dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{1.39} + c.$$
+Should $3 * \int e^xdx$ become $3 * e^x + c$?
+
+## (b)
+
