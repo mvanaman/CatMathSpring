@@ -294,3 +294,22 @@ Should $3 * \int e^xdx$ become $3 * e^x + c$?
 
 ## (b)
 
+**Answer:**
+```{r, echo=FALSE}
+cat((9^(3/2) * 10/3 - 1/9^3) - (1^(3/2) * 10/3 - 1/1^3))
+```
+
+**Work:**\newline
+$$F(x) = \int_{1}^9 5 \sqrt{x} \ dx + \dfrac {3}{x^4} dx,$$
+$$= \int_{1}^9 5 \sqrt{x} \ dx + \int \dfrac {3}{x^4} dx,$$
+$$= 5 \int_{1}^9 \sqrt{x} \ dx + 3 \int \dfrac {1}{x^4} dx,$$
+$$= 5 \int_{1}^9 x^{1/2} \ dx + 3 \int x^{-4} dx,$$
+$$= 5 \dfrac {x^{1/2 + 1}} {\frac {1} {2} + 1}   + 3 \dfrac {x^{-4 + 1}}{-4 + 1},$$
+$$= 5 \dfrac {x^{3/2}} {\frac {3} {2}} + 3 \dfrac {x^{-3}}{-3},$$
+$$= 5 \Big(x^{3/2}\dfrac {2}{3}\Big) + 3 \Big( \dfrac {-1}{3}x^{-3} \Big),$$
+$$= (x^{3/2}) \dfrac {10}{3} + (3) \dfrac {1}{x^3}.$$
+From here, plug in the bounds and take the difference:
+```{r}
+(9^(3/2) * 10/3 - 1/9^3) - (1^(3/2) * 10/3 - 1/1^3)
+```
+
