@@ -313,3 +313,21 @@ From here, plug in the bounds and take the difference:
 (9^(3/2) * 10/3 - 1/9^3) - (1^(3/2) * 10/3 - 1/1^3)
 ```
 
+## (c)
+
+**Answer:**
+```{r, echo=FALSE}
+cat(12 * (0 + 1/2))
+```
+
+**Work:**
+$$F(x) = \int_2^\infty \dfrac {12} {x^2} dx,$$
+$$= \lim_{k \to \infty} \int_2^k \dfrac {12} {x^2} dx,$$
+$$= 12 \lim_{k \to \infty} \int_2^k x^{-2} dx,$$
+$$= 12 \lim_{k \to \infty} \int_2^k \dfrac {x^{-2+1}}{-2  +1} dx,$$
+$$= 12 \lim_{k \to \infty} \dfrac {-1}{x}.$$
+Plug in the bounds (plugging for the $-1/x$ since it approaches zero the higher x gets):
+```{r}
+12 * (0 + 1/2)
+```
+
