@@ -383,7 +383,57 @@ $$\dfrac{1}{5}\int \dfrac{u^{8}}{8} + c,$$
 $$\dfrac{u^{8}}{40} + c,$$
 $$\dfrac{(5x^{10} - 25x^4 + 15x)^{8}}{40} + c.$$
 
+# 6.4a
+
+**Answer:** 
+```{r, echo=FALSE}
+cat(((2/3 * 4 * ((4+5)^(3/2))) - 2/3 * (2/5 * (4 + 5)^(5/2))) -
+  
+  ((2/3 * 1 * ((1+5)^(3/2))) - 2/3 * (2/5 * (1 + 5)^(5/2))))
+```
 
 
+$$\int_1^4 x \sqrt{x + 5} \ dx,$$
+We want to get to:
+$$\int u \ dv = uv - \int v \ du.$$
+Use some u-substution:
+$$u = x, \ dv = \sqrt{x + 5} \ dx.$$
+$$\dfrac{du}{dx} = 1,\ \text{therefore} \ du = dx.$$
+$$w = x + 5,$$ 
+$$\dfrac{dw}{dx}(x+5) = 1 + 0 = 1,$$
+$$dw = dx.$$
+$$\int \sqrt{w} \ dw,$$
+$$\int w^{\frac{1}{2}} \ (1),$$
+$$\dfrac{w^{{\frac{1}{2} + 1}}} {\frac{1}{2} + 1},$$
+$$\dfrac{w^{{\frac{3}{2}}}} {\frac{3}{2}},$$
+$$ {\frac{2}{3}} w^{{\frac{3}{2}}},$$
+$$ {\frac{2}{3}} (x + 5)^{{\frac{3}{2}}} = v.$$
+Plug back into:
+$$\int u \ dv = uv - \int v \ du,$$
+with \newline
+$u = x.$ \newline
+$dv = \sqrt{x + 5} \ dx.$ \newline
+$du = dx = dw.$ \newline
+$w = x + 5.$ \newline
+$v = {\frac{2}{3}} (x + 5)^{{\frac{3}{2}}}.$
 
+$$\int_1^4 x \ \sqrt{x + 5} \ dx = x \ \Big({\frac{2}{3}} (x + 5)^{{\frac{3}{2}}}\Big) - \int_1^4 {\frac{2}{3}} (x + 5)^{{\frac{3}{2}}} \ dx,$$
+$$\int_1^4 x \ \sqrt{x + 5} \ dx = x \ \Big({\frac{2}{3}} (x + 5)^{{\frac{3}{2}}}\Big) -{\frac{2}{3}}  \int_1^4  (x + 5)^{{\frac{3}{2}}} \ dx.$$
+Before we can start plugging in numbers, gotta take care of the remaining integral:
+$$ \int (x + 5)^{{\frac{3}{2}}} \ dx,$$
+$$ \int (x + 5)^{{\frac{3}{2}}} \ dx,$$
+$$u = x + 5,$$
+$$ \int (u)^{{\frac{3}{2}}} \ dx,$$
+$$ \int \dfrac{(u)^{{\frac {3} {2} + 1}}}{\frac {3} {2} + 1} \ dx,$$
+$$\dfrac{(u)^{{\frac {5} {2}}}}{\frac {5} {2}},$$
+$$\frac {2} {5}(u)^{{\frac {5} {2}}},$$
+$$\frac {2} {5}(x + 5)^{{\frac {5} {2}}}.$$
+So in the end you have:
+$$\int_1^4 x \ \sqrt{x + 5} \ dx = x \ \Big({\frac{2}{3}} (x + 5)^{{\frac{3}{2}}}\Big) -{\frac{2}{3}} \Big( \frac {2} {5}(x + 5)^{{\frac {5} {2}}}\Big).$$
+Plug in the bounds:
+```{r}
+((2/3 * 4 * ((4+5)^(3/2))) - 2/3 * (2/5 * (4 + 5)^(5/2))) -
+  
+  ((2/3 * 1 * ((1+5)^(3/2))) - 2/3 * (2/5 * (1 + 5)^(5/2)))
+```
 
