@@ -331,3 +331,15 @@ Plug in the bounds (plugging for the $-1/x$ since it approaches zero the higher 
 12 * (0 + 1/2)
 ```
 
+## (d)
+
+**Answer:**\newline
+$2y^2.$
+
+
+**Work:**
+$$F(x) = \dfrac {d}{dy} \int_{-3}^{y^2} \sqrt{x} \ dx,$$
+$$= \sqrt{y^2} \ \dfrac {d}{dy} y^2,$$
+Power rule..
+$$= \sqrt{y^2} \ 2y,$$
+$$= 2y^2.$$
