@@ -334,12 +334,26 @@ Plug in the bounds (plugging for the $-1/x$ since it approaches zero the higher 
 ## (d)
 
 **Answer:**\newline
-$2y^2.$
+$2y^2.$ \newline
 
 
 **Work:**
 $$F(x) = \dfrac {d}{dy} \int_{-3}^{y^2} \sqrt{x} \ dx,$$
 $$= \sqrt{y^2} \ \dfrac {d}{dy} y^2,$$
-Power rule..
+Power rule...
 $$= \sqrt{y^2} \ 2y,$$
 $$= 2y^2.$$
+
+## (e)
+
+**Answer:**\newline
+$- e^{\sqrt{z} + \ln(z)} \Big(\dfrac{1}{2 \sqrt{z}} + \dfrac {1}{z}\Big).$ \newline
+
+
+**Work:**
+
+$$F(x) = \dfrac {d}{dz} \int_{\sqrt{z} + \ln(z)}^{10} e^x dx,$$
+$$= -1 \times \dfrac {d}{dz} \int_{\sqrt{z} + \ln(z)}^{10} e^x dx,$$
+$$= -\dfrac {d}{dz} \int_{10}^{\sqrt{z} + \ln(z)} e^x dx,$$
+$$= - e^{\sqrt{z} + \ln(z)} \dfrac{d}{dy} \sqrt{z} + \ln(z),$$
+$$= - e^{\sqrt{z} + \ln(z)} \Big(\dfrac{1}{2 \sqrt{z}} + \dfrac {1}{z}\Big).$$
