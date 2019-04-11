@@ -96,11 +96,162 @@ ggplot(df, aes(x)) +
 
 ## (b)
 
-## Left
-
-**Answer:** \newline
+**Left:** \newline
 $A \approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=0}^{9} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$\newline
 
+**Right:** \newline
+$A \approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=1}^{10} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$\newline
+
+**Midpoint:** \newline
+$A \approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-2.16 + 0.392i)\Big)^2}  \Bigg).$ \newline
+
+**Trapezoidal:** \newline
+$A \approx  \Big(\dfrac {0.196}{\sqrt{2\pi}}\Big) \sum_{i=0}^{9} \dfrac{ e^{-0.5(0.392i - 1.96)^2} + e^{-0.5(0.392i - 0.564)^2} } {2}.$ \newline
+
+
+## (c)
+
+**Left:** 0.947
+
+**Right:** 0.947 
+
+**Midpoint:** 0.951 
+
+**Trapezoidal:** 0.947
+
+# 6.2
+
+## (a)
+
+$\dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{1.39} + c.$ \newline
+
+## (b)
+
+
+```{r, echo=FALSE}
+cat((9^(3/2) * 10/3 - 1/9^3) - (1^(3/2) * 10/3 - 1/1^3))
+```
+
+## (c)
+
+
+```{r, echo=FALSE}
+cat(12 * (0 + 1/2))
+```
+
+## (d)
+
+$2y^2.$ \newline
+
+## (e)
+
+$- e^{\sqrt{z} + \ln(z)} \Big(\dfrac{1}{2 \sqrt{z}} + \dfrac {1}{z}\Big).$ \newline
+
+# 6.3a
+
+$\dfrac{(5x^{10} - 25x^4 + 15x)^{8}}{40} + c.$ \newline
+
+# 6.4a
+
+ 
+```{r, echo=FALSE}
+cat(((2/3 * 4 * ((4+5)^(3/2))) - 2/3 * (2/5 * (4 + 5)^(5/2))) -
+  
+  ((2/3 * 1 * ((1+5)^(3/2))) - 2/3 * (2/5 * (1 + 5)^(5/2))))
+```
+
+
+# 6.5a
+
+ 
+```{r, echo=FALSE}
+e <- exp(1)
+cat(167 / 3 - (log(8))^3 / 3 + e^(167^(1/3)) - e^(log(8)))
+```
+
+# 6.6
+
+## (a)
+
+
+A function is a PDF if the function is never less than 0 and the total area under the curve (over the domain of the function) is equal to 1.\newline
+Step 1: show that function is never less than 0:
+```{r, results = "hold"}
+(3 * sqrt(0) / 2)
+(3 * sqrt(1) / 2)
+(3 * sqrt(100) / 2)
+```
+Function is never less than 0! \newline
+Step 2: show that the total area under the curve over the domain is equal to 1.\newline
+To get the area under the curve, integrate the function (it'd be a definite integral):
+$$\int_0^1 \dfrac{3 \sqrt{x}} {2} dx,$$
+$$ \dfrac{3} {2}  \int_0^1 x^{1/2} \ dx,$$
+$$ \dfrac{3} {2}  \int_0^1 \dfrac{x^{\frac{1}{2} + 1}} {\frac {1}{2} + 1} \ dx,$$
+$$ \dfrac{3} {2}  \int_0^1 \dfrac{x^{3/2}} {\frac {3}{2}} \ dx,$$
+$$ \dfrac{3} {2} \Big(\dfrac{2}{3} x^{3/2}\Big) \ dx,$$
+$$x^{3/2}.$$
+
+Plug in the values of the domain and get the area under the curve within the domain of the function:
+```{r}
+1^(3/2) - 0^(3/2)
+```
+Because this function satisfies both criteria, it is a PDF.
+
+## (b)
+
+```{r, echo=FALSE}
+cat("A:", (1^(3/2) - 0.9^(3/2)),"\n")
+cat("B:", 0.9^(3/2) - 0.8^(3/2),"\n")
+cat("C:", 0.8^(3/2) - 0.7^(3/2),"\n")
+cat("D:", 0.7^(3/2) - 0.6^(3/2),"\n") 
+cat("F:", 0.6^(3/2) - 0.0^(3/2),"\n")
+```
+
+## (c)
+
+```{r, echo=FALSE}
+cat(3/5 * 1^(5/2) - 3/5 * 0^(5/2))
+```
+
+## (d)
+
+
+```{r, echo = FALSE}
+cat("\n", "Variance:", (0.429 - 0.6^2) * 100, "\n",
+"Standard deviation:", sqrt(0.429 - 0.6^2) * 100)
+```
+
+
+\begin{center}
+\newpage
+\LARGE\bfseries Appendix
+\end{center}
+
+# 6.1
+
+## (a)
+
+$$f(x) = \int_{-1.96}^{1.96} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5^2} dx$$
+
+### Figs (code is the same for all of them)
+```{r, fig.show="hide"}
+# Variables
+x <- seq(-3, 3, by=0.1)
+norm <- dnorm(x, mean=0, sd=1)
+df <- as.data.frame(cbind(x,norm))
+# plot
+ggplot(df, aes(x)) +
+  geom_line(aes(y = norm)) +
+  ylab("f(x)") + xlab("x") +
+  labs(color = "Function") +
+  theme_minimal() +
+  scale_x_continuous(breaks=c(-1.96,1.96)) 
+```
+
+
+## (b)
+
+## Left
 
 **Work:** \newline
 The left Riemann Sum formula is:
@@ -122,9 +273,6 @@ $$\approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=0}^{9} e^{-0.5^2 \Big(0.39
 
 ## Right:
 
-**Answer:** \newline
-$A \approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=1}^{10} e^{-0.5^2 \Big(0.392i - 1.96\Big)^2}\Bigg).$\newline
-
 **Work:** \newline
 Do the same thing here except the index is from $1$ to $n$ instead of from $0$ to $n-1$.
 $$A \approx  \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Bigg(-1.96 + \frac {1.96-(-1.96)}{10} i \Big(  \frac{1.96 - (-1.96)}{10}\Big)\Bigg)^2}  \Bigg),$$
@@ -133,9 +281,6 @@ $$\approx \dfrac{0.392}{\sqrt{2 \pi}}  \Bigg( \sum_{i=1}^{10} e^{-0.5^2 \Big(0.3
 
 
 ## Midpoint:
-
-**Answer:** \newline
-$A \approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-2.16 + 0.392i)\Big)^2}  \Bigg).$ \newline
 
 **Work:** \newline
 $$A \approx \sum_{i=0}^{n-1} f\Big(a + \dfrac {(b-a)(i - 0.5)}{n} \Big).$$
@@ -155,9 +300,6 @@ $$\approx 0.392 \Bigg( \sum_{i=1}^{10} \dfrac{1}{\sqrt{2 \pi}} e^{-0.5 \Big(-2.1
 
 ## Trapezoidal
 
-**Answer:** \newline
-$A \approx  \Big(\dfrac {0.196}{\sqrt{2\pi}}\Big) \sum_{i=0}^{9} \dfrac{ e^{-0.5(0.392i - 1.96)^2} + e^{-0.5(0.392i - 0.564)^2} } {2}.$ \newline
-
 **Work:**
 $$A \approx \sum_{i=0}^{n-1} \dfrac {b - a}{n} \dfrac{\dfrac{1}{\sqrt{2 \pi}} e^{  \Big(a + \frac {(b-a)i}{n} \Big)^2} + \dfrac {1}{\sqrt{2\pi}} e^{  \Big(a + \frac {(b-a)i+1}{n} \Big)^2} } {2} \dfrac {b-a}{n},$$
 $$\approx \sum_{i=0}^{10-1} \dfrac {1.96 - (-1.96)}{10} \dfrac{\dfrac{1}{\sqrt{2 \pi}} e^{  \Big((-1.96) + \frac {(1.96-(-1.96))i}{10} \Big)^2} + \dfrac {1}{\sqrt{2\pi}} e^{  \Big((-1.96) + \frac {(1.96-(-1.96))i+1}{10} \Big)^2} } {2},$$
@@ -173,9 +315,6 @@ $$\approx  \Big(\dfrac {0.196}{\sqrt{2\pi}}\Big) \sum_{i=0}^{9} \dfrac{ e^{-0.5(
 ## (c)
 
 ### Left
-
-**Answer:** \newline
-0.947 \newline
 
 **Work:** \newline
 
@@ -198,9 +337,6 @@ e <- exp(1) # get euler's number
 
 ### Right
 
-**Answer:** \newline
-0.947 \newline
-
 ** Work:** \newline
 
 Same thing, except runs from 1-10 instead of 0-9. Not surprising that it gives you the same answer:
@@ -220,9 +356,6 @@ e <- exp(1) # get euler's number
 ```
 
 ### Midpoint
-
-**Answer:** \newline
-0.951 \newline
 
 **Work:** \newline
 
@@ -244,9 +377,6 @@ e <- exp(1) # get euler's number
 ```
 
 ### Trapezoidal
-
-**Answer:** \newline
-0.947 \newline
 
 **Work:** \newline
 
@@ -281,10 +411,6 @@ e <- exp(1) # get euler's number
 
 ## (a)
 
-**Answer:** \newline 
-\newline
-$= \dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{1.39} + c.$ \newline
-
 **Work:**\newline
 
 $$F(x) = \int x^{100} + 3e^x - 7(4^x)dx,$$
@@ -296,11 +422,6 @@ $$= \dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{\ln(4)} + c,$$
 $$= \dfrac {x^{101}} {101} + 3 e^x - 7 \dfrac {4^x}{1.39} + c.$$
 
 ## (b)
-
-**Answer:**
-```{r, echo=FALSE}
-cat((9^(3/2) * 10/3 - 1/9^3) - (1^(3/2) * 10/3 - 1/1^3))
-```
 
 **Work:**\newline
 $$F(x) = \int_{1}^9 5 \sqrt{x} \ dx + \dfrac {3}{x^4} dx,$$
@@ -318,11 +439,6 @@ From here, plug in the bounds and take the difference:
 
 ## (c)
 
-**Answer:**
-```{r, echo=FALSE}
-cat(12 * (0 + 1/2))
-```
-
 **Work:**
 $$F(x) = \int_2^\infty \dfrac {12} {x^2} dx,$$
 $$= \lim_{k \to \infty} \int_2^k \dfrac {12} {x^2} dx,$$
@@ -336,10 +452,6 @@ Plug in the bounds (plugging for the $-1/x$ since it approaches zero the higher 
 
 ## (d)
 
-**Answer:**\newline
-$2y^2.$ \newline
-
-
 **Work:**
 $$F(x) = \dfrac {d}{dy} \int_{-3}^{y^2} \sqrt{x} \ dx,$$
 $$= \sqrt{y^2} \ \dfrac {d}{dy} y^2,$$
@@ -348,10 +460,6 @@ $$= \sqrt{y^2} \ 2y,$$
 $$= 2y^2.$$
 
 ## (e)
-
-**Answer:**\newline
-$- e^{\sqrt{z} + \ln(z)} \Big(\dfrac{1}{2 \sqrt{z}} + \dfrac {1}{z}\Big).$ \newline
-
 
 **Work:**
 
@@ -362,9 +470,6 @@ $$= - e^{\sqrt{z} + \ln(z)} \dfrac{d}{dy} \sqrt{z} + \ln(z),$$
 $$= - e^{\sqrt{z} + \ln(z)} \Big(\dfrac{1}{2 \sqrt{z}} + \dfrac {1}{z}\Big).$$
 
 # 6.3a
-
-**Answer:**\newline \newline
-$\dfrac{(5x^{10} - 25x^4 + 15x)^{8}}{40} + c.$ \newline
 
 **Work:**\newline
 
@@ -388,14 +493,7 @@ $$\dfrac{(5x^{10} - 25x^4 + 15x)^{8}}{40} + c.$$
 
 # 6.4a
 
-**Answer:** 
-```{r, echo=FALSE}
-cat(((2/3 * 4 * ((4+5)^(3/2))) - 2/3 * (2/5 * (4 + 5)^(5/2))) -
-  
-  ((2/3 * 1 * ((1+5)^(3/2))) - 2/3 * (2/5 * (1 + 5)^(5/2))))
-```
-
-
+**Work:**
 $$\int_1^4 x \sqrt{x + 5} \ dx,$$
 We want to get to:
 $$\int u \ dv = uv - \int v \ du.$$
@@ -443,12 +541,6 @@ Plug in the bounds:
 
 # 6.5a
 
-**Answer:** 
-```{r, echo=FALSE}
-e <- exp(1)
-cat(167 / 3 - (log(8))^3 / 3 + e^(167^(1/3)) - e^(log(8)))
-```
-
 **Work:**
 Second theorem:
 $$\int_a^b f(x) \ dx = F(x) \Bigg\rvert_a^b = F(b) - F(a).$$
@@ -470,39 +562,9 @@ e <- exp(1)
 
 ## (a)
 
-**Answer:** \newline
-A function is a PDF if the function is never less than 0 and the total area under the curve (over the domain of the function) is equal to 1.\newline
-Step 1: show that function is never less than 0:
-```{r, results = "hold"}
-(3 * sqrt(0) / 2)
-(3 * sqrt(1) / 2)
-(3 * sqrt(100) / 2)
-```
-Function is never less than 0! \newline
-Step 2: show that the total area under the curve over the domain is equal to 1.\newline
-To get the area under the curve, integrate the function (it'd be a definite integral):
-$$\int_0^1 \dfrac{3 \sqrt{x}} {2} dx,$$
-$$ \dfrac{3} {2}  \int_0^1 x^{1/2} \ dx,$$
-$$ \dfrac{3} {2}  \int_0^1 \dfrac{x^{\frac{1}{2} + 1}} {\frac {1}{2} + 1} \ dx,$$
-$$ \dfrac{3} {2}  \int_0^1 \dfrac{x^{3/2}} {\frac {3}{2}} \ dx,$$
-$$ \dfrac{3} {2} \Big(\dfrac{2}{3} x^{3/2}\Big) \ dx,$$
-$$x^{3/2}.$$
-
-Plug in the values of the domain and get the area under the curve within the domain of the function:
-```{r}
-1^(3/2) - 0^(3/2)
-```
-Because this function satisfies both criteria, it is a PDF.
+N/A - work shown in answer
 
 ## (b)
-**Answer:**
-```{r, echo=FALSE}
-cat("A:", (1^(3/2) - 0.9^(3/2)),"\n")
-cat("B:", 0.9^(3/2) - 0.8^(3/2),"\n")
-cat("C:", 0.8^(3/2) - 0.7^(3/2),"\n")
-cat("D:", 0.7^(3/2) - 0.6^(3/2),"\n") 
-cat("F:", 0.6^(3/2) - 0.0^(3/2),"\n")
-```
 
 **Work:** \newline
 We got the integral, so now we just need to plug in the domains of all the grades. Since x runs from 0 to 1, we know that the range of e.g. an A is from 0.9 to 1.0 on the domain.
@@ -515,10 +577,6 @@ We got the integral, so now we just need to plug in the domains of all the grade
 ```
 
 ## (c)
-**Answer:**
-```{r, echo=FALSE}
-cat(3/5 * 1^(5/2) - 3/5 * 0^(5/2))
-```
 
 **Work:** \newline
 We have the formula for the first moment:
@@ -539,12 +597,6 @@ Plug in the domain to the first moment formula:
 ```
 
 ## (d)
-
-**Answer:**
-```{r, echo = FALSE}
-cat("Variance:", (0.429 - 0.6^2) * 100, "\n",
-"Standard deviation:", sqrt(0.429 - 0.6^2) * 100)
-```
 
 **Work:** \newline
 Second moment:
