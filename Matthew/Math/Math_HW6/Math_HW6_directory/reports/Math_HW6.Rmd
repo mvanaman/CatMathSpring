@@ -485,13 +485,32 @@ $$\int_0^1 \dfrac{3 \sqrt{x}} {2} dx,$$
 $$ \dfrac{3} {2}  \int_0^1 x^{1/2} \ dx,$$
 $$ \dfrac{3} {2}  \int_0^1 \dfrac{x^{\frac{1}{2} + 1}} {\frac {1}{2} + 1} \ dx,$$
 $$ \dfrac{3} {2}  \int_0^1 \dfrac{x^{3/2}} {\frac {3}{2}} \ dx,$$
-$$ \dfrac{3} {2} \Big(\dfrac{2}{3} x^{3/2}\Big) \ dx.$$
+$$ \dfrac{3} {2} \Big(\dfrac{2}{3} x^{3/2}\Big) \ dx,$$
+$$x^{3/2}.$$
+
 Plug in the values of the domain and get the area under the curve within the domain of the function:
 ```{r}
-3/2 * (2/3 * 1^(3/2)) - 3/2 * (2/3 * 0^(3/2))
+1^(3/2) - 0^(3/2)
 ```
 Because this function satisfies both criteria, it is a PDF.
 
 ## (b)
+**Answer:**
+```{r, echo=FALSE}
+cat("A:", (1^(3/2) - 0.9^(3/2)),"\n")
+cat("B:", 0.9^(3/2) - 0.8^(3/2),"\n")
+cat("C:", 0.8^(3/2) - 0.7^(3/2),"\n")
+cat("D:", 0.7^(3/2) - 0.6^(3/2),"\n") 
+cat("F:", 0.6^(3/2) - 0.0^(3/2),"\n")
+```
 
+**Work:** \newline
+We got the integral, so now we just need to plug in the domains of all the grades. Since x runs from 0 to 1, we know that the range of e.g. an A is from 0.9 to 1.0 on the domain.
+```{r, results = "hide"}
+(1^(3/2) - 0.9^(3/2))
+0.9^(3/2) - 0.8^(3/2)
+0.8^(3/2) - 0.7^(3/2)
+0.7^(3/2) - 0.6^(3/2)
+0.6^(3/2) - 0.0^(3/2)
+```
 
