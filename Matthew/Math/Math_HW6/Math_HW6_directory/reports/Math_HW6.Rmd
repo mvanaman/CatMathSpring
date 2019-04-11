@@ -514,3 +514,27 @@ We got the integral, so now we just need to plug in the domains of all the grade
 0.6^(3/2) - 0.0^(3/2)
 ```
 
+## (c)
+**Answer:**
+```{r, echo=FALSE}
+cat(3/5 * 1^(5/2) - 3/5 * 0^(5/2))
+```
+
+**Work:** \newline
+We have the formula for the first moment:
+$$E(x) = \int_{-\infty}^\infty x f(x) \ dx.$$
+We just want to plug in the information we have:\newline
+- $f(x) = \frac {3 \sqrt{x}} {2}$ \newline
+- the domain of x: [0,1].
+$$E(x) = \int_0^1 x \frac {3 \sqrt{x}} {2} \ dx,$$
+$$= \int_0^1 \frac {3x (x^{1/2})} {2} \ dx,$$
+$$= \int_0^1 \frac{3}{2} x^{3/2} \ dx,$$
+$$= \frac{3}{2} \int_0^1 \dfrac{x^{3/2 + 1}} {\frac {3}{2} + 1} \ dx,$$
+$$= \frac{3}{2} \Big( {\frac {2}{5}} x^{5/2} \Big),$$
+$$= {\frac {3}{5}} x^{5/2}$$
+
+Plug in the domain to the first moment formula:
+```{r}
+3/5 * 1^(5/2) - 3/5 * 0^(5/2)
+```
+
