@@ -538,3 +538,39 @@ Plug in the domain to the first moment formula:
 3/5 * 1^(5/2) - 3/5 * 0^(5/2)
 ```
 
+## (d)
+
+**Answer:**
+```{r, echo = FALSE}
+cat("Variance:", (0.429 - 0.6^2) * 100, "\n",
+"Standard deviation:", sqrt(0.429 - 0.6^2) * 100)
+```
+
+**Work:** \newline
+Second moment:
+$$V(x) = E(x^2) - E(x)^2.$$
+- $E(x)^2 = 0.6^2$\newline
+- $E(x^2) = \ ?$
+$$\int_0^1 x^2 \dfrac {3 \sqrt{x}}{2} dx,$$
+$$\dfrac {3}{2} \int_0^1 x^2 \sqrt{x} \ dx,$$
+$$\dfrac {3}{2} \int_0^1 x^2 (x^{1/2}) \ dx,$$
+$$\dfrac {3}{2} \int_0^1 x^{5/2} \ dx,$$
+$$\dfrac {3}{2} \int_0^1 \dfrac{x^{7/2}}{\frac{7}{2}} \ dx,$$
+$$\dfrac {3}{2} \frac{7}{2} x^{7/2},$$
+$$\dfrac {3}{7} x^{7/2},$$
+$$\dfrac {3}{7} (1^{7/2}) - \dfrac {3}{7} (0^{7/2}),$$
+$$= 0.429.$$
+```{r}
+# calculation
+3/7 * 1^(7/2) - 3/7 * 0^(7/2)
+```
+Multiply by 100 to get onto 0-100 scale \newline
+Variance:
+$V(x) = E(x^2) - E(x)^2:$
+```{r}
+(0.429 - 0.6^2) * 100
+```
+Standard deviation:
+```{r}
+sqrt(0.429 - 0.6^2) * 100
+```
