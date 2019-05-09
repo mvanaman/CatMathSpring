@@ -1,0 +1,26 @@
+---
+title: "Math HW7"
+author: "Matthew Vanaman"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+monofont: Courier New
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{tikz,xcolor,listings}
+---
+`r knitr::opts_knit$set(root.dir='..')`
+
+```{r, include=FALSE}
+library(ProjectTemplate); load.project()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+options(scipen = 999)
+knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+np <- reticulate::import("numpy")
+sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
+```
+
+7.1a, 7.3a, 7.6 (sketch its level sets as well), 7.7, 7.10
