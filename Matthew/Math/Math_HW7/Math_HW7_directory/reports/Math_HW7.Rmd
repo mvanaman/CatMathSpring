@@ -7,7 +7,7 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{tikz,xcolor,listings}
+header-includes: \usepackage{listings}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
@@ -19,6 +19,7 @@ library(ProjectTemplate); load.project()
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
 options(scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+knitr::knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}','\\usepackage{xcolor}', x, fixed = TRUE)})
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
@@ -86,4 +87,27 @@ $$= x - 2y + 1.$$
 
 Therefore, the gradient is:
 $$\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$$
+
+### (b)
+
+**Answer:** critical point = $(\dfrac{5}{3},\dfrac{4}{3}).$ \newline
+
+**Work:**
+
+start by solving for x:
+
+$$-2x + y + 2 = 0,$$
+$$y = 2x - 2.$$
+Plug into the bottom element:
+$$x - 2y + 1 = 0,$$
+$$x - 2(2x - 2) + 1 = 0,$$
+$$x - 4x - 3 = 0,$$
+$$3x = 5,$$
+$$x = \dfrac {5}{3}.$$
+Back to the top element:
+$$y - 2x + 2 = 0,$$
+$$-y = 2x + 2,$$
+$$-y = -2(\frac{5}{3}) + 2,$$
+$$y = \dfrac {4}{3}$$
+
 

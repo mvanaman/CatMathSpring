@@ -1,4 +1,10 @@
 base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
 ProjectTemplate
 reshape2
 plyr
@@ -33,4 +39,3 @@ reghelper
 xlsx
 DescTools
 binom
-kableExtra
