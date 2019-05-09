@@ -67,3 +67,23 @@ Plugging in x and y values:
 ## 7.6 (sketch its level sets as well)
 
 ### (a)
+
+**Answer:** $\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$
+
+
+**Work:**\newline
+Gradient = first partial derivative. Need to find one for x and one for y, and construct a matrix where row 1 is the first partial derivative with respect to x and row 2 is the first partial derivative with respect to y.\newline
+With respect to x:
+$$\dfrac{\partial}{\partial x} (-x^2 + xy - y^2 + 2x  + y),$$
+$$= \dfrac{\partial}{\partial x} (-x^2) + \dfrac{\partial}{\partial x}  (x) \cdot \dfrac{\partial}{\partial x} (y) - \dfrac{\partial}{\partial x} (y^2) + \dfrac{\partial}{\partial x} (2) \cdot \dfrac{\partial}{\partial x} (x)  + \dfrac{\partial}{\partial x} (y),$$
+$$y - 2x + 2.$$
+
+With respect to y:
+
+$$\dfrac{\partial}{\partial y} (-x^2 + xy - y^2 + 2x  + y),$$
+$$= \dfrac{\partial}{\partial y} (-x^2) + \dfrac{\partial}{\partial y}  (x) \cdot \dfrac{\partial}{\partial y} (y) - \dfrac{\partial}{\partial y} (y^2) + \dfrac{\partial}{\partial y} (2) \cdot \dfrac{\partial}{\partial y} (x)  + \dfrac{\partial}{\partial y} (y),$$
+$$= x - 2y + 1.$$
+
+Therefore, the gradient is:
+$$\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$$
+

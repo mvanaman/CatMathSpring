@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.4.16)  9 MAY 2019 14:48
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.4.16)  9 MAY 2019 15:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1354,21 +1354,21 @@ Package xcolor Warning: Incompatible color definition on input line 189.
 Package xcolor Warning: Incompatible color definition on input line 189.
 
 [2]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 196.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 196.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 223.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 223.
 (./Math_HW7.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 196.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 196.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 223.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 223.
 Package rerunfilecheck Info: File `Math_HW7.out' has not changed.
-(rerunfilecheck)             Checksum: 913DA5C9581C1691583E6886A3B04454.
+(rerunfilecheck)             Checksum: 19E6831EF18B29D0F26B6EEBE9CB1A5F.
  ) 
 Here is how much of TeX's memory you used:
- 33330 strings out of 492970
- 647853 string characters out of 6133938
- 757681 words of memory out of 5000000
- 36889 multiletter control sequences out of 15000+600000
+ 33333 strings out of 492970
+ 647901 string characters out of 6133938
+ 757765 words of memory out of 5000000
+ 36892 multiletter control sequences out of 15000+600000
  542999 words of font info for 53 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 55i,5n,116p,10449b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,8n,116p,10449b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on Math_HW7.pdf (2 pages).
