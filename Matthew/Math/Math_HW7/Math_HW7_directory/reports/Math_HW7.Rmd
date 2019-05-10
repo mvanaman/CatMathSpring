@@ -125,3 +125,12 @@ $$ = \begin{bmatrix} -2 & 1 \\ 1 & -2 \end{bmatrix}.$$
 
 ### (d)
 
+$$f_{xx} (\dfrac {5} {3}, \dfrac {4}{3}) \cdot f_{yy} (\dfrac {5} {3}, \dfrac {4}{3}) - f_{xy} (\dfrac {5} {3}, \dfrac {4}{3})^2 > 0,$$
+$$-2(-2) - 1^2 > 0,$$
+$$3.$$
+We therefore know the matrix is either a positive-definite or negative-definite matrix.
+
+$$f_{xx} (\dfrac {5} {3}, \dfrac {4}{3}) + f_{yy} (\dfrac {5} {3}, \dfrac {4}{3}),$$
+$$= -2 + (-2),$$
+$$= -4.$$
+At $(\dfrac {5} {3}, \dfrac {4}{3})$, the matrix is negative-definite, and at a local maximum. 
