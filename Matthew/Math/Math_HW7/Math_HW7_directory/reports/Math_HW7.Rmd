@@ -24,19 +24,47 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
- 7.7, 7.10
+*All work and code are shown in the Appendix.* \newline
+
+**\large 7.1a:** $f(a,b,c,d,e,f) = a \times b \times c \times d \times e \times f$ \newline
+
+**\large 7.3a:** 5.
+
+## 7.6 
+
+**\large (a):** $\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$ \newline
+
+**\large (b):** Critical point = $(\dfrac{5}{3},\dfrac{4}{3}).$ \newline
+
+**\large (c):** $\begin{bmatrix} -2 & 1 \\ 1 & -2 \end{bmatrix}.$ \newline
+
+**\large (d):** At $(\dfrac {5} {3}, \dfrac {4}{3})$, the matrix is negative-definite, and at a local maximum. \newline
+
+**\large 7.7:** The pair (111.11, 133.33) maximizes the function.
+
+## 7.10
+
+**\large (a):** 8.33.
+
+**\large (b):** 27. 
+
+**\large (c):** 15.
+
+**\large (d):** -6. 
+
+**\large (e):** -0.298. 
+\newpage
+
+\begin{center}
+\newpage
+\LARGE{Appendix}
+\end{center}
 
 ## 7.1a
-
-**Answer:** $f(a,b,c,d,e,f) = a \times b \times c \times d \times e \times f$
+Work shown in answer.
 
 ## 7.3a
-
-**Answer:** 5 \newline
-
 **Work:** \newline
-
-
 Plug in 3 and 1:
 ```{r}
 (3^2 - 3 * 1 + (6 * 1)^2) / (3 - 3 * 1)
@@ -65,13 +93,9 @@ Plugging in x and y values:
 3 + 2 * 1
 ```
 
-## 7.6 (sketch its level sets as well)
+## 7.6
 
 ### (a)
-
-**Answer:** $\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$
-
-
 **Work:**\newline
 Gradient = first partial derivative. Need to find one for x and one for y, and construct a matrix where row 1 is the first partial derivative with respect to x and row 2 is the first partial derivative with respect to y.\newline
 With respect to x:
@@ -89,9 +113,6 @@ Therefore, the gradient is:
 $$\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$$
 
 ### (b)
-
-**Answer:** critical point = $(\dfrac{5}{3},\dfrac{4}{3}).$ \newline
-
 **Work:**
 
 start by solving for x:
@@ -112,9 +133,6 @@ $$y = \dfrac {4}{3}$$
 
 
 ### (c)
-
-**Answer:** $\begin{bmatrix} -2 & 1 \\ 1 & -2 \end{bmatrix}.$
-
 **Work:**\newline
 The gradient is:
 $$\nabla f(xy) = \begin{bmatrix} y - 2x + 2 \\ x - 2y + 1 \end{bmatrix}.$$
@@ -124,8 +142,6 @@ $$H (f(x,y)) = \begin{bmatrix} \dfrac{\partial}{\partial x}(y - 2x + 2) & \dfrac
 $$ = \begin{bmatrix} -2 & 1 \\ 1 & -2 \end{bmatrix}.$$
 
 ### (d)
-**Anwer:** At $(\dfrac {5} {3}, \dfrac {4}{3})$, the matrix is negative-definite, and at a local maximum. \newline
-
 **Work:**
 $$f_{xx} (\dfrac {5} {3}, \dfrac {4}{3}) \cdot f_{yy} (\dfrac {5} {3}, \dfrac {4}{3}) - f_{xy} (\dfrac {5} {3}, \dfrac {4}{3})^2 > 0,$$
 $$-2(-2) - 1^2 > 0,$$
@@ -138,13 +154,7 @@ $$= -4.$$
 At $(\dfrac {5} {3}, \dfrac {4}{3})$, the matrix is negative-definite, and at a local maximum. 
 
 ## 7.7
-
-
-300x + 500y = 100,000
-
-how much x, y to maximize profits
-constraint = 100,000
-
+**Work:** \newline
 First, find gradient of the function (partial derivative with respect to x, then y). With respect to x:
 $$\dfrac {\partial}{\partial x} (150x^{1/3} y^{2/3}),$$
 $$= 150 y^{2/3}\dfrac {\partial}{\partial x} (x^{1/3}),$$
@@ -196,11 +206,10 @@ Step 6 is to compare f at the critical points. But plugging in 0s does not make 
 150 * 111.11^(1/3) * 133.33^(2/3)
 ```
 Plug in a higher x value (x = 120) and solve for y:
-```{python, echo=FALSE}
+```{python}
 from sympy import solveset, S
 from sympy.abc import y
 from sympy import Symbol, Eq
-print("solveset(Eq(300 * 120 + 500*y, 100000),y)")
 print(solveset(Eq(300 * 120 + 500*y, 100000),y))
 ```
 Plug in (120, 128) to production function:
@@ -208,15 +217,68 @@ Plug in (120, 128) to production function:
 150 * 120^(1/3) * 128^(2/3)
 ```
 We lose money. What if you decease x? Make x = 100 and solve for y:
-```{python, echo=FALSE}
+```{python}
 from sympy import solveset, S
 from sympy.abc import y
 from sympy import Symbol, Eq
-print("solveset(Eq(300 * 100 + 500*y, 100000),y)")
 print(solveset(Eq(300 * 100 + 500*y, 100000),y))
 ```
 ```{r}
 150 * 100^(1/3) * 140^(2/3)
-
 ```
 Because decreasing x and increasing y (and vice versa) decreases the output of the function, we can be confident that (111.11, 133.33) maximizes the function.
+
+## 7.10
+
+### (a)
+**Work:** \newline
+We already have everything we need: \newline
+$s(X) = \sqrt{4} = 2$ \
+$s(Y) = \sqrt {9} = 3$ \
+$$Corr(X,Y) = \dfrac {Cov(X,Y)}{s(X) \cdot s(Y)},$$
+$$= \dfrac {5}{6},$$
+$$= 8.33.$$
+
+### (b)
+**Work:** \newline
+First remove constant since V(X + C) = V(X):
+$$V(A) = V(3X - 3Y),$$
+$$V(A) = V(3X - 3Y),$$
+Weighted difference, so use the weighted sum of two variances formula (which is the same as for when you need a difference also):
+$$V(aX - bY) = a^2V(X) + b^2V(Y) + 2ab\text{Cov}(X,Y),$$
+$$ = 3^2V(X) + (-3)^2V(Y) + 2(3)(-3)\text{Cov}(X,Y),$$
+Then plug in the information the question has given:
+$$ = 3^2(4) + (-3)^2(9) + 2(3)(-3)(5),$$
+```{r}
+3^2 * 4 + (-3)^2 * 9 + 2 * 3 * (-3) * 5
+```
+
+### (c)
+**Work:** \newline
+First remove constant since V(X + C) = V(X):
+$$V(B) = V(-2X + Y),$$
+Weighted difference, so use the weighted sum of two variances formula (which is the same as for when you need a difference also):
+$$V(aX - bY) = a^2V(X) + b^2V(Y) + 2ab\text{Cov}(X,Y),$$
+$$ = -2^2V(X) + (1)^2V(Y) + 2(-1)(1)\text{Cov}(X,Y),$$
+Then plug in the information the question has given:
+$$ = (-2)^2(4) + 1^2(9) + 2(-1)(1)(5).$$
+```{r}
+(-2)^2 * 4 + 1^2 * 9 + 2 * (-1) * (1) * 5
+```
+
+### (d)
+**Work:** \newline
+When both variables are replaced by linear functions of other variables, you use:
+$$\text{Cov}(aX + bY, cW + dZ) = ac\text{Cov}(X, W) + ad\text{Cov}(X, Z) + bc\text{Cov}(Y, W) + bd\text{Cov}(Y, Z)$$
+$$= 3(-2)\text{Cov}(X, W) + 3(1)\text{Cov}(X, Z) + (-3)(-2)\text{Cov}(Y, W) + (-3)(1)\text{Cov}(Y, Z),$$
+$$= 3(-2)(4) + 3(1)(5) + (-3)(-2)(5) + (-3)(1)(9),$$
+```{r}
+3*(-2)*(4) + 3*(1)*(5) + (-3)*(-2)*(5) + (-3)*(1)*(9)
+```
+
+### (e)
+**Work:** \newline
+$$\dfrac{-6}{\sqrt{27}\sqrt{15}}.$$
+```{r}
+-6/(sqrt(27) * sqrt(15))
+```
