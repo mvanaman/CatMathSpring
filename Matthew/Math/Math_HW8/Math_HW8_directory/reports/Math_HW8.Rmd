@@ -222,3 +222,26 @@ cat(matrixcalc::frobenius.prod(do,re) / (sqrt(2^2+4^2)*sqrt(1^2+2^2)))
 ```
 
 ## 8.10a
+
+**large (a):**
+$$\begin{bmatrix} 2 & 1 & 6 \\ 8 & 4 & 3 \\ 12 & 1 & 4 \end{bmatrix},$$
+Switch the top and second rows
+$$\begin{bmatrix} 8 & 4 & 3 \\ 2 & 1 & 6 \\ 12 & 1 & 4 \end{bmatrix},$$
+Multiple the first row by -1, then add that to the last row
+$$\begin{bmatrix} 8 & 4 & 3 \\ 2 & 1 & 6 \\ 8 & -3 & 1 \end{bmatrix},$$
+Switch the first and the last row
+$$\begin{bmatrix} 8 & -3 & 1 \\ 2 & 1 & 6 \\  8 & 4 & 3\end{bmatrix},$$
+Multiply the second row by -4, then add that to the last row
+$$\begin{bmatrix} 8 & -3 & 1 \\ 2 & 1 & 6 \\  0 & 0 & -21\end{bmatrix},$$
+Divide the last row by -21
+$$\begin{bmatrix} 8 & -3 & 1 \\ 2 & 1 & 6 \\  0 & 0 & 1\end{bmatrix},$$
+Multiply the second row by 3 and add that to the first row
+$$\begin{bmatrix} 2 & 0 & 18 \\ 2 & 1 & 6 \\ 0 & 0 & 1\end{bmatrix},$$
+Divide the fist row by 2
+$$\begin{bmatrix} 1 & 0 & 9 \\ 2 & 1 & 6 \\ 0 & 0 & 1\end{bmatrix},$$
+Multiply the last row by -6 and add that to the second row
+$$\begin{bmatrix} 1 & 0 & 9 \\ 2 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix},$$
+Multiply the last row by -9 and add that to the first row
+$$\begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix},$$
+Multiply the first row by -2 and add that to the second row
+$$\begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}.$$
