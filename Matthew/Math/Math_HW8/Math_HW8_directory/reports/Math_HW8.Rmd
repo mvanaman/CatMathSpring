@@ -21,7 +21,7 @@ options(scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 ```
 
-8.4, 8.8, 8.9, 8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
+8.8, 8.9, 8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
 
 ## 8.3
 
@@ -192,4 +192,13 @@ which ends up being $3(-4) + (-8)6 = -60.$
 $\begin{bmatrix} -4 & 6 \end{bmatrix} \times \begin{bmatrix} 3 \\ -8 \end{bmatrix}$,
 
 which ends up being $-4(3) + 6(-8) = -60$.
+
+## 8.8
+In the matrix $\begin{bmatrix} \ \ 1 \\ -1 \end{bmatrix}$, 1 represents latitude and -1 represents longitude. To rotate 90 degrees, just shift the arrow to a new quandrant in the clockwise direction by changing the latitude: $\begin{bmatrix} -1 \\ -1 \end{bmatrix}$. Step 2 is to find the transformation matrix, which is a matrix that when multiplied by $\begin{bmatrix} \ \ 1 \\ -1 \end{bmatrix}$ will yield $\begin{bmatrix} -1 \\ -1 \end{bmatrix}$. This would work:
+$$\begin{bmatrix} \ \ 5 & \ \ 6 \\ -2 & -1 \end{bmatrix} \times \begin{bmatrix} \ \ 1 \\ -1 \end{bmatrix},$$
+```{r, echo=FALSE, results="asis"}
+tran <- matrix(c(5,-2,6,-1), nrow=2, ncol=2)
+mat <- matrix(c(1,-1), nrow=2, ncol=1)
+write_matex(tran%*%mat)
+```
 
