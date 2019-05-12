@@ -21,7 +21,7 @@ options(scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 ```
 
-8.8, 8.9, 8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
+8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
 
 ## 8.3
 
@@ -202,3 +202,23 @@ mat <- matrix(c(1,-1), nrow=2, ncol=1)
 write_matex(tran%*%mat)
 ```
 
+
+## 8.9
+Multiply latitude and longitude by the some fraction and the magnitude will change while the direction will remain the same. E.g.:
+$$\begin{bmatrix} 2 \\ 4 \end{bmatrix},$$
+$$\begin{bmatrix} 2 \times 0.5 \\ 4 \times 0.5 \end{bmatrix},$$
+$$= \begin{bmatrix} 1 \\ 2\end{bmatrix}.$$
+To confirm the direction is the same, the cosine should be 1, meaning the angle is 0:
+$$\dfrac {A \cdot B} {||A|| \ ||B||},$$
+$$\dfrac {\begin{bmatrix} 2 \\ 4 \end{bmatrix} \cdot \begin{bmatrix} 1 \\ 2 \end{bmatrix} } {\sqrt{2^2 + 4^2} \ \sqrt{1^2+2^2}},$$
+$$\dfrac {10} {10},$$
+$$=1.$$
+
+```{r}
+# check work
+do <- matrix(c(2,4), nrow=2, ncol=1)
+re <- matrix(c(1,2), nrow=2, ncol=1)
+cat(matrixcalc::frobenius.prod(do,re) / (sqrt(2^2+4^2)*sqrt(1^2+2^2)))
+```
+
+## 8.10a
