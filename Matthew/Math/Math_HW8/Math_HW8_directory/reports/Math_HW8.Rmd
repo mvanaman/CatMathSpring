@@ -7,7 +7,7 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{tikz,xcolor,listings}
+header-includes: \usepackage{listings}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
@@ -19,10 +19,164 @@ library(ProjectTemplate); load.project()
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
 options(scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
-np <- reticulate::import("numpy")
-sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-8.3, 8.4, 8.8, 8.9, 8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
+8.4, 8.8, 8.9, 8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
 
 ## 8.3
+
+I made the matrices here for checking work (see code in the appendix), but just to show they work as intended using A as an example:
+```{r, echo=FALSE}
+A <- matrix(c(-1,3,4), nrow=3, ncol=1)
+B <- matrix(c(3,-2,1), nrow=3, ncol=1)
+C <- matrix(c(3,-8,2,0,-4,6), nrow=2, ncol=3)
+D <- matrix(c(6,-1,-3,-2,3,8), nrow=3, ncol=2)
+# this function gets rid of the annoying row and  column names of the matrices
+print.matrix <- function(m){
+write.table(format(m, justify="right"),
+            row.names=F, col.names=F, quote=F)
+}
+# This function makes r matrix output look pretty and consistent with latex
+write_matex <- function(x) {
+  begin <- "$$= \\begin{bmatrix}"
+  end <- "\\end{bmatrix}.$$"
+  X <-
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  writeLines(c(begin, X, end))
+}
+```
+```{r}
+print(A)
+print(A * 3)
+```
+
+
+**\large (a):** 
+$$3A - 2B,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(3*A - 2*B)
+```
+
+**Work:**
+If the number of rows and columns are the same, you can use scalar multiplication. 
+$$3A = \begin{bmatrix} 3(-1) \\ 3(3) \\ 3(4) \end{bmatrix},$$
+
+```{r, results="asis"}
+write_matex(3*A)
+```
+
+$$2B = \begin{bmatrix} 2(3) \\ 2(-2) \\ 2(1) \end{bmatrix},$$
+```{r, results="asis"}
+write_matex(2*B)
+```
+$$3A - 2B,$$
+```{r results="asis"}
+write_matex(3*A - 2*B)
+```
+
+**\large (b):** $A \cdot B$ = -5. \newline
+
+**Work:** \newline
+Element-wise multiplication:\newline
+$$A \times B,$$
+$$= \begin{bmatrix}-1 \\ 3 \\ 4  \end{bmatrix} \times \begin{bmatrix} 3 \\ -2 \\ 1  \end{bmatrix},$$
+$$= -1(3) + 3(-2) + 4(1),$$
+$$-5.$$
+
+**\large (c):**
+$$A \times B,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(A%o%B)
+```
+
+
+**Work:** \newline
+Out-product rule: 
+$$A \times B,$$
+$$= \begin{bmatrix} -1(3) & -1(-2) & -1(1) \\ 3(3) & 3(-2) & 3(1) \\ 4(3) & 4(-2) & 4(1) \end{bmatrix},$$
+```{r, results="asis"}
+write_matex(A%o%B)
+```
+
+**\large (d):** 
+$$CA,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(C%*%A)
+```
+
+**Work:** \newline
+Matrix multiplication, which is possible because the number of C's columns are equal to the number of A's rows: $C_{23} \ A_{32}$.
+$$CA,$$
+$$= \begin{bmatrix} 3(-1) + 2(3) + -4(4) \\ -8(-1) + 0(3) + 6(4) \end{bmatrix},$$
+```{r, results="asis"}
+write_matex(C%*%A)
+```
+
+**\large (e):** Because the dimensions don't work out ($B_{31} \ D_{32}$), we can't multiply.\newline
+
+**\large (f):** 
+$$B \otimes D,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(kronecker(B,D, FUN="*"))
+```
+
+
+**Work:**
+$$B \otimes D,$$
+$$= \begin{bmatrix} 3 \ \ \small \begin{bmatrix} 6 & -2 \\ -1 & 3 \\ -3 & 8 \end{bmatrix} \\ -1 \small \begin{bmatrix}6 & -2 \\ -1 & 3 \\ -3 & 8 \end{bmatrix} \\ 1 \ \ \small \begin{bmatrix} 6 & -2 \\ -1 & 3 \\ -3 & 8 \end{bmatrix}   \end{bmatrix}$$
+```{r, results="asis"}
+write_matex(kronecker(B,D, FUN="*"))
+```
+
+**\large (g):** 
+$$CD,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(C%*%D)
+```
+
+
+**Work:** \newline
+Same situation as (d), because the dimensions work out: $C_{23}$ and $D_{32}$.
+$$CD,$$
+$$= \begin{bmatrix} 3(6) + 2(1) + (-4)(-3) & 3(-2) + 2(3) + (-1)(8) \\ -8(6) + 0(-1) + 6(-3) & -8(-2) + 0(3) + 6(8) \end{bmatrix},$$
+```{r, results="asis"}
+write_matex(C%*%D)
+```
+
+**\large (h):** 
+$$DC,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(D%*%C)
+```
+
+
+**Work:** \newline
+Yet again the same situation as (d), because the dimensions work out: $D_{32}$ and $C_{23}$.
+$$DC,$$
+$$= \begin{bmatrix} 6(3) + (-2)(-8) &  6(2) + (-2)0 & 6(-4) + (-2)6 \\ -1(3) + 3(-8) & -1(2) + 3(0) & -1(-4) + 3(6) \\ -3(3) + 8(-8) & -3(2) + 8(0) & -3(-4) + 8(6) \end{bmatrix},$$
+```{r, results="asis"}
+write_matex(C%*%D)
+```
+
+**\large (i):** 
+$$C'C,$$
+```{r, echo=FALSE, results="asis"}
+write_matex(t(C)%*%C)
+```
+
+**Work:** \newline
+First, transpose C:
+```{r, results="asis"}
+write_matex(t(C))
+```
+$$C'C,$$
+$$= \begin{bmatrix} 3(3) + (-8)(-8) &  3(2) + (-8)0 & 3(-4) + (-8)6 \\ 2(3) + 0(-8) & 2(2) + 0(0) & 2(-4) + 0(6) \\ -4(3) + 6(-8) & -4(2) + 6(0) & -4(-4) + 6(6) \end{bmatrix},$$
+```{r, results="asis"}
+write_matex(t(C)%*%C)
+```
+
