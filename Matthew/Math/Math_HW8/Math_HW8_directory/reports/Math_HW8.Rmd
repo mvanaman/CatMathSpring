@@ -1,0 +1,28 @@
+---
+title: "Math HW8"
+author: "Matthew Vanaman"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+monofont: Courier New
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{tikz,xcolor,listings}
+---
+`r knitr::opts_knit$set(root.dir='..')`
+
+```{r, include=FALSE, cache=TRUE}
+library(ProjectTemplate); load.project()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+options(scipen = 999)
+knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+np <- reticulate::import("numpy")
+sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
+```
+
+8.3, 8.4, 8.8, 8.9, 8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
+
+## 8.3
