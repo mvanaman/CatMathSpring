@@ -1,0 +1,250 @@
+---
+title: "CDA Homework 6"
+author: "Ryan Tracy"
+date: "5/12/2019"
+output: pdf_document
+---
+
+```{r, include = F}
+library(car)
+library(samplesizeCMH)
+library(haven)
+library(tidyverse)
+```
+
+#4.3
+
+##a.
+In this formula, as decade increases, the percentage of complete games pitched decreases by .0694.
+
+##b.
+```{r}
+.7578 - (.0694 * 12)
+```
+
+The prediction is -7.5%. This is implausible as it's not possible to have a negative percentage of complete games pitched.
+
+##c.
+```{r}
+exp(1.148 - (.315*12))/(1 + exp(1.148 - (.315*12)))
+```
+
+This is a more plausible value than the prediction for $\textbf{b}$.
+
+
+#4.5
+```{r}
+#Ft = flight no. and TD = thermal distress
+Ft <- as.data.frame(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23))
+Temp <- as.data.frame(c(66,70,69,68,67,72,73,70,57,63,70,78,67,53,67,75,70,81,76,79,75,76,58))
+TD <- as.data.frame(c(0,1,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,1,0,1))
+
+challenger <- as.data.frame(cbind(Ft, Temp, TD))
+colnames(challenger) <- c("Ft", "Temp", "TD")
+```
+
+##a.
+```{r}
+#model temperature on probability of thermal distress
+mod <- glm(TD ~ Temp, family = binomial, data = challenger)
+summary(mod)
+```
+
+The model illustrates that as temperature rises, the probability of thermal distress decreases by -.23.
+
+##b.
+```{r}
+predict(mod, data.frame(Temp = 31.0), type = "response")
+#or
+exp(15.0429 - (.2322*31))/(1+exp(15.0429 - (.2322*31)))
+```
+
+At $31^{\circ}$F the probability of thermal distress is .999
+
+##c.
+```{r}
+logit <- function(x) log(x)/log(1-x)
+ggplot(challenger, aes(Temp, TD)) + 
+  geom_point(size = 3, color = "grey10", alpha = .7) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              formula = y ~ x, color = "navy", se = FALSE, alpha = .7) +
+  scale_y_continuous(breaks = c(0, .25, .5, .75, 1)) +
+  xlab("Temperature") + ylab("P(Thermal Disaster)") + 
+  theme_bw()
+#value looks to be around 64-65 (exact value determined via Wolfram Alpha)
+exp(15.0429 - (.2322*64.7842))/(1+exp(15.0429 - (.2322*64.7842)))
+```
+
+At a temperature of $64.7842^{\circ}$, the Challenger had a $\hat{\pi} = .50$ of a thermal disaster (i.e., chance level).
+
+##d.
+The model indicates that as temperature rises, the odds of thermal distress decreases.
+
+##e.
+```{r}
+#Wald test
+(waldTest <- (-.2322)/(.1082))
+waldTest^2
+#could also get this from the GLM output
+
+#LRT
+Anova(mod)
+```
+ 
+The Wald test (and its square) confirmed that temperature does have an effect, $z = 2.416, \ p = .03$. The LRT also confirmed this, $\chi^2(1) = 7.952, \ p = .005$.
+
+
+#4.15
+```{r}
+district <- as.data.frame(c("NC", "NE", "NW", "SE", "SW", "NC", "NE", "NW", "SE", "SW"))
+race <- as.data.frame(rep(c("Blacks", "Whites"), each = 5))
+yes <- as.data.frame(c(24,10,5,16,7,47,45,57,54,59))
+no <- as.data.frame(c(9,3,4,7,4,12,8,9,10,12))
+extension <- as.data.frame(cbind(district, race, yes, no)); colnames(extension) <- c("district", "race", "yes", "no")
+```
+
+##a.
+```{r}
+merit <- array(c(24,10,5,16,7,
+                 9,3,4,7,4,
+                 47,45,47,54,59,
+                 12,8,9,10,12),
+               dim = c(5,2,2),
+               dimnames = list(
+                 district = c("NC", "NE", "NW", "SE", "SW"),
+                 meritPay = c("yes", "no"),
+                 race = c("black", "white")))
+merit
+mantelhaen.test(merit)
+```
+
+The results from the CMH test reveal that there is conditional independence between a person's race and their qualifications for a merit pay increase based on district, $\chi^2(4) = .97$. 
+
+##b.
+```{r}
+#logistic regression model
+mod <- glm((yes/(yes + no)) ~ race * district, family = binomial, weights = yes + no, data = extension)
+summary(mod)
+```
+
+This model shows that, because the interaction is not significant, race and district are independent of each other on the decision for a merit pay raise.
+
+##c.
+CMH tests only tell you whether there is conditional independence or not. Model tests tell you the degree to which one level of a nominal variable depends on another, given that there is conditional dependence. 
+
+#4.31
+```{r}
+marijuana <- read.table("http://www.stat.ufl.edu/~aa/cat/data/Marijuana.dat", header = T)
+marijuana
+
+#get mean use
+420 / 620 #white females
+483 / 579 #white males
+25 / 55 #other females
+32 / 62 #other males
+
+fit <- glm(yes/(yes+no) ~ gender + race, weights = yes + no, family = binomial, data = marijuana)
+summary(fit)
+
+#model fit chi square
+mod$null.deviance - mod$deviance
+1 - pchisq(10.66487, 2)
+
+#LRTs for individual explanatory variables (gender and race)
+Anova(fit)
+#wald stat provides similar results
+.203/.085 #for gender
+(.203/.085)^2
+.444/.167 #for race
+(.444/.167)^2
+
+#ORs
+exp(fit$coefficients)
+exp(confint(fit))
+```
+
+The marijuana data demonstrate interesting results. Descriptive statistics reveal that $67.7\%$ of white females surveyed reported previous marijuana use, $83.4\%$ of white males surveyed reported prior use, $45.5\%$ of nonwhite females reported prior use, and $51.6\%$ of nonwhite males reported prior use. As these descriptive statistics indicate, likelihood of prior use may be predicted by race and gender, with males likely having a higher probability of use than females and white respondents likely having a higher probability of use than nonwhites. These data were entered into a generalized linear model (GLM) predicting likelihood of prior use as a binary variable from race and gender using a logit link function. Fit statistics revealed that this model provided a significantly improved fit over a null model, $\chi^2(2) = 10.665, p = .004$. This logistic regression model confirmed these predictions. Model estimates revealed that males had a higher likelihood of reporting prior marijuana use than females, $b = .202, \ SE = .085, \ z = 2.378, \ p = .017$, while white respondents had a higher likelihood of reporting prior marijuana use than nonwhites, $b = .444, \ SE = .168, \ z = 2.647, \ p = .008$. Odds ratios for these estimates indicate that males are are $22.5\%$ more likely as females to report marijuana use, $OR = 1.225, \ 95\% CI [1.036, 1.447]$, while white respondents were $55.9\%$ more likely to report prior marijuana use, $OR = 1.559, \ 95\% CI [1.127, 2.178]$. Likelihood ratio tests of the predictors indicated that gender explained a significant portion of variance, $\chi^2(1) = 5.666, \ p = .017$, as did race, $\chi^2(1) = 7.277, \ p = .007$.
+
+
+#4.16
+```{r}
+mb <- read_dta("data/myers_briggs_binomial.dta")
+```
+
+##a.
+```{r}
+mod <- glm(countY/total ~ EI + SN + TF + JP, family = binomial, weights = total, data = mb)
+summary(mod)
+```
+
+Using indicator variables that are 1 for any of E, S, T, J and 0 for any of I, N, F, P ends of the scales, $logit(\hat{\pi}) = -2.17 + .73EI - .66SN + .55TF - .32JP$
+
+##b.
+```{r}
+exp(-2.17+.73-.66+.55-.32) / (1 + exp(-2.17+.73-.66+.55-.32))
+```
+
+A person with the ESTJ personality type would have a probability of $.13$ of responding 'yes.'
+
+##c.
+```{r}
+exp(-2.17+.73+.55) / (1 + exp(-2.17+.73+.55))
+```
+Because of the way the indicator variables are set, negative parameter esimates of the SN and JP scales have higher probability of drinking frequently at the second category of each.
+
+
+#4.17
+
+##a.
+```{r}
+exp(-2.83) / (1 + exp(-2.83))
+```
+A person with the I E personality types would have a $\hat{\pi}$ of .055.
+
+##b.
+```{r}
+exp(.5805)
+```
+The estimated odds an extrovert drinks frequently is 1.79 times the odds an introvert drinks frequently.
+
+##c.
+```{r}
+exp(c(.159, 1.008))
+```
+$95\%CI[1.17, 2.74]$. These CIs indicate that with 95% certainty, at the population level, an extrovert's odds of drinking frequently (compared to an introvert) lie between 1.17 and 2.74.
+
+##d.
+```{r}
+1/1.79
+1/2.74; 1/1.17
+```
+These values are just interpreting the results from $\textbf{c}$ in the other direction, i.e., the intervals for an introvert place them at .36 and .85 times as likely to drink frequently.
+
+##e.
+From the output given on the likelihood ratio test, EI has a significant effect on the response when controlling for TF, $\chi^2(1) = 7.28, \ p = .007$.
+
+
+#5.4
+
+##a.
+```{r}
+deviance <- 11.1491
+df <- 11
+1 - pchisq(deviance, df)
+```
+The deviance and degress of freedom indicate an adequate fit, $\chi^2(11) = 11.15, \ p = .43$.
+
+##b.
+To improve the model fit, the JP term could be removed, as it is the least significant, $\chi_{Wald}^2(1) = .37$
+
+##c.
+```{r}
+1 - pchisq(7.4, 6)
+```
+The likelihood-ratio statistic and df indicate that the model without interaction terms is a more adequate fit, $\chi^2(6) = 7.4, \ p = .285$
+
+
+
+
+
+
