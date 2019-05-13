@@ -1,0 +1,99 @@
+---
+title: "CDA Homework 7"
+author: "Ryan Tracy"
+date: "5/13/2019"
+output: pdf_document
+---
+
+```{r, include = FALSE}
+library(lme4)
+library(lmerTest)
+library(car)
+```
+
+
+#8.2
+
+##a.
+```{r}
+(zTest <- (125 - 2) / (sqrt(125 + 2)))
+chSq <- zTest^2
+1-pchisq(chSq, 1)
+```
+
+##b.
+```{r}
+#sample proportion for heaven
+(heaven <- (833+125) / (833+2+160+125))
+#sample proportion for hell
+(hell <- (833 + 2) / (833+2+125+160))
+#difference
+(diff <- heaven - hell)
+#std error
+(stErr <- (1/1120)*sqrt((125+2) - ((125-2)^2/1120)))
+#90% CIs
+diff + (1.645*stErr)
+diff - (1.645*stErr)
+```
+The sample proportions are .855 for heaven and .746 for hell, $90\% \ CI [.094, .125]$.
+
+
+#4.20
+```{r}
+clinical <- as.data.frame(rep(c(1:8), each = 2)); names(clinical)[1] <- "center"
+clinical$treatment <- rep(c("drug", "control"), each = 1)
+clinical$success <- c(11,10,16,22,14,7,2,1,6,0,1,0,1,1,4,6)
+clinical$failure <- c(25,27,4,10,5,12,14,16,11,12,10,10,4,8,2,1)
+```
+
+##a.
+```{r}
+mod <- glm(success / (success + failure) ~ treatment, weights = success + failure, family = binomial, data = clinical)
+summary(mod)
+exp(mod$coefficients)
+exp(confint(mod))
+```
+The logistic regression model revealed no significant effect for treatment, $b = .40,\ SE = .25,\ z = 1.61,\ p = .11$. While the drug may be associated with a .40 increase in the probability of sucesss, the fact that the effect is nonsignificant makes this a useless conclusion.
+
+##b.
+```{r}
+clinicTable <- matrix(c(55, 47, 75, 96), nrow = 2, byrow = T)
+rownames(clinicTable) <- c("drug", "control")
+colnames(clinicTable) <- c("success", "failure")
+clinicDat <- array(c(11,25,
+                     10,27,
+                     16,4,
+                     22,10,
+                     14,5,
+                     7,12,
+                     2,14,
+                     1,16,
+                     6,11,
+                     0,12,
+                     1,10,
+                     0,10,
+                     1,4,
+                     1,8,
+                     4,2,
+                     6,1),
+                   dim = c(2,2,8),
+                   dimnames = list(
+                     response = c("success", "failure"),
+                     treatment = c("drug", "control"),
+                     clinic = c("1", "2", "3", "4", "5", "6", "7", "8")))
+clinicDat
+mantelhaen.test(clinicDat)
+```
+The CMH test revealed that there was conditional dependence between the nominal variables in the clinical dataset, $\chi^2(1) = 5.67,\ p = .02$.
+
+##"c."
+```{r}
+mod1 <- glmer(success / (success + failure) ~ treatment + (1|center), family = binomial, weights = success + failure, data = clinical)
+Anova(mod1)
+summary(mod1)
+confint(mod1)
+exp(.7379); exp(c(.1580966, 1.33952684))
+```
+This data is actually hierarchical in nature, so a random intercept of center may clarify whether or not the treatment does have an effect. Significance tests revealed that the effect of clinic did vary at random, $SD = 1.39,\ 95\%\ CI[.80, 2.69]$. This model also revealed that the effect of treatment was significant, $b = .74,\ SE = .30,\ z = 2.48,\ p = .01$. Patients who received the drug were 2.09 times as likely to be cured than those who did not, $OR = 2.09,\ 95\%\ CI[1.17, 3.82]$. This is a higher than the OR for the model that did not account for the random intercept of clinic, which was also not significant ($OR = 1.50,\ 95\%\ CI[.92, 2.46]$).
+
+
