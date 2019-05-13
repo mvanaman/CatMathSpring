@@ -21,8 +21,6 @@ options(scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 ```
 
-8.10a, 8.11 (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
-
 ## 8.3
 
 I made the matrices here for checking work (see code in the appendix), but just to show they work as intended using A as an example:
@@ -245,3 +243,6 @@ Multiply the last row by -9 and add that to the first row
 $$\begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix},$$
 Multiply the first row by -2 and add that to the second row
 $$\begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}.$$
+
+
+**\large 8.11** (you should use a matrix language to do this problem, but be sure to show suitable intermediate steps)
