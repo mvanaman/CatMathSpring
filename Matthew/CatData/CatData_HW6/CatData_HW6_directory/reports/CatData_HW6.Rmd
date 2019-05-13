@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-A4.3, A4.5, A4.15 (3 points)
+A4.5, A4.15 (3 points)
 
 A4.31 (5 points)
 
@@ -34,17 +34,24 @@ A4.16-A4.17, A5.4 (10 points)
 
 # 4.3
 
-### (a): 
-Software calculated predicted probabilities at each level of the independent variable, including LI = 8. In logistic regression, for formula is as follows:
-$$\hat \pi = \dfrac {\text{exp}(\alpha + \beta x)} {1 + \text{exp}(\alpha + \beta x)}.$$
-Table 4.9 contains the coeficient and y-intercept, so just plugging those in, you get:
-$$\hat \pi = \dfrac {\text{exp}(-3.7771 + 0.1449 (8))} {1 + \text{exp}(-3.7771 + 0.1449 (8)),}$$
-$$= `r exp(-3.7771 + 0.1449 * 8) / (1 + exp(-3.7771 + 0.1449  * 8))`.$$
+**\large (a):** In the linear probability model, the coefficient is treated the same way as it is in linear regression. That is, it represents a slope such that for every unit increase x (decade, in this case), there is a corresponding unit change in y (the probability of pitching a complete game, in this case, the change of which = -0.0694).
 
-### (b)
-Same deal as with part a:
-$$\hat \pi = \dfrac {\text{exp}(\alpha + \beta x)} {1 + \text{exp}(\alpha + \beta x)}.$$
-$$\hat \pi = \dfrac {\text{exp}(-3.7771 + 0.1449 (26.0))} {1 + \text{exp}(-3.7771 + 0.1449 (26.0)),}$$
-$$= `r exp(-3.7771 + 0.1449 * 26.0) / (1 + exp(-3.7771 + 0.1449  * 26.0))`.$$
+**\large (b):** 
+$$\hat \pi = 0.7578 - 0.0694(12),$$
+$$= `r 0.7578 - 0.0694*(12)`.$$
+Percentages can't be negative! So not possible.
 
-### (c)
+**\large (c):** 
+$$\hat \pi = \dfrac {e^{\alpha + \beta x}} {1 + e^{\alpha + \beta x}}.$$
+$$\hat \pi = \dfrac {e^{1.148 - 0.315 (12)}} {1 + e^{1.148 - 0.315 (12)}},$$
+$$= `r exp(1)^(1.148 - 0.315 * 12) / (1 + exp(1)^(1.148 - 0.315 * 12))`.$$
+This is much more plausible. 
+
+
+# 4.5
+
+
+
+
+
+
