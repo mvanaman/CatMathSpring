@@ -1,0 +1,50 @@
+---
+title: "CatData HW6"
+author: "Matthew Vanaman"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+monofont: Courier New
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{tikz,xcolor,listings}
+---
+`r knitr::opts_knit$set(root.dir='..')`
+
+```{r, include=FALSE, cache=TRUE}
+library(ProjectTemplate); load.project()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+options(scipen = 999)
+knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+np <- reticulate::import("numpy")
+sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
+```
+
+A4.3, A4.5, A4.15 (3 points)
+
+A4.31 (5 points)
+
+A4.16-A4.17, A5.4 (10 points)
+
+
+
+
+# 4.3
+
+### (a): 
+Software calculated predicted probabilities at each level of the independent variable, including LI = 8. In logistic regression, for formula is as follows:
+$$\hat \pi = \dfrac {\text{exp}(\alpha + \beta x)} {1 + \text{exp}(\alpha + \beta x)}.$$
+Table 4.9 contains the coeficient and y-intercept, so just plugging those in, you get:
+$$\hat \pi = \dfrac {\text{exp}(-3.7771 + 0.1449 (8))} {1 + \text{exp}(-3.7771 + 0.1449 (8)),}$$
+$$= `r exp(-3.7771 + 0.1449 * 8) / (1 + exp(-3.7771 + 0.1449  * 8))`.$$
+
+### (b)
+Same deal as with part a:
+$$\hat \pi = \dfrac {\text{exp}(\alpha + \beta x)} {1 + \text{exp}(\alpha + \beta x)}.$$
+$$\hat \pi = \dfrac {\text{exp}(-3.7771 + 0.1449 (26.0))} {1 + \text{exp}(-3.7771 + 0.1449 (26.0)),}$$
+$$= `r exp(-3.7771 + 0.1449 * 26.0) / (1 + exp(-3.7771 + 0.1449  * 26.0))`.$$
+
+### (c)
