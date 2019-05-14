@@ -63,6 +63,7 @@ shuttle <- as.data.frame(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
                   ncol = 3, nrow=23))
 colnames(shuttle) <- c("Ft", "Temp", "TD")
 shuttle_mod <- glm(TD ~ Temp, family = binomial, data = shuttle)
+summary(shuttle_mod)
 ```
 
 
@@ -88,4 +89,20 @@ At 64.8 degrees, for every unit increase in temperature, there is a 0.058 decrea
 **\large (d):**
 
 Since the coefficient is the log odds ratio, you exponentiate it to get the odds. Exp(-0.2321627) = `r exp(-0.2321627)`. This seems kind of difficult to interpret though, so it might be easier to take $1/OR = 1/0.79 = 1.27$ and say that for every unit increase in temperature, the odds of the o-rings *working correctly* increase by 1.27 - that is, every unit increase in temperature means there is 27% greater odds of the orings working the way they're supposed to (or 27% greater probability if we think events are rare enough to warrent using the odds ratio as an approximation of the risk ratio).
+
+**\large (e):**
+
+The Wald test is:
+$$z^2 = \Bigg(\dfrac{\beta}{SE}\Bigg)^2,$$
+$$= \Bigg(\dfrac{-0.2321627}{0.1082}\Bigg)^2,$$
+
+$$= `r (-0.2321627/0.1082)^2`.$$
+$z^2$ approximates the chi-square; the p-value is `r pchisq(4.6039476, df=1, lower.tail=FALSE)` with one degree of freedom.\newline
+
+The likelihood ratio test is:
+$$-2(\ell_0 - \ell_1),$$
+$$-2(`r logLik(glm(TD ~ 1, family = binomial, data = shuttle))` `r logLik(shuttle_mod)`),$$
+$$`r -2 * (logLik(glm(TD ~ 1, family = binomial, data = shuttle)) - logLik(shuttle_mod))`.$$
+$\chi^2$ p-value at 1 degree of freedom is `r pchisq(7.95196, df=1, lower.tail=FALSE)`. Temperature is probably important here.
+
 
