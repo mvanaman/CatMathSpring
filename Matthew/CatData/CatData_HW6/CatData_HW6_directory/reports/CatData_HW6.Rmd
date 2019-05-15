@@ -7,7 +7,7 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{tikz,xcolor,listings}
+header-includes: \usepackage{tikz,xcolor,listings, setspace}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
@@ -23,14 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-
-
-A4.31 (5 points)
-
 A4.16-A4.17, A5.4 (10 points)
-
-
-
 
 # 4.3
 
@@ -153,3 +146,50 @@ You could use the wald test to test the difference between the race parameter an
 ### (c)
 
 Unlike with the CMH, the model tells you the log-odds ratio which you can exponentiate to get the odds ratio. This tells us the magnitude of difference in decision pay rates between whites and blacks. Exponentiating the parameter for Whites, you get `r exp((coef(merit_mod)[("raceWhites")]))`, meaning Whites have 123% greater odds of getting a pay increase.
+\newpage
+
+## 4.31 
+
+```{r, echo=FALSE}
+
+maryj <- data.frame(c("Yes", "Yes", "No", "No"),
+                                c("Yes", "No", "Yes", "No"),
+                                c(as.integer(c(911, 44, 3, 2))), 
+                                c(as.integer(c(538, 456, 43, 279))))
+colnames(maryj) <- c("AlcUse", "CigUse", "MaryjYes", "MaryjNo")
+
+mary_intercept <- glm(MaryjYes/(MaryjYes+MaryjNo) ~ 1, weights = MaryjYes + MaryjNo, family = binomial, data = maryj)
+mary_cig <- glm(MaryjYes/(MaryjYes+MaryjNo) ~ CigUse, weights = MaryjYes + MaryjNo, family = binomial, data = maryj)
+mary_cig_alc <- glm(MaryjYes/(MaryjYes+MaryjNo) ~ CigUse + AlcUse, weights = MaryjYes + MaryjNo, family = binomial, data = maryj)
+mary_full <- glm(MaryjYes/(MaryjYes+MaryjNo) ~ CigUse * AlcUse, weights = MaryjYes + MaryjNo, family = binomial, data = maryj)
+
+# print good looking p-values
+pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
+
+  roundr <- function(x, digits = 1) {
+    res <- sprintf(paste0('%.', digits, 'f'), x)
+    zzz <- paste0('0.', paste(rep('0', digits), collapse = ''))
+    res[res == paste0('-', zzz)] <- zzz
+    res
+  }
+
+  sapply(pvals, function(x, sig.limit) {
+    if (x < sig.limit)
+      if (html)
+        return(sprintf('&lt; %s', format(sig.limit))) else
+          return(sprintf('< %s', format(sig.limit)))
+    if (x > .1)
+      return(roundr(x, digits = 2)) else
+        return(roundr(x, digits = digits))
+  }, sig.limit = sig.limit)
+}
+```
+
+\begin{doublespace}
+
+\newcommand{\forceindent}{\leavevmode{\parindent=2em\indent}}
+
+\forceindent The odds ratio of marijuana use for alcohol users vs non-users, ignoring whether or not they smoke, is `r round(((911+44)*(43+279)) / ((2+3) * (538 + 456)),2)`. The odds ratio of marijuana use for smokers  vs non-smokers, ignoring whether or not they drink, is `r round(((911+3)*(456+279)) / ((44+2) * (538 + 43)),2)`. These are pretty large, and may be deceptive because they are not conditioned on the other variable. On theoretical grounds, there may be reason to suspect that the use of cigarettes in addition to alcohol (or vice versa) has a compounding effect on the odds of marijuana use, so it makes sense to run a logistic regression with main effects for cigarette use and alcohol use as well as a cigarette x alchohol interaction. Using the likelihood ratio test $(-2(\ell_0 - \ell_1))$, we should first test to see whether we gain anything from adding cigarettes to an intercept-only model. We get a LRT statistic `r round(-2 * (logLik(mary_intercept) - logLik(mary_cig)),2)`, \textit{p} `r pvalr(pchisq((-2 * (logLik(mary_intercept) - logLik(mary_cig))), df=1, lower.tail=FALSE))` with 1 degree of freedom, strongly suggesting that the cigarette model is an improvement over the intercept-only model. Big surprise. But what about adding alcohol to the model? The LRT is `r round(-2 * (logLik(mary_cig) - logLik(mary_cig_alc)),2)` \textit{p} `r pvalr(pchisq((-2 * (logLik(mary_cig) - logLik(mary_cig_alc))), df=1, lower.tail=FALSE))` with 1 degree of freedom. It would thus be wise to include alcohol in the model. Lastly, what about adding an interaction term? Adding the interaction, the LRT is `r round(-2 * (logLik(mary_cig_alc) - logLik(mary_full)),2)` \textit{p} = `r pvalr(pchisq((-2 * (logLik(mary_cig_alc) - logLik(mary_full))), df=1, lower.tail=FALSE))` with 1 degree of freedom. The model does not seem to improve, and that the interaction term does not come out significant in this model serves as further evidence in favor of its exclusion. However, for substantive reasons, I think it is still informative to have in the model for reasons discussed below.\newline
+\forceindent Examining the main-effects plus interaction model, with alcohol, cigarette, and alcohol+cigarette use predicting the use of marijuana, we find that the conditional odds ratio for marijuana use is `r round(exp((coef(mary_full)[("CigUseYes")])),2)`, \textit{p} = `r pvalr(coef(summary(mary_full))[2,4], digits = 3)` for smokers vs non-smokers, such that smokers have 9.73 greater odds of marijuana use compared to non-sokers. This is large, but not nearly as large as the unconditional odds ratio. For alcohol, the conditional odds ratio is `r round(exp((coef(mary_full)[("AlcUseYes")])),2)`, \textit{p} `r pvalr(coef(summary(mary_full))[3,4])` which is again quite sizable but not as large as the unconditional odds ratio. Importantly though, the odds ratio for the interaction is `r round(exp((coef(mary_full)[("CigUseYes:AlcUseYes")])),2)`, \textit{p} = `r pvalr(coef(summary(mary_full))[4,4], digits = 3)`. Because we fail to reject the null here, we continue to assume the null is true, thus that the odds ratio difference here is due to sampling variability. Despite the lack of statistical significance, this is still informative to have in the model because there may be practical reasons why you'd want to point out that adding smoking on top of drinking (or vice versa) doesn't really affect the odds of smoking marijuana. For example, an intervention that aims to prevent alcohol users from picking up smoking might not be worth the money, and that that money might be better spent on trying to prevent alcohol use in people who don't smoke and cigarette use in people who don't drink.
+
+\end{doublespace}
