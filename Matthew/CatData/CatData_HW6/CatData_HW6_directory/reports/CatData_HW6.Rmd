@@ -142,3 +142,10 @@ cmh <- mantelhaen.test(merit, z=district, correct = FALSE, exact = FALSE)
 ```
 
 The CMH test statistic comes out to be `r cmh$statistic` with 1 df, and a p-value of `r cmh$p.value`. We reject the null hypothesis that merit pay decisions are independent of race.
+
+### (b)
+```{r, echo=FALSE}
+#logistic regression model
+merit_mod <- glm((yes/(yes + no)) ~ race , family = binomial, weights = yes + no, data = extension)
+```
+You could use the wald test to test the difference between the race parameter and the intercept while excluding distrit from the model. This would mean the intercept is the effect of race when race is Black, and the parameter is the effect when race is White. The parameter for White is zero according to the nuul. The wald test is $\Big(\frac {\beta} {SE}\Big)^2$, which comes out the be `r ((coef(merit_mod)[("raceWhites")] / (summary(merit_mod)$coefficients[2, 2]))^2)` with a p-value of `r pchisq(8.4655366, df=1, lower.tail=FALSE)`. We reject the null of no difference between race in merit decision pay.
