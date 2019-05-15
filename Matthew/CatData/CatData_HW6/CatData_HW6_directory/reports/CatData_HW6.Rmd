@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-A4.5, A4.15 (3 points)
+
 
 A4.31 (5 points)
 
@@ -103,6 +103,42 @@ The likelihood ratio test is:
 $$-2(\ell_0 - \ell_1),$$
 $$-2(`r logLik(glm(TD ~ 1, family = binomial, data = shuttle))` `r logLik(shuttle_mod)`),$$
 $$`r -2 * (logLik(glm(TD ~ 1, family = binomial, data = shuttle)) - logLik(shuttle_mod))`.$$
+\newpage
+
 $\chi^2$ p-value at 1 degree of freedom is `r pchisq(7.95196, df=1, lower.tail=FALSE)`. Temperature is probably important here.
 
 
+## A4.15
+
+### (a)
+
+```{r, echo=FALSE}
+district <- as.data.frame(c("NC", "NE", "NW", "SE", "SW", "NC", "NE", "NW", "SE", "SW"))
+race <- as.data.frame(rep(c("Blacks", "Whites"), each = 5))
+yes <- as.data.frame(c(24,10,5,16,7,47,45,57,54,59))
+no <- as.data.frame(c(9,3,4,7,4,12,8,9,10,12))
+extension <- as.data.frame(cbind(district, race, yes, no)); colnames(extension) <- c("district", "race", "yes", "no")
+```
+
+The CMH test is:
+$$\dfrac {[\sum_k (n_{11k} - \mu_{11k})]^2} {\sum_k  \text{Var}(n_{11k})},$$
+where:
+$$\mu_{11k} = \dfrac {n_{1+k} n_{+1k}} {n_{++k}},$$
+and:
+$$\text{Var}_{11k} = \dfrac {n_{1+k} n_{2+k} n_{+1k} n_{+2k}}  {n^2_{++k} (n_{++k}-1)}.$$
+```{r, echo=FALSE}
+merit <- array(c(24,9,47,12,
+                 10,3,45,8,
+                 5,4,57,9,
+                 16,7,54,10,
+                 7,4,59,12),
+               dim = c(2,2,5),
+               dimnames = list(
+                 meritPay = c("yes", "no"),
+                 race = c("black", "white"),
+                 district = c("NC", "NE", "NW", "SE", "SW")))
+
+cmh <- mantelhaen.test(merit, z=district, correct = FALSE, exact = FALSE)
+```
+
+The CMH test statistic comes out to be `r cmh$statistic` with 1 df, and a p-value of `r cmh$p.value`. We reject the null hypothesis that merit pay decisions are independent of race.
