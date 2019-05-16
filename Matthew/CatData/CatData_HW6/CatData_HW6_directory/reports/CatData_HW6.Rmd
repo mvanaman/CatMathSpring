@@ -7,7 +7,7 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{tikz,xcolor,listings, setspace}
+header-includes: \usepackage{listings, setspace}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
@@ -17,7 +17,7 @@ library(ProjectTemplate); load.project()
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
-options(scipen = 999)
+options(scipen = 999, xtable.comment = FALSE)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
@@ -56,7 +56,6 @@ shuttle <- as.data.frame(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
                   ncol = 3, nrow=23))
 colnames(shuttle) <- c("Ft", "Temp", "TD")
 shuttle_mod <- glm(TD ~ Temp, family = binomial, data = shuttle)
-summary(shuttle_mod)
 ```
 
 
@@ -96,7 +95,6 @@ The likelihood ratio test is:
 $$-2(\ell_0 - \ell_1),$$
 $$-2(`r logLik(glm(TD ~ 1, family = binomial, data = shuttle))` `r logLik(shuttle_mod)`),$$
 $$`r -2 * (logLik(glm(TD ~ 1, family = binomial, data = shuttle)) - logLik(shuttle_mod))`.$$
-\newpage
 
 $\chi^2$ p-value at 1 degree of freedom is `r pchisq(7.95196, df=1, lower.tail=FALSE)`. Temperature is probably important here.
 
@@ -193,3 +191,49 @@ pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
 \forceindent Examining the main-effects plus interaction model, with alcohol, cigarette, and alcohol+cigarette use predicting the use of marijuana, we find that the conditional odds ratio for marijuana use is `r round(exp((coef(mary_full)[("CigUseYes")])),2)`, \textit{p} = `r pvalr(coef(summary(mary_full))[2,4], digits = 3)` for smokers vs non-smokers, such that smokers have 9.73 greater odds of marijuana use compared to non-sokers. This is large, but not nearly as large as the unconditional odds ratio. For alcohol, the conditional odds ratio is `r round(exp((coef(mary_full)[("AlcUseYes")])),2)`, \textit{p} `r pvalr(coef(summary(mary_full))[3,4])` which is again quite sizable but not as large as the unconditional odds ratio. Importantly though, the odds ratio for the interaction is `r round(exp((coef(mary_full)[("CigUseYes:AlcUseYes")])),2)`, \textit{p} = `r pvalr(coef(summary(mary_full))[4,4], digits = 3)`. Because we fail to reject the null here, we continue to assume the null is true, thus that the odds ratio difference here is due to sampling variability. Despite the lack of statistical significance, this is still informative to have in the model because there may be practical reasons why you'd want to point out that adding smoking on top of drinking (or vice versa) doesn't really affect the odds of smoking marijuana. For example, an intervention that aims to prevent alcohol users from picking up smoking might not be worth the money, and that that money might be better spent on trying to prevent alcohol use in people who don't smoke and cigarette use in people who don't drink.
 
 \end{doublespace}
+
+## 4.16
+
+
+
+
+### (a)
+
+```{r, echo=FALSE, results="asis"}
+myers <- data.frame(c("T", "T", "F", "F", "T", "T", "F", "F", 
+                      "T", "T", "F", "F", "T", "T", "F", "F"),
+                    
+                    c("J", "P", "J", "P", "J", "P", "J", "P",
+                      "J", "P", "J", "P", "J", "P", "J", "P"),
+                    
+                    c("E", "E", "E", "E", "E", "E", "E", "E",
+                      "I", "I", "I", "I", "I", "I", "I", "I"),
+     
+                    c("S", "S", "S", "S", "N", "N", "N", "N", 
+                      "S", "S", "S", "S", "N", "N", "N", "N"),
+                    
+                    c(as.integer(c(10, 8, 5, 7, 3, 2, 4, 15, 
+                                   17, 3, 6, 4, 1, 5, 1, 6))),
+                    
+                    c(as.integer(c(67, 34, 101, 72, 20, 16, 27, 
+                                   65, 123, 49, 132, 102, 12, 30, 30, 73))))
+colnames(myers) <- c("ThinkFeel", "JudPer", "ExtInt", "SensIntuit", "AlcYes", "AlcNo")
+xtable::xtable(myers, align = "ccccccc")
+```
+```{r, echo=FALSE, results="asis"}
+AlcUse <- myers$AlcYes/(myers$AlcYes + myers$AlcNo)
+mbti_mod <- summary(glm(AlcUse ~ ThinkFeel + JudPer + ExtInt + SensIntuit, weights = AlcYes + AlcNo, family = binomial, data = myers))
+xtable::xtable(mbti_mod)
+```
+
+The model formula is $\text{logit}(\hat \pi) = `r round((coef(mbti_mod)[("(Intercept)"),1]),2)` `r round((coef(mbti_mod)[("ExtIntI"),1]),2)` `r round((coef(mbti_mod)[("SensIntuitS"),1]),2)` + `r round((coef(mbti_mod)[("ThinkFeelT"),1]),2)` + `r round((coef(mbti_mod)[("JudPerP"),1]),2)`$. The intercept is the ENFJ type; that is, when ExtInt = E, SensIntuit = N, ThinkFeel = F, and JudPer = J.
+
+### (b)
+For an ESTJ, $$\hat \pi = \dfrac {e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` - `r round(coef(mbti_mod)[("JudPerP"),1],2)` `r round(coef(mbti_mod)[("SensIntuitS"),1],2)`}}{(1 + e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` - `r round(coef(mbti_mod)[("JudPerP"),1],2)` `r round(coef(mbti_mod)[("SensIntuitS"),1],2)`})},$$
+$$= `r round(exp(1)^(coef(mbti_mod)[("(Intercept)"),1] - coef(mbti_mod)[("JudPerP"),1] - coef(mbti_mod)[("SensIntuitS"),1]) / (1 + round(exp(1)^(coef(mbti_mod)[("(Intercept)"),1] - coef(mbti_mod)[("JudPerP"),1] - coef(mbti_mod)[("SensIntuitS"),1]),2)),2)`.$$
+
+
+
+
+
+
