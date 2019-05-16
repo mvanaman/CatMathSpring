@@ -7,7 +7,7 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{listings, setspace}
+header-includes: \usepackage{listings, setspace, caption}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
@@ -22,6 +22,9 @@ knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
+
+\captionsetup[table]{labelformat=empty}
+
 
 4.17, A5.4 (10 points)
 
@@ -199,7 +202,7 @@ pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
 
 ### (a)
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, results="asis"}
 # dataset
 myers <- data.frame(c("t", "t", "f", "f", "t", "t", "f", "f", 
                       "t", "t", "f", "f", "t", "t", "f", "f"),
@@ -219,14 +222,14 @@ myers <- data.frame(c("t", "t", "f", "f", "t", "t", "f", "f",
                     c(as.integer(c(67, 34, 101, 72, 20, 16, 27, 
                                    65, 123, 49, 132, 102, 12, 30, 30, 73))))
 colnames(myers) <- c("TF", "JP", "EI", "SN", "AlcYes", "AlcNo")
-myers_table <- xtable::xtable(myers, align = "ccccccc")
+myers_table <- print(xtable::xtable(myers, caption="MBTI Dataset",align = "ccccccc"), caption.placement ="top")
 
 # model
 AlcUse <- myers$AlcYes/(myers$AlcYes + myers$AlcNo)
 mbti_mod <- summary(glm(AlcUse ~ TF + JP + 
                           EI + SN, 
                         weights = AlcYes + AlcNo, family = binomial, data = myers))
-mbti_mod_table <- xtable::xtable(mbti_mod)
+mbti_mod_table <- print(xtable::xtable(mbti_mod, caption="MBTI Model Output", align="lcccc"), caption.placement ="top")
 
 # coefficients
 intercept <- coef(mbti_mod)[("(Intercept)"),1]
@@ -236,10 +239,7 @@ TF <- coef(mbti_mod)[("TFt"),1]
 JP <- coef(mbti_mod)[("JPp"),1]
 ```
 
-```{r, results="asis", echo=FALSE}
-myers_table
-mbti_mod_table
-```
+
 
 
 The model formula is $\text{logit}(\hat \pi) = `r round(intercept,2)` `r round(EI,2)`(E/I) `r round((SN),2)`(S/N) + `r round(TF,2)`(T/F) + `r round((JP),2)`(J/P)$. The intercept is the ENFJ type; that is, when EI = E, SN = N, TF = F, and JP = J.
@@ -267,6 +267,24 @@ $$\hat \pi = \dfrac{e^{`r round(intercept,2)`  `r round(EI,2)`}} {(1 + e^{`r rou
 $$= `r round(exp(intercept + EI) / (1 + exp(intercept + EI)),2)`.$$
 
 ### (b)
+
+The estimated conditional odds for the EI variable is
+$$e^{`r round(EI,2)`} = `r round(exp(1)^(EI),2)`.$$
+
+### (c)
+
+```{r, echo=FALSE, results="asis"}
+CIs<- confint.default(glm(AlcUse ~ TF + JP + 
+                          EI + SN, 
+                        weights = AlcYes + AlcNo, family = binomial, data = myers))
+print(xtable::xtable(CIs, caption="MBTI Model Confidence Intervals", align="lrr"), caption.placement = 'top')
+CI_u <- -0.12971926
+CI_l <- -0.9803037
+```
+
+
+To get CIs for the conditional odds ratio:
+$$(e^{`r round(CI_l,2)`}, e^{`r round(CI_u,2)`}) = (`r round(exp(1)^(CI_l),2)`, `r round(exp(1)^(CI_u),2)`).$$
 
 
 
