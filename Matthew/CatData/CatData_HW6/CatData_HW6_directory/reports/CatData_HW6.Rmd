@@ -226,12 +226,22 @@ mbti_mod <- summary(glm(AlcUse ~ ThinkFeel + JudPer + ExtInt + SensIntuit, weigh
 xtable::xtable(mbti_mod)
 ```
 
-The model formula is $\text{logit}(\hat \pi) = `r round((coef(mbti_mod)[("(Intercept)"),1]),2)` `r round((coef(mbti_mod)[("ExtIntI"),1]),2)` `r round((coef(mbti_mod)[("SensIntuitS"),1]),2)` + `r round((coef(mbti_mod)[("ThinkFeelT"),1]),2)` + `r round((coef(mbti_mod)[("JudPerP"),1]),2)`$. The intercept is the ENFJ type; that is, when ExtInt = E, SensIntuit = N, ThinkFeel = F, and JudPer = J.
+The model formula is $\text{logit}(\hat \pi) = `r round((coef(mbti_mod)[("(Intercept)"),1]),2)` `r round((coef(mbti_mod)[("ExtIntI"),1]),2)`(E/I) `r round((coef(mbti_mod)[("SensIntuitS"),1]),2)`(S/N) + `r round((coef(mbti_mod)[("ThinkFeelT"),1]),2)`(T/F) + `r round((coef(mbti_mod)[("JudPerP"),1]),2)`(J/P)$. The intercept is the ENFJ type; that is, when ExtInt = E, SensIntuit = N, ThinkFeel = F, and JudPer = J.
 
 ### (b)
 For an ESTJ, $$\hat \pi = \dfrac {e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` - `r round(coef(mbti_mod)[("JudPerP"),1],2)` `r round(coef(mbti_mod)[("SensIntuitS"),1],2)`}}{(1 + e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` - `r round(coef(mbti_mod)[("JudPerP"),1],2)` `r round(coef(mbti_mod)[("SensIntuitS"),1],2)`})},$$
 $$= `r round(exp(1)^(coef(mbti_mod)[("(Intercept)"),1] - coef(mbti_mod)[("JudPerP"),1] - coef(mbti_mod)[("SensIntuitS"),1]) / (1 + round(exp(1)^(coef(mbti_mod)[("(Intercept)"),1] - coef(mbti_mod)[("JudPerP"),1] - coef(mbti_mod)[("SensIntuitS"),1]),2)),2)`.$$
 
+### (c)
+
+```{r, echo=FALSE}
+intercept <- 
+x <- round(coef(mbti_mod)[("(Intercept)"),1] + coef(mbti_mod)[("ThinkFeelT"),1] + coef(mbti_mod)[("JudPerP"),1],2)
+```
+
+The formula for ENTP would come out to be $\text{logit}(\hat \pi) = `r round((coef(mbti_mod)[("(Intercept)"),1]),2)` + `r round((coef(mbti_mod)[("ThinkFeelT"),1]),2)` + `r round((coef(mbti_mod)[("JudPerP"),1]),2)`$. To get the probability,
+$$\hat \pi = \dfrac{e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` + `r round(coef(mbti_mod)[("ThinkFeelT"),1],2)` + `r round(coef(mbti_mod)[("JudPerP"),1],2)`}}{(1 + e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` + `r round(coef(mbti_mod)[("ThinkFeelT"),1],2)` + `r round(coef(mbti_mod)[("JudPerP"),1],2)`})},$$
+$$= `r round(exp(x) / (1 + exp(x)),2)`.$$
 
 
 
