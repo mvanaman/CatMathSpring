@@ -25,9 +25,6 @@ sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/
 
 \captionsetup[table]{labelformat=empty}
 
-
-4.17, A5.4 (10 points)
-
 # 4.3
 
 **\large (a):** In the linear probability model, the coefficient is treated the same way as it is in linear regression. That is, it represents a slope such that for every unit increase x (decade, in this case), there is a corresponding unit change in y (the probability of pitching a complete game, in this case, the change of which = -0.0694).
@@ -288,3 +285,19 @@ $$ = (`r round(1/2.74,2)`, \ `r round(1/1.17,2)`).$$
 ### (e)
 
 You could calculate the likelihood ratio test by taking $-2(\ell_0 - \ell_1)$, where $\ell$ is the model sans EI and $\ell_1$ is the model with EI. This approximates the chi-squared, and luckily the output has already done this procedure for us. The LR statistic is 7.28, which has a p-value of `r pvalr(pchisq(7.28, df=1, lower.tail=FALSE))`. We conclude that EI has  effect on the response above and beyond TF.
+
+
+## 5.4
+
+### (a)
+
+The deviance approximates the chi-square, so with a reported deviance of 11.1491 and 11 degrees of freedom, the p-value comes out to `r pvalr(pchisq(11.1491, df=11, lower.tail=FALSE))`. Failure to reject the null indicates a lack of evidence for poor fit.
+
+### (b)
+
+The JP would have to go because it's Chi-Squared value is the smallest of all predictors. It is also not significant, \textit{p} = `r pvalr(pchisq(0.80, df=1, lower.tail=FALSE))`.
+
+### (c)
+
+We can conduct a deviance test. Deviance of model minus deviance of model 2 with 6 degrees of freedom is $11.1491 - 3.74 = `r round(11.1491 - 3.74,2)`$, \textit{p} = `r pvalr(pchisq(7.4091, df=6, lower.tail=FALSE))`. Probably want the more parsimonious model without the interaction.
+
