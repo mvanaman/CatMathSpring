@@ -262,29 +262,22 @@ $$= `r round(exp(x) / (1 + exp(x)),2)`.$$
 
 ### (a)
 
-Currently, the intercept captures Extroverted Feelers. To get $\hat \pi$ for introverted feelers, tack on the coefficient for EIi:
-$$\hat \pi = \dfrac{e^{`r round(intercept,2)`  `r round(EI,2)`}} {(1 + e^{`r round(intercept,2)`  `r round(EI,2)`)}},$$
-$$= `r round(exp(intercept + EI) / (1 + exp(intercept + EI)),2)`.$$
+In table 4.14, the intercept captures Introverted Feelers. To get $\hat \pi$ for introverted feelers::
+$$\hat \pi = \dfrac{e^{-2.8291}} {(1 + e^{-2.8291)}},$$
+$$= `r round(exp(-2.8291) / (1 + exp(-2.8291)),2)`.$$
 
 ### (b)
 
 The estimated conditional odds for the EI variable is
-$$e^{`r round(EI,2)`} = `r round(exp(1)^(EI),2)`.$$
+$$e^{`r round(0.5805,2)`} = `r round(exp(1)^(0.5805),2)`.$$
 
 ### (c)
 
-```{r, echo=FALSE, results="asis"}
-CIs<- confint.default(glm(AlcUse ~ TF + JP + 
-                          EI + SN, 
-                        weights = AlcYes + AlcNo, family = binomial, data = myers))
-print(xtable::xtable(CIs, caption="MBTI Model Confidence Intervals", align="lrr"), caption.placement = 'top')
-CI_u <- -0.12971926
-CI_l <- -0.9803037
-```
-
-
 To get CIs for the conditional odds ratio:
-$$(e^{`r round(CI_l,2)`}, e^{`r round(CI_u,2)`}) = (`r round(exp(1)^(CI_l),2)`, `r round(exp(1)^(CI_u),2)`).$$
+$$(e^{0.1589}, e^{1.0080}) = (`r round(exp(1)^(0.1589),2)`, \ `r round(exp(1)^(1.0080),2)`).$$
+
+
+### (d)
 
 
 
