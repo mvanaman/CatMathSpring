@@ -23,7 +23,7 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
-A4.16-A4.17, A5.4 (10 points)
+4.17, A5.4 (10 points)
 
 # 4.3
 
@@ -199,49 +199,74 @@ pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
 
 ### (a)
 
-```{r, echo=FALSE, results="asis"}
-myers <- data.frame(c("T", "T", "F", "F", "T", "T", "F", "F", 
-                      "T", "T", "F", "F", "T", "T", "F", "F"),
+```{r, echo=FALSE}
+# dataset
+myers <- data.frame(c("t", "t", "f", "f", "t", "t", "f", "f", 
+                      "t", "t", "f", "f", "t", "t", "f", "f"),
                     
-                    c("J", "P", "J", "P", "J", "P", "J", "P",
-                      "J", "P", "J", "P", "J", "P", "J", "P"),
+                    c("j", "p", "j", "p", "j", "p", "j", "p",
+                      "j", "p", "j", "p", "j", "p", "j", "p"),
                     
-                    c("E", "E", "E", "E", "E", "E", "E", "E",
-                      "I", "I", "I", "I", "I", "I", "I", "I"),
+                    c("e", "e", "e", "e", "e", "e", "e", "e",
+                      "i", "i", "i", "i", "i", "i", "i", "i"),
      
-                    c("S", "S", "S", "S", "N", "N", "N", "N", 
-                      "S", "S", "S", "S", "N", "N", "N", "N"),
+                    c("s", "s", "s", "s", "n", "n", "n", "n", 
+                      "s", "s", "s", "s", "n", "n", "n", "n"),
                     
                     c(as.integer(c(10, 8, 5, 7, 3, 2, 4, 15, 
                                    17, 3, 6, 4, 1, 5, 1, 6))),
                     
                     c(as.integer(c(67, 34, 101, 72, 20, 16, 27, 
                                    65, 123, 49, 132, 102, 12, 30, 30, 73))))
-colnames(myers) <- c("ThinkFeel", "JudPer", "ExtInt", "SensIntuit", "AlcYes", "AlcNo")
-xtable::xtable(myers, align = "ccccccc")
-```
-```{r, echo=FALSE, results="asis"}
+colnames(myers) <- c("TF", "JP", "EI", "SN", "AlcYes", "AlcNo")
+myers_table <- xtable::xtable(myers, align = "ccccccc")
+
+# model
 AlcUse <- myers$AlcYes/(myers$AlcYes + myers$AlcNo)
-mbti_mod <- summary(glm(AlcUse ~ ThinkFeel + JudPer + ExtInt + SensIntuit, weights = AlcYes + AlcNo, family = binomial, data = myers))
-xtable::xtable(mbti_mod)
+mbti_mod <- summary(glm(AlcUse ~ TF + JP + 
+                          EI + SN, 
+                        weights = AlcYes + AlcNo, family = binomial, data = myers))
+mbti_mod_table <- xtable::xtable(mbti_mod)
+
+# coefficients
+intercept <- coef(mbti_mod)[("(Intercept)"),1]
+EI <- coef(mbti_mod)[("EIi"),1]
+SN <- coef(mbti_mod)[("SNs"),1]
+TF <- coef(mbti_mod)[("TFt"),1]
+JP <- coef(mbti_mod)[("JPp"),1]
 ```
 
-The model formula is $\text{logit}(\hat \pi) = `r round((coef(mbti_mod)[("(Intercept)"),1]),2)` `r round((coef(mbti_mod)[("ExtIntI"),1]),2)`(E/I) `r round((coef(mbti_mod)[("SensIntuitS"),1]),2)`(S/N) + `r round((coef(mbti_mod)[("ThinkFeelT"),1]),2)`(T/F) + `r round((coef(mbti_mod)[("JudPerP"),1]),2)`(J/P)$. The intercept is the ENFJ type; that is, when ExtInt = E, SensIntuit = N, ThinkFeel = F, and JudPer = J.
+```{r, results="asis", echo=FALSE}
+myers_table
+mbti_mod_table
+```
+
+
+The model formula is $\text{logit}(\hat \pi) = `r round(intercept,2)` `r round(EI,2)`(E/I) `r round((SN),2)`(S/N) + `r round(TF,2)`(T/F) + `r round((JP),2)`(J/P)$. The intercept is the ENFJ type; that is, when EI = E, SN = N, TF = F, and JP = J.
 
 ### (b)
-For an ESTJ, $$\hat \pi = \dfrac {e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` - `r round(coef(mbti_mod)[("JudPerP"),1],2)` `r round(coef(mbti_mod)[("SensIntuitS"),1],2)`}}{(1 + e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` - `r round(coef(mbti_mod)[("JudPerP"),1],2)` `r round(coef(mbti_mod)[("SensIntuitS"),1],2)`})},$$
-$$= `r round(exp(1)^(coef(mbti_mod)[("(Intercept)"),1] - coef(mbti_mod)[("JudPerP"),1] - coef(mbti_mod)[("SensIntuitS"),1]) / (1 + round(exp(1)^(coef(mbti_mod)[("(Intercept)"),1] - coef(mbti_mod)[("JudPerP"),1] - coef(mbti_mod)[("SensIntuitS"),1]),2)),2)`.$$
+For an ESTJ, $$\hat \pi = \dfrac {e^{`r round(intercept,2)` - `r round(JP,2)` `r round(SN,2)`}}{(1 + e^{`r round(intercept,2)` - `r round(JP,2)` `r round(SN,2)`})},$$
+$$= `r round(exp(1)^(intercept - JP - SN) / (1 + round(exp(1)^(intercept - JP - SN),2)),2)`.$$
 
 ### (c)
 
 ```{r, echo=FALSE}
-intercept <- 
-x <- round(coef(mbti_mod)[("(Intercept)"),1] + coef(mbti_mod)[("ThinkFeelT"),1] + coef(mbti_mod)[("JudPerP"),1],2)
+x <- round(intercept + TF + JP,2)
 ```
 
-The formula for ENTP would come out to be $\text{logit}(\hat \pi) = `r round((coef(mbti_mod)[("(Intercept)"),1]),2)` + `r round((coef(mbti_mod)[("ThinkFeelT"),1]),2)` + `r round((coef(mbti_mod)[("JudPerP"),1]),2)`$. To get the probability,
-$$\hat \pi = \dfrac{e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` + `r round(coef(mbti_mod)[("ThinkFeelT"),1],2)` + `r round(coef(mbti_mod)[("JudPerP"),1],2)`}}{(1 + e^{`r round(coef(mbti_mod)[("(Intercept)"),1],2)` + `r round(coef(mbti_mod)[("ThinkFeelT"),1],2)` + `r round(coef(mbti_mod)[("JudPerP"),1],2)`})},$$
+The formula for ENTP would come out to be $\text{logit}(\hat \pi) = `r round((intercept),2)` + `r round(TF,2)` + `r round((JP),2)`$. To get the probability,
+$$\hat \pi = \dfrac{e^{`r round(intercept,2)` + `r round(TF,2)` + `r round(JP,2)`}}{(1 + e^{`r round(intercept,2)` + `r round(TF,2)` + `r round(JP,2)`})},$$
 $$= `r round(exp(x) / (1 + exp(x)),2)`.$$
+
+## 4.17
+
+### (a)
+
+Currently, the intercept captures Extroverted Feelers. To get $\hat \pi$ for introverted feelers, tack on the coefficient for EIi:
+$$\hat \pi = \dfrac{e^{`r round(intercept,2)`  `r round(EI,2)`}} {(1 + e^{`r round(intercept,2)`  `r round(EI,2)`)}},$$
+$$= `r round(exp(intercept + EI) / (1 + exp(intercept + EI)),2)`.$$
+
+### (b)
 
 
 
