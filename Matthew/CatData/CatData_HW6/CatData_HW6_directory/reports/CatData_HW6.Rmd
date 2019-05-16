@@ -279,7 +279,12 @@ $$(e^{0.1589}, e^{1.0080}) = (`r round(exp(1)^(0.1589),2)`, \ `r round(exp(1)^(1
 
 ### (d)
 
+We just need the inverse of part (b), so
+$$\dfrac{1}{1.79} = `r round(1/1.79,2)`,$$ 
+$$\text{CI} = (\dfrac{1}{2.74}, \dfrac{1}{1.17}),$$
+$$ = (`r round(1/2.74,2)`, \ `r round(1/1.17,2)`).$$
 
 
+### (e)
 
 
