@@ -130,7 +130,7 @@ $$\dfrac {\begin{bmatrix} 2 \\ 4 \end{bmatrix} \cdot \begin{bmatrix} 1 \\ 2 \end
 $$\dfrac {10} {10},$$
 $$=1.$$
 
-```{r}
+```{r, echo=FALSE}
 # check work
 do <- matrix(c(2,4), nrow=2, ncol=1)
 re <- matrix(c(1,2), nrow=2, ncol=1)
@@ -217,7 +217,7 @@ write_matex(A * 3)
 
 **\large (a):** 
 $$3A - 2B,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(3*A - 2*B)
 ```
 
@@ -249,7 +249,7 @@ $$-5.$$
 
 **\large (c):**
 $$A \times B,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(A%o%B)
 ```
 
@@ -264,7 +264,7 @@ write_matex(A%o%B)
 
 **\large (d):** 
 $$CA,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(C%*%A)
 ```
 
@@ -280,7 +280,7 @@ write_matex(C%*%A)
 
 **\large (f):** 
 $$B \otimes D,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(kronecker(B,D, FUN="*"))
 ```
 
@@ -294,7 +294,7 @@ write_matex(kronecker(B,D, FUN="*"))
 
 **\large (g):** 
 $$CD,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(C%*%D)
 ```
 
@@ -309,7 +309,7 @@ write_matex(C%*%D)
 
 **\large (h):** 
 $$DC,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(D%*%C)
 ```
 
@@ -324,7 +324,7 @@ write_matex(C%*%D)
 
 **\large (i):** 
 $$C'C,$$
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis"}
 write_matex(t(C)%*%C)
 ```
 
