@@ -287,4 +287,4 @@ $$ = (`r round(1/2.74,2)`, \ `r round(1/1.17,2)`).$$
 
 ### (e)
 
-
+You could calculate the likelihood ratio test by taking $-2(\ell_0 - \ell_1)$, where $\ell$ is the model sans EI and $\ell_1$ is the model with EI. This approximates the chi-squared, and luckily the output has already done this procedure for us. The LR statistic is 7.28, which has a p-value of `r pvalr(pchisq(7.28, df=1, lower.tail=FALSE))`. We conclude that EI has  effect on the response above and beyond TF.
