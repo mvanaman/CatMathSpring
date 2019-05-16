@@ -1,0 +1,28 @@
+---
+title: "CatDat HW7"
+author: "Matthew Vanaman"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+monofont: Courier New
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{tikz,xcolor,listings}
+---
+`r knitr::opts_knit$set(root.dir='..')`
+
+```{r, include=FALSE, cache=TRUE}
+library(ProjectTemplate); load.project()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+options(scipen = 999)
+knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+np <- reticulate::import("numpy")
+sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
+```
+
+A8.2 (5 points)
+
+A4.20. Explain why pooling is necessary. For this problem use both cc to do the MH procedure and meglm (or melogit) to do mixed effects analysis. Compare the results. In particular, compare the resulting odds ratios and confidence intervals. (10 points). 
