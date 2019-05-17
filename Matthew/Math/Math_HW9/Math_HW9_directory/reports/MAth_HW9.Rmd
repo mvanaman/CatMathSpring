@@ -22,3 +22,197 @@ knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
+
+9.1, 9.3a, 9.4a, 9.6, 9.7a, 9.8, 10.3
+
+# 9.1
+
+Matrices are inverses of each other if their product results in an identity matrix. Multiply through and see if you get an identity matrix:
+
+$$\frac{1}{11} \begin{bmatrix} 2 & 10 & 2 & -3 \\ 8 & -4 & 5 & -8 \\ 0 & 5 & -1 & 6 \\ -8 & 4 & -4 & 3 \end{bmatrix} \begin{bmatrix} -44.5 & 138 & 99 & 125.5 \\ -4 & 15 & 11 & 14 \\ 100 & -309 & -220 & -284 \\ 20 & -64 & -44 & -59 \end{bmatrix}$$
+$$ \frac{1}{11} \bigg((2 \times -44.5) + (10 \times -4) + (2 \times 100) + (-3 \times 20) \bigg) = 1$$
+$$\text{etc, all the way down the line...}$$
+$$... \frac{1}{11} \bigg((-8 \times 125.5) + (4 \times 14) + (-4 \times -284) + (3 \times -59) \bigg) = 1$$
+$$= \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
+
+# 9.3
+
+## (a)
+First, get the minor elements:
+$$\begin{vmatrix} \begin{bmatrix} 4 & 6 \\ 0 & 5 \end{bmatrix} \end{vmatrix} = 4(5) - 6(-3) = 20$$
+$$... \begin{vmatrix} \begin{bmatrix} 3 & 6 \\ -3 & 4 \end{bmatrix} \end{vmatrix} = 3(4) - 6 (-3) = 30$$
+
+Then get the cofactors:
+$$-1^{2}M_{11} = 20...$$
+$$... -1^{6}M_{33} = 30$$
+Which ends up being:
+$$C = \begin{bmatrix} 20 & -39 & 36 \\ -30 & 69 & -54 \\ 12 & -36 & 30 \end{bmatrix}.$$
+
+Transpose the cofactor matrix to ge the adoint:
+$$C' = \begin{bmatrix} 20 & -30 & 12 \\ -39 & 69 & -36 \\ 36 & -54 & 30 \end{bmatrix}.$$
+
+The determinant can found several ways, e.g.
+$$-3(-30) + 4(69) + 6 (-54) = 42$$
+
+To get inverse of adjoint matrix:
+$$\frac{1}{42} \begin{bmatrix} 20 & -30 & 12 \\ -39 & 69 & -36 \\ 36 & -54 & 30 \end{bmatrix} = \begin{bmatrix} .48 & -.71 & .29 \\ -.93 & 1.64 & -.86 \\ .86 & -1.29 & .71 \end{bmatrix}$$
+
+
+# 9.4
+
+## (a)
+Step 1:
+$$\begin{bmatrix} 6 & -9 & -8 \\ -5 & 4 & 10 \\ -9 & 8 & 6 \end{bmatrix} \begin{bmatrix} 6 & -9 & -8 \\ -5 & 4 & 10 \\ -9 & 8 & 6 \end{bmatrix}$$
+Step 2/4:
+$$(6 \times 4 \times 6) = 162$$
+$$(-9 \times 10 \times -9) = 144$$
+$$(-8 \times -5 \times 8) = 320$$
+Step 3/4:
+$$(6 \times 10 \times 8) = 480$$
+$$(-9 \times - 5 \times 6) = 270$$
+$$(-8 \times 4 \times -9) = 288$$
+Step 5/6:
+$$(144+810+320) - (480+270+288) = 236$$
+
+# 9.6
+
+## (a)
+The student takes 1 minute to find the determinant of a 3x3 matrix, and the 4 x 4 matrix requires 4 determinants (each of which turns out to be 3 x 3), you expect the student will take four minutes to solve the 4x4 matrix. For the 5 x 5 matrix, there is a similar situation where the student will have to determine 5 4x4 matrices. Except this time, we know it will take four minutes per matrix since each 4x4 matrix requires finding four determinants. So that's 20 minutes (4-minutes for each 4x4, five 4x4's total). The logic works the same way up the line:\newline
+- The 6x6 matrix will require 6 5x5's, so 6 times 20 = 120 minutes total.
+- The 7x7 matrix will require 7 6x6's, so 7 times 120 = 840 minutes total.
+- The 7x7 matrix will require 7 6x6's, so 7 times 120 = 840 minutes total.
+
+It all works the same way for the computer, just with much faster speed per determinant. For the computer:
+- The 4x4 matrix will require 4 3x3's, so 4 times 0.1 = 0.4 seconds total.
+- The 5x5 matrix will require 5 5x5's, so 5 times 0.4 = 2 seconds total.
+- The 6x6 matrix will require 6 5x5's, so 6 times 2 = 12 seconds total.
+- The 7x7 matrix will require 7 6x6's, so 7 times 12 = 84 seconds total.
+
+## (b)
+Michael Sand is saying that in real-world projects, matrices will probably be larger than what is on the test. He's testing them with small matrices to illustrate the concept. Students will probably never do such work by hand becuase it would be too time-consuming with too high of risk for errors.
+
+# 9.7
+
+## (a)
+Set the equation to zero and solve for $\lambda$:
+$$0 = \begin{vmatrix} \begin{bmatrix} 8-\lambda & 7 \\ 7 & 8-\lambda \end{bmatrix} \end{vmatrix},$$
+$$0 = (8-\lambda)^2 - 49,$$
+$$0 = (64 - 16\lambda + \lambda^2) - 49,$$
+$$0 = \lambda^2 - 16\lambda + 15,$$
+$$0 = (\lambda-15)(\lambda-1),$$
+$$\lambda = 1, \ \lambda = 15.$$
+
+
+# 9.8
+
+## a.
+$$\begin{bmatrix} 3 & -3 & 0 \\ 1 & 7 & -1 \\ -4 & 4 & 6 \end{bmatrix}$$
+Divide the first row by 3:
+$$\begin{bmatrix} 1 & -1 & 0 \\ 1 & 7 & -1 \\ -4 & 4 & 6 \end{bmatrix}$$
+Multply the first row by -1 and add that to the second row:
+$$\begin{bmatrix} 1 & -1 & 0 \\ 0 & 7 & -1 \\ -4 & 4 & 6 \end{bmatrix}$$
+Multply the first row by 4 and add that to the last row:
+$$\begin{bmatrix} 1 & -1 & 0 \\ 0 & 7 & -1 \\ 0 & 0 & 6 \end{bmatrix}$$
+Divide the last row by 6:
+$$\begin{bmatrix} 1 & -1 & 0 \\ 0 & 7 & -1 \\ 0 & 0 & 1 \end{bmatrix}$$
+Multply the last row by 1 and add that to the second row:
+$$\begin{bmatrix} 1 & -1 & 0 \\ 0 & 7 & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+Divide the second row by 7:
+$$\begin{bmatrix} 1 & -1 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+Multiply the second row by -1 and add that to the first row:
+$$\begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+The matrix is full rank (i.e. 3).
+
+
+# 10.3
+
+## (a)
+$$\begin{bmatrix} 1 & -2 & -1 & \Bigg| & 15 \\ -1 & -1 & 1 & \Bigg| & -6 \\ 1 & -6 & -1 & \Bigg| & -43 \end{bmatrix},$$
+
+Add the first row to the second row:
+$$\begin{bmatrix} 1 & -2 & -1 & \Bigg| & 15 \\ 0 & -3 & 0 & \Bigg| & 9 \\ 1 & -6 & -1 & \Bigg| & -43 \end{bmatrix},$$
+Multiply the first row by -1 and add that to the third row:
+$$\begin{bmatrix} 1 & -2 & -1 & \Bigg| & 15 \\ 0 & -3 & 0 & \Bigg| & 9 \\ 0 & -4 & 0 & \Bigg| & -58 \end{bmatrix},$$
+Divide the second row by -3:
+$$\begin{bmatrix} 1 & -2 & -1 & \Bigg| & 15 \\ 0 & 1 & 0 & \Bigg| & -3 \\ 0 & -4 & 0 & \Bigg| & -58 \end{bmatrix},$$
+Divide the last row by -4
+$$\begin{bmatrix} 1 & -2 & -1 & \Bigg| & 15 \\ 0 & 1 & 0 & \Bigg| & -3 \\ 0 & 1 & 0 & \Bigg| & 14.5 \end{bmatrix},$$
+
+Multiply the the second row by -1 and add that to the third row:
+$$\begin{bmatrix} 1 & -2 & -1 & \Bigg| & 15 \\ 0 & 1 & 0 & \Bigg| & -3 \\ 0 & 0 & 0 & \Bigg| & 17.5 \end{bmatrix}.$$
+Multiply the second row by -2 and add that to the first row:
+$$\begin{bmatrix} 1 & 0 & -1 & \Bigg| & 21 \\ 0 & 1 & 0 & \Bigg| & -3 \\ 0 & 0 & 0 & \Bigg| & 17.5 \end{bmatrix}.$$
+
+Probably no solution.
+
+##( b)
+$$\begin{bmatrix} -4 & -1 & -2 & \Bigg| & 15 \\ 1 & -2 & 2 & \Bigg| & 18 \\ 0 & -6 & 4 & \Bigg| & 20 \end{bmatrix}$$
+Multply the second row by 1 and add that to the first row
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 1 & -2 & 2 & \Bigg| & 18 \\ 0 & -6 & 4 & \Bigg| & 20 \end{bmatrix}$$
+Multiply the second row by -2 and add that to the third row
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 1 & -2 & 2 & \Bigg| & 18 \\ 0 & -2 & 0 & \Bigg| & -16 \end{bmatrix}$$
+Divie the last row by -2
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 1 & -2 & 2 & \Bigg| & 18 \\ 0 & 1 & 0 & \Bigg| & 8 \end{bmatrix}$$
+Switch the second and third rows
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 0 & 1 & 0 & \Bigg| & 8 \\ 1 & -2 & 2 & \Bigg| & 18 \end{bmatrix}$$
+Multiply the first row by 2 and add that to the third row
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 0 & 1 & 0 & \Bigg| & 8 \\ -4 & 0 & 2 & \Bigg| & 84 \end{bmatrix}$$
+Dive the last row by 2
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 0 & 1 & 0 & \Bigg| & 8 \\ -2 & 0 & 1 & \Bigg| & 42 \end{bmatrix}$$
+Multiply the first row by -1 and add that to the last row:
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 0 & 1 & 0 & \Bigg| & 8 \\ 0 & -1 & 1 & \Bigg| & 9 \end{bmatrix}$$
+Multiply the second row by 1 and add that to the last row:
+$$\begin{bmatrix} -2 & 1 & 0 & \Bigg| & 33 \\ 0 & 1 & 0 & \Bigg| & 8 \\ 0 & 0 & 1 & \Bigg| & 17 \end{bmatrix}$$
+Probably no solution.
+
+## (c)
+$$\begin{bmatrix} -6 & -2 & 5 & \Bigg| & -29 \\ 2 & -5 & 1 & \Bigg| & -4 \\ 4 & 5 & -5 & \Bigg| & 28 \end{bmatrix}$$
+Move the first row to the last row, the last row to the second row, and what was the second row becomes the first row:
+$$\begin{bmatrix} 2 & -5 & 1 & \Bigg| & -4 \\ 4 & 5 & -5 & \Bigg| & 28 \\ -6 & -2 & 5 & \Bigg| & -29 \end{bmatrix}$$
+Multiply the last row by 1 and add that to the second row:
+$$\begin{bmatrix} 2 & -5 & 1 & \Bigg| & -4 \\ -2 & 3 & 0 & \Bigg| & -1 \\ -6 & -2 & 5 & \Bigg| & -29 \end{bmatrix}$$
+Multply the second row by 1  and add it to the last row
+$$\begin{bmatrix} 2 & -5 & 1 & \Bigg| & -4 \\ -2 & 3 & 0 & \Bigg| & -1 \\ -8 & 1 & 5 & \Bigg| & -30 \end{bmatrix}$$
+Multiply the first row by -5 and add it to the third row:
+$$\begin{bmatrix} 2 & -5 & 1 & \Bigg| & -4 \\ -2 & 3 & 0 & \Bigg| & -1 \\ 2 & 24 & 0 & \Bigg| & -10 \end{bmatrix}$$
+Multiply the second row by 1 and add that to the first row
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ -2 & 3 & 0 & \Bigg| & -1 \\ 2 & 24 & 0 & \Bigg| & -10 \end{bmatrix}$$
+Multiply the second row by -8 and add that to the last row
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ -2 & 3 & 0 & \Bigg| & -1 \\ 18 & 0 & 0 & \Bigg| & -2 \end{bmatrix}$$
+Add the first row to the second row
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ -2 & 1 & 1 & \Bigg| & 6 \\ 18 & 0 & 0 & \Bigg| & -2 \end{bmatrix}$$
+Multiply the second row by 9 and add that to the last row
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ -2 & 1 & 1 & \Bigg| & 6 \\ 0 & 9 & 9 & \Bigg| & 52 \end{bmatrix}$$
+Divide the last row by 9
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ -2 & 1 & 1 & \Bigg| & 6 \\ 0 & 1 & 1 & \Bigg| & 5.78 \end{bmatrix}$$
+Multiply the las t row by -1 and add that to the second row
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ -2 & 0 & 0 & \Bigg| & 0.22 \\ 0 & 1 & 1 & \Bigg| & 5.78 \end{bmatrix}$$
+divide the second row by -2
+$$\begin{bmatrix} 0 & -2 & 1 & \Bigg| & -5 \\ 1 & 0 & 0 & \Bigg| & -0.11 \\ 0 & 1 & 1 & \Bigg| & 5.78 \end{bmatrix}$$
+switch the first and second rows
+$$\begin{bmatrix}  1 & 0 & 0 & \Bigg| & -0.11 \\ 0 & -2 & 1 & \Bigg| & -5 \\ 0 & 1 & 1 & \Bigg| & 5.78 \end{bmatrix}$$
+Switch the second adn third rows
+$$\begin{bmatrix}  1 & 0 & 0 & \Bigg| & -0.11 \\ 0 & 1 & 1 & \Bigg| & 5.78 \\ 0 & -2 & 1 & \Bigg| & -5 \end{bmatrix}$$
+Multiply the second row by 2 and add that to the last row:
+$$\begin{bmatrix}  1 & 0 & 0 & \Bigg| & -0.11 \\ 0 & 1 & 1 & \Bigg| & 5.78 \\ 0 & 0 & 2 & \Bigg| & 6.56 \end{bmatrix}$$
+Divide the last row by 2
+$$\begin{bmatrix}  1 & 0 & 0 & \Bigg| & -0.11 \\ 0 & 1 & 1 & \Bigg| & 5.78 \\ 0 & 0 & 1 & \Bigg| & 3.28 \end{bmatrix}$$
+Multiply the last row by -1 and add that to the second row
+$$\begin{bmatrix}  1 & 0 & 0 & \Bigg| & -0.11 \\ 0 & 1 & 0 & \Bigg| & 2.5 \\ 0 & 0 & 1 & \Bigg| & 3.28 \end{bmatrix}$$
+
+
+Which leaves you with:
+$$\begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix} -0.11 \\ 2.5 \\ 3.28 \end{bmatrix}.$$
+
+## (d)
+$$\begin{bmatrix} -1 & 3 & -1 & \Bigg| & 9 \\ 1 & -1 & 0 & \Bigg| & -8 \\ -5 & 3 & 1 & \Bigg| & 39 \end{bmatrix}$$
+Switch the first and second rows
+$$\begin{bmatrix} 1 & -1 & 0 & \Bigg| & -8 \\ -1 & 3 & -1 & \Bigg| & 9 \\ -5 & 3 & 1 & \Bigg| & 39 \end{bmatrix}$$
+
+Add the first row to the second and 5 times the first row to the third
+$$\begin{bmatrix} 1 & -1 & 0 & \Bigg| & -8 \\ 0 & 2 & -1 & \Bigg| & 1 \\ 0 & -2 & 1 & \Bigg| & -1 \end{bmatrix}$$
+
+Add the second row to the third
+$$\begin{bmatrix} 1 & -1 & 0 & \Bigg| & -8 \\ 0 & 2 & -1 & \Bigg| & 1 \\ 0 & 0 & 0 & \Bigg| & 0 \end{bmatrix}$$
+
+Which leaves you with infinitely many solutions.
