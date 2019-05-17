@@ -23,6 +23,62 @@ np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
 
+```{r, echo=FALSE}
+# print good looking p-values
+pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
+
+  roundr <- function(x, digits = 1) {
+    res <- sprintf(paste0('%.', digits, 'f'), x)
+    zzz <- paste0('0.', paste(rep('0', digits), collapse = ''))
+    res[res == paste0('-', zzz)] <- zzz
+    res
+  }
+
+  sapply(pvals, function(x, sig.limit) {
+    if (x < sig.limit)
+      if (html)
+        return(sprintf('&lt; %s', format(sig.limit))) else
+          return(sprintf('< %s', format(sig.limit)))
+    if (x > .1)
+      return(roundr(x, digits = 2)) else
+        return(roundr(x, digits = digits))
+  }, sig.limit = sig.limit)
+}
+```
+
+
 A8.2 (5 points)
 
 A4.20. Explain why pooling is necessary. For this problem use both cc to do the MH procedure and meglm (or melogit) to do mixed effects analysis. Compare the results. In particular, compare the resulting odds ratios and confidence intervals. (10 points). 
+
+## 8.2
+
+### (a)
+```{r,echo=FALSE}
+chi_82 <- round(((125-2)/sqrt(125+2))^2,2)
+p_82 <- pvalr(pchisq(chi_82, df=1, lower.tail = FALSE))
+```
+
+$$z^2 = \Big( \dfrac {n_{12} - n_{21}} {\sqrt{n_{12} + n_{21}}} \Big)^2,$$
+$$= \Big(\dfrac {125-2} {\sqrt{125+2}}\Big)^2,$$
+$$= `r chi_82`, \ p `r p_82`.$$
+
+### (b)
+
+```{r, echo=FALSE}
+# proportions
+heaven <- (833+125) / (833+2+160+125)
+hell <- (833 + 2) / (833+2+125+160)
+# difference
+diff <- heaven - hell
+# standard error
+SE <- sqrt((125+2) - (125-2)^2 / 1120) / 1120
+#90% CIs
+upper <- diff + (1.645*SE)
+lower <- diff - (1.645*SE)
+```
+$$SE = \sqrt{(n_{12}+n_{21}) - (n_{12} - n_{21})^2 / n} / n$$
+$$CI = \text{diff}  \pm \alpha_{0.9}SE,$$
+$$= `r round(diff,3)` \pm 1.645 (`r round(SE,3)`),$$
+$$= (`r round(lower,3)`, \ `r round(upper,3)` ).$$
+The lower bound CI is pretty close to zero, but the CIs are also pretty narrow. We also have a lax alpha, so I'd say this is good evidence against the null.
