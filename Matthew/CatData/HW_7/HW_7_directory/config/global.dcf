@@ -8,7 +8,7 @@ munging: TRUE
 logging: FALSE
 logging_level: INFO
 load_libraries: TRUE
-libraries: reshape2, plyr, tidyverse, stringr, lubridate, broom, MASS, effsize, sjstats, car, ez, lme4, lmerTest, psych, lavaan, GPArotation, polycor, matrixcalc, lmtest, reghelper, xlsx, DescTools, binom, kableExtra
+libraries: reshape2, plyr, tidyverse, stringr, lubridate, broom, MASS, effsize, sjstats, car, ez, lme4, lmerTest, psych, lavaan, GPArotation, polycor, matrixcalc, lmtest, reghelper, xlsx, DescTools, binom, xtable
 as_factors: TRUE
 data_tables: FALSE
 attach_internal_libraries: FALSE

@@ -17,7 +17,7 @@ library(ProjectTemplate); load.project()
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
-options(scipen = 999)
+options(scipen = 999, xtable.comment = FALSE)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
@@ -78,7 +78,98 @@ upper <- diff + (1.645*SE)
 lower <- diff - (1.645*SE)
 ```
 $$SE = \sqrt{(n_{12}+n_{21}) - (n_{12} - n_{21})^2 / n} / n$$
-$$CI = \text{diff}  \pm \alpha_{0.9}SE,$$
+$$CI = \text{diff}  \pm \alpha_{0.90}SE,$$
 $$= `r round(diff,3)` \pm 1.645 (`r round(SE,3)`),$$
 $$= (`r round(lower,3)`, \ `r round(upper,3)` ).$$
 The lower bound CI is pretty close to zero, but the CIs are also pretty narrow. We also have a lax alpha, so I'd say this is good evidence against the null.
+
+## 4.20
+
+### (a)
+
+```{r, results="asis", echo=FALSE}
+# data
+trial <- as.data.frame(rep(c(1:8), each = 2)); names(trial)[1] <- "Center"
+trial$Treatment <- rep(c("Drug", "Control"), each = 1)
+trial$Success <- c(11,10,16,22,14,7,2,1,6,0,1,0,1,1,4,6)
+trial$Failure <- c(25,27,4,10,5,12,14,16,11,12,10,10,4,8,2,1)
+# model
+Response <- trial$Success / (trial$Success + trial$Failure)
+trial_mod <- glm(Response ~ Treatment, 
+                         weights = Success + Failure, 
+                         family = binomial, 
+                         data = trial)
+trial_mod$formula
+xtable::xtable(trial_mod, align = "lrrrr")
+```
+With Treatment as the only predictor, we get null results. 
+
+### (b)
+```{r, echo=FALSE}
+trial_table <- matrix(c(55, 47, 75, 96), nrow = 2, byrow = T)
+rownames(trial_table) <- c("drug", "control")
+colnames(trial_table) <- c("success", "failure")
+trial_partials <- array(c(11,25,
+                     10,27,
+                     16,4,
+                     22,10,
+                     14,5,
+                     7,12,
+                     2,14,
+                     1,16,
+                     6,11,
+                     0,12,
+                     1,10,
+                     0,10,
+                     1,4,
+                     1,8,
+                     4,2,
+                     6,1),
+                   dim = c(2,2,8),
+                   dimnames = list(
+                     response = c("success", "failure"),
+                     treatment = c("drug", "control"),
+                     clinic = c("1", "2", "3", "4", "5", "6", "7", "8")))
+mantelhaen.test(trial_partials, correct = FALSE)
+```
+
+Because we reject the null ($\chi^2 = 6.38, \ \text{df} = 1, \ p = 0.012$), the CMH test on the partial tables of each stratum of center demonstrates potential conditionality on the Center variable. Ignoring Center might not be wise.
+
+### (c)
+```{r, results="asis", echo=FALSE}
+trial_partials <- array(c(11,25,
+                     10,27,
+                     16,4,
+                     22,10,
+                     14,5,
+                     7,12,
+                     2,14,
+                     1,16,
+                     6,11,
+                     0,12,
+                     1,10,
+                     0,10,
+                     1,4,
+                     1,8,
+                     4,2,
+                     6,1),
+                   dim = c(2,2,8),
+                   dimnames = list(
+                     response = c("success", "failure"),
+                     treatment = c("drug", "control"),
+                     clinic = c("1", "2", "3", "4", "5", "6", "7", "8")))
+mixed_mod <- lme4::glmer(Response ~ Treatment + (Treatment|Center), family = binomial, weights = Success + Failure, data = trial)
+xtable::xtable(summary(mixed_mod)$coef)
+CIs <- confint.default(trial_mod)
+sum <- summary(mixed_mod)
+CIs_mixed <- confint(mixed_mod, parm="beta_", method = "Wald")
+OR <- round(exp(0.4040),2)
+OR_mixed <- round(exp(0.89),2)
+CIs_mixed_l <- round(exp(0.07551159),3)
+CIs_mixed_u <- round(exp(1.69556330),3)
+```
+
+Following up on the CMH test, it's likely that there is conditionality on the Center variable, which indicates that we should take measures to hold the effect of Center constant when assessing the effect of Treatment on Response. By not doing so, we risk Type II error.
+
+The odds ratio for the original model was `r OR`, \textit{p} = 0.12, with 95% CIs (`r round(exp(-0.08871422),3)` `r round(exp(0.8968055),3)`). Using mixed effects logistic regression with random intercepts and random slopes, the odds ratio comes out to `r OR_mixed`, \textit{p} = 0.03, with 95% CIs (`r CIs_mixed_l`,  `r CIs_mixed_u`).
+
