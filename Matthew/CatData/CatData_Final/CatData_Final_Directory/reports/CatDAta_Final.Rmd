@@ -11,14 +11,130 @@ header-includes: \usepackage{tikz,xcolor,listings}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
-```{r, include=FALSE, cache=TRUE}
+```{r, include=FALSE}
 library(ProjectTemplate); load.project()
 ```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
-options(scipen = 999)
+options(scipen = 999, xtable.comment = FALSE)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 np <- reticulate::import("numpy")
 sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
+
+```{r, echo=FALSE}
+pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
+
+  roundr <- function(x, digits = 1) {
+    res <- sprintf(paste0('%.', digits, 'f'), x)
+    zzz <- paste0('0.', paste(rep('0', digits), collapse = ''))
+    res[res == paste0('-', zzz)] <- zzz
+    res
+  }
+
+  sapply(pvals, function(x, sig.limit) {
+    if (x < sig.limit)
+      if (html)
+        return(sprintf('&lt; %s', format(sig.limit))) else
+          return(sprintf('< %s', format(sig.limit)))
+    if (x > .1)
+      return(roundr(x, digits = 2)) else
+        return(roundr(x, digits = digits))
+  }, sig.limit = sig.limit)
+}
+```
+
+
+# 5.19
+
+### (a)
+
+$\text{logit} (\pi) = \alpha + \beta_1 M_1 + \beta_2 M_2 + \beta_3 M_3 + \beta_4 M_4 + \beta_5 M_5 + \beta_6 M_6$, with M = major, once for each level. When you want to assess the effect of a particular level of major, code that major (e.g. $M_3$) to 1 and the rest to zero.
+
+### (b)
+
+```{r, echo=FALSE}
+dev <- pvalr(pchisq(21.7, df=6, lower.tail = FALSE))
+```
+
+
+The deviance goodness-of-fit test approximates the $\chi^2$ for GLMs with binomial responses and large numbers of successes and failures. Our model meets these criteria. The p-value for the deviance test is `r dev`, indicating that other possible predictors excluded from this model may not equal zero (i.e. bad fit).
+
+### (c)
+
+The rule of thumb for standardized residuals is that residuals with aboslute values above 2 or 3 are suspect. Most of the standardized residuals given are pretty small, with the exception of the first Major. This indicates that the model in (a) with Major as the only predictor may not have good fit because it excludes another important predictor (gender).
+
+### (d)
+
+Because the model in (a) excludes a predictor for gender, it assumes an equal probability of admission for males and females across majors. If this is true, the standardized residuals should be close to zero (they are normally distributed when the model holds). Because gender is a binary predictor in this case, we can expect the standardized residual for males to be identical to female, but with an opposite sign. In other words, whatever deviation from the expected probability there is for females, there is probability of equal magnitude in the opposite direction for males. The residual of -4.15 for males indicates that males have a lower-than-expected probability of admission, likely violating the assumption of equal probability for males and females within that major.
+
+### (e)
+
+First of all, this illustrates Simpson's paradox: failing to account for differences across majors leads to an effect in the opposite direction. When you condition on major females have 10% lower odds of admission, yet collapsing over major, females have 84% greater odds of admission. This *could* mean that females apply to the more competitive majors relatively more often, so are accepted less often than males after conditioning on major. So when you control for major, females fare worse because the majors they are applying to are more competitive. Males on the other hand, are applying to less competitive majors, meaning that when you average across majors of varying difficulty, it appears that males are doing worse. When you allow for the conditionality of major, males fare better because they apply in relatively higher numbers to the easier majors. This shows why it's important to keep track of whom applies to where when making group comparisons.
+
+# 7.9
+
+9 Table7.23referstoapplicantstograduateschoolattheUniversityofCalifornia, Berkeley for the fall 1973 session. Admissions decisions are presented by gender of applicant, for the six largest graduate departments. Denote the three variables by A = whether admitted, F = female, and M = major Fit loglinear model (AM, AF, MF).
+
+a. Report the estimated AF conditional odds ratio, and compare it with the AF marginal odds ratio. Why are they so different?
+
+b. Report $G^2$ and df values, and comment on the quality of ﬁt. Conduct a residual analysis. Describe the lack of ﬁt.
+
+c. Deleting the data for major 1, re-ﬁt the model. Interpret.
+
+d. Deleting the data for Department 1 and treating A as the response variable, ﬁt an equivalent logistic model for model (AM, AF, MF) in (c). Show how to use each model to obtain an odds ratio estimate of the effect of F on A, controlling for D.
+
+
+
+### (a)
+
+
+
+```{r, echo=FALSE, results="asis"}
+AM <- summary(glm(admit ~ major, weights = count, family=poisson, data=berk_admin))
+AF <- glm(admit ~ female, weights = count, family=poisson, data=berk_admin)
+MF <- summary(glm(major ~ female, weights = count, family=poisson, data=berk_admin))
+fit <- glm(count ~ admit + female + major + admit:major + admit:female + major:female, family=poisson, data=berk_admin)
+xtable(summary(fit))
+fitted <- as.data.frame(predict(fit, type="response"))
+berk_admin <- cbind(berk_admin, fitted)
+```
+
+
+```{r, echo=FALSE, results="asis"}
+margins <- as.data.frame(matrix(c(1,2,3,4,5,6,
+                    
+                    262.82, 257.06, 251.43, 245.92, 240.53, 235.26,
+                    
+                    500.33, 301.35, 181.50, 109.32, 65.84, 39.66,
+                    
+                    73.24, 104.54, 149.22, 213.00, 304.03, 433.97,
+                    
+                    125.11, 109.96, 96.66, 84.96, 74.68, 65.64), nrow=6, ncol=5))
+names(margins) <- c("Major", "Myes", "Mno", "Fyes", "Fno")
+print(xtable(margins), include.rownames=FALSE)
+```
+
+```{r}
+Fyes <- 73.24 + 104.54 + 149.22 + 213.00 + 304.03 + 433.97 
+Mno <- 500.33+ 301.35+ 181.50+ 109.32+ 65.84+ 39.66
+Fno <- 125.11+ 109.96+ 96.66+ 84.96+ 74.68+ 65.64
+Myes <- 262.82+ 257.06+ 251.43+ 245.92+ 240.53+ 235.26
+(Fyes * Mno) / (Fno * Myes)
+```
+
+$$\dfrac {} {}$$
+
+
+
+a. Estimated odds ratios are 0.9 for conditional and 1.8 for marginal. Men apply in greater numbers to departments (1, 2) having relatively high admissions rates and women apply in greater numbers to departments (3, 4, 5, 6) having relatively low admissions rates.
+
+b. Deviance G 2 = 20.2 (df = 5), poor ﬁt. Standardized residuals show lack of ﬁt only for Department 1.
+
+c. G 2 = 2.56, df = 4, good ﬁt.
+
+d. Logit model with main effects for department and gender has estimated conditional odds ratio = 1.03 between gender and admissions. Model deleting gender term ﬁts essentially as well, with G 2 = 2.68 (df = 5); plausible that admissions and gender are conditionally independent for these departments.
+
+# 4.37
+
