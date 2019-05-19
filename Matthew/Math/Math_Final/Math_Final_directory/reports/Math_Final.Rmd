@@ -26,23 +26,49 @@ knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 
 ## (a)
 
-$$\frac {\partial} {\partial \beta_1} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+$$\frac {\partial} {\partial x_1} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
 Derivative of a constant is zero, so drop $\alpha$:
 $$= \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
-Break up across addition and subtration, then again across multiplication:
-$$= \frac {\partial} {\partial \beta_1}\beta_1  x_{i1} + \frac {\partial} {\partial \beta_1}\beta_2 \frac {\partial} {\partial \beta_1} x_{i2} + \frac {\partial} {\partial \beta_1}\beta_3 \frac {\partial} {\partial \beta_1}x_{i2}^2 + \frac {\partial} {\partial \beta_1}\beta_4 \frac {\partial} {\partial \beta_1}x_{i2}^3 + \frac {\partial} {\partial \beta_1}\beta_5 \frac {\partial} {\partial \beta_1}x_{i3} + \frac {\partial} {\partial \beta_1}\beta_6 \frac {\partial} {\partial \beta_1}x_{i4} + \frac {\partial} {\partial \beta_1}\beta_7 \frac {\partial} {\partial \beta_1}x_{i3} \frac {\partial} {\partial \beta_1}x_{i4},$$
+Break up across addition and subtraction, then bring out constants:
+$$= \beta_1 \frac {\partial} {\partial x_1} x_{i1} + \beta_2 \frac {\partial} {\partial x_1} x_{i2} + \beta_3 \frac {\partial} {\partial x_1}x_{i2}^2 + \beta_4 \frac {\partial} {\partial x_1}x_{i2}^3 + \beta_5 \frac {\partial} {\partial x_1}x_{i3} + \beta_6 \frac {\partial} {\partial x_1}x_{i4} + \beta_7 \frac {\partial} {\partial x_1}x_{i3} \frac {\partial} {\partial x_1}x_{i4},$$
 All other independent variables are treated as constants:
-$$= \frac {\partial} {\partial \beta_1}\beta_1 x_{i1} + 0 (0) + 0(0) + 0(0) + 0(0) + 0(0) + 0(0)(0),$$
+$$= \frac {\partial} {\partial x_1}\beta_1 x_{i1} + 1 (0) + 1(0) + 1(0) + 1(0) + 1(0) + 1(0)(0),$$
 Bring the constant out:
-$$= \beta_1 \frac {\partial} {\partial \beta_1} x_{i1} = \beta_1(1) = \beta_1.$$
+$$= \beta_1 \frac {\partial} {\partial x_1} x_{i1} = \beta_1(1) = \beta_1.$$
 
+## (b)
 
+As long as the *x* variable is not exponentiated or multiplied, the coefficient is the partial derivative. This is not true for exponentiated terms. Take for example:
+$$\frac {d}{dx} (a + \beta x^2),$$
+$$= \frac {d}{dx} (a) + \frac {d}{dx}(\beta x^2),$$
+$$= \beta \frac {d}{dx}(x^{2}),$$
+$$= \beta (2 x^{2-1}),$$
+$$=2\beta x.$$
+This derivative does not yield the coefficient by itself, so you cannot interpret the coefficient as a straightforward linear relationship between *x* and *y* in the case of exponentiated terms. When the slope is exponential, the partial derivative gives you the instantaneous rate of change at each level of x which, unlike in the case of (a), will be different at each level of *x*.
 
+Multiplicative relationships also cannot be interpreted as a straightfoward linear relationship. Consider a model with two predictors, $x_1$ and $x_2$, and their interaction: 
+$$\frac {\partial}{\partial x_1} (a + \beta_1 x_1+ \beta_2 x_2 + \beta_{12}(x_1 \times x_2) = \beta1 + \beta_{12}x_2.$$
+Here, the first derivative with respect to $x_1$ is a function of $x_{2}$. If there is an interaction, this partial derivative will change when evaluated across differing $x_2$ values. The key thing to notice is that because this function incorporates information about $x_2$, it does not describe an exclusive relationship between $x_1$ and $y$ like function (a) does.  Therefore, when an interaction term is present, the first partial derivaitve does not yield the regression coefficient $\beta_1$. However, if this derivative does not change across differing levels of $x_2$, there is no interaction. In cases where there is no interaction (i.e. in cases where $\beta_{12} x_2$ comes out to zero), this function *would*  describe the linear relationship between $x_1$ and $y$ in the way function (a) does. This would also be true whenever $x_2 = 0$. However, mathematically, this derivative does not directly represent the coefficient one sees in regression output for $x_1$ in a main-effects only model, nor does it yield the coefficient for the interaction. 
 
+To get the coefficient for the interaction, you need to take the *cross-partial* derivative with respect to both $x_1$ and $x_2$:
+$$\frac {\partial^2}{\partial x_1 x_2} (a + \beta_1 x_1+ \beta_2 x_2 + \beta_{12}(x_1 \times x_2) = \beta_{12}.$$
+Importantly, this coefficient does not describe an exclusive relationship between $x_1$ and $y$ since it is a function of both $x_1$ and $x_2$. The cross-partial derivative introduces a third slope, which is the slope between $x_1$ and $y$ spanning across all levels of $x_2$. If this slope is zero, you have no interaction. 
 
+In sum, the coefficient seen in regression output describes a linear relationship between $x$ and $y$ in a linear main-effects model but the meaning of this coefficient changes when $x$ is exponentiated or multiplied by another independent variable.  
 
+## (c)
 
+$$\frac {\partial} {\partial x_2} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Derivative of a constant is zero, so drop $\alpha$:
+$$= \frac {\partial} {\partial x_2} (\beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4}),$$
+Break up across addition and subtration, then again across multiplication:
+$$= \frac {\partial} {\partial x_2}\beta_1  x_{i1} + \frac {\partial} {\partial x_2}\beta_2  x_{i2} + \frac {\partial} {\partial x_2}\beta_3 x_{i2}^2 + \frac {\partial} {\partial x_2}\beta_4 x_{i2}^3 + \frac {\partial} {\partial x_2}\beta_5 x_{i3} + \frac {\partial} {\partial x_2}\beta_6 x_{i4} + \frac {\partial} {\partial x_2}\beta_7 x_{i3} x_{i4},$$
+The independent variables all get treated as constants:
+$$= 0 + \frac {\partial} {\partial x_2}\beta_2  x_{i2} + \frac {\partial} {\partial x_2}\beta_3  x_{i2}^2 + \frac {\partial} {\partial x_2}\beta_4  x_{i2}^3 + 0 + 0 + 0 +0,$$
+$$= \beta_2\frac {\partial} {\partial x_2} x_{i2} + \beta_3 \frac {\partial} {\partial x_2}  x_{i2}^2 + \beta_4 \frac {\partial} {\partial x_2}  x_{i2}^3,$$
+$$= \beta_2 + 2\beta_3  x_{i2} + 3 \beta_4 x_{i2}^2.$$
 
+## (d)
 
 
 
