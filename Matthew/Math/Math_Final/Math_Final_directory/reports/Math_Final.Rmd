@@ -1,0 +1,25 @@
+---
+title: "Math Final"
+author: "Matthew Vanaman"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+monofont: Courier New
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+header-includes: \usepackage{tikz,xcolor,listings}
+---
+`r knitr::opts_knit$set(root.dir='..')`
+
+```{r, include=FALSE, cache=TRUE}
+library(ProjectTemplate); load.project()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+options(scipen = 999)
+knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
+```
+
+Pick 3:
+3.9, 7.9, 7.11, 7.12, 9.10, 10.9
