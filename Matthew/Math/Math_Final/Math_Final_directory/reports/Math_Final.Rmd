@@ -11,7 +11,7 @@ header-includes: \usepackage{tikz,xcolor,listings}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
-```{r, include=FALSE, cache=TRUE}
+```{r, include=FALSE}
 library(ProjectTemplate); load.project()
 ```
 
@@ -69,6 +69,41 @@ $$= \beta_2\frac {\partial} {\partial x_2} x_{i2} + \beta_3 \frac {\partial} {\p
 $$= \beta_2 + 2\beta_3  x_{i2} + 3 \beta_4 x_{i2}^2.$$
 
 ## (d)
+
+On the x-axis, you will age. On the y-axis, you will have: \newline
+$$0.653 + 2(−0.073)x_{i2} + 3(0.00054)x_{i2}^2,$$
+$$= 0.653 − 0.146x_{i2} + 0.00162x_{i2}^2.$$
+Voting age starts at 18, so make age run from 18 to 100, let's say.
+
+```{r, echo=FALSE}
+x <- seq(18, 100, length=10000)
+pd <- 0.653 - 0.146*x + 0.00162*x^2
+df <- as.data.frame(cbind(x,pd))
+ggplot(df, aes(x)) +
+  geom_line(aes(y = pd)) +
+  ylab("Age's Effect on Approval of Obama") + xlab("Age") +
+  labs(color = "Function") +
+  geom_hline(yintercept=0, linetype="dashed", color = "purple") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"))
+```
+
+There is a curvilinear relationship such that generally speaking, age is negatively associated with approval. That is, the slope between age and approval is negative everywhere except for those older than around 80 years old or so. At that age, the effect turns around, and age becomes positively predictive of approval. The effect of age on approval is most negative at middle age.
+
+## (e)
+
+$$\frac {\partial} {\partial x_4} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Derivative of a constant is zero, so drop $\alpha$:
+$$= \frac {\partial} {\partial x_4} (\beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4}),$$
+$$= \frac {\partial} {\partial x_4} (\beta_1 x_{i1} + \frac {\partial} {\partial x_4}\beta_2 x_{i2} + \frac {\partial} {\partial x_4}\beta_3 x_{i2}^2 + \frac {\partial} {\partial x_4} \beta_4 x_{i2}^3 + \frac {\partial} {\partial x_4} \beta_5 x_{i3} + \frac {\partial} {\partial x_4}\beta_6 x_{i4} + \frac {\partial} {\partial x_4} \beta_7 x_{i3} x_{i4}),$$
+$$= 0 + 0 + 0 + 0 + 0 + \frac {\partial} {\partial x_4} \beta_6 x_{i4} + \frac {\partial} {\partial x_4} \beta_7 x_{i3} x_{i4},$$
+$$= \beta_6 \frac {\partial} {\partial x_4} x_{i4} + \beta_7 x_{i3} \frac {\partial} {\partial x_4} x_{i4},$$
+$$= \beta_6 + \beta_7 x_{i3}.$$
+
+## (f)
+
 
 
 
