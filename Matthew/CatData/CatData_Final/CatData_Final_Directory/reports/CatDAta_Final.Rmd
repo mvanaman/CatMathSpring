@@ -20,9 +20,9 @@ library(ProjectTemplate); load.project()
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
 options(scipen = 999, xtable.comment = FALSE)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
-np <- reticulate::import("numpy")
-sympy <- reticulate::import_from_path("sympy", path = "/anaconda3/lib/python3.7/site-packages")
 ```
+
+*Code shown in the appendix.*
 
 ```{r, echo=FALSE}
 pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
@@ -73,19 +73,9 @@ Because the model in (a) excludes a predictor for gender, it assumes an equal pr
 
 ### (e)
 
-First of all, this illustrates Simpson's paradox: failing to account for differences across majors leads to an effect in the opposite direction. When you condition on major females have 10% lower odds of admission, yet collapsing over major, females have 84% greater odds of admission. This *could* mean that females apply to the more competitive majors relatively more often, so are accepted less often than males after conditioning on major. So when you control for major, females fare worse because the majors they are applying to are more competitive. Males on the other hand, are applying to less competitive majors, meaning that when you average across majors of varying difficulty, it appears that males are doing worse. When you allow for the conditionality of major, males fare better because they apply in relatively higher numbers to the easier majors. This shows why it's important to keep track of whom applies to where when making group comparisons.
+This illustrates Simpson's paradox: failing to account for differences across majors leads to an effect in the opposite direction. When you condition on major females have 10% lower odds of admission, yet collapsing over major, females have 84% greater odds of admission. This *could* mean that females apply to the more competitive majors relatively more often, so are accepted less often than males after conditioning on major. So when you control for major, females fare worse because the majors they are applying to are more competitive. Males on the other hand, are applying to less competitive majors, meaning that when you average across majors of varying difficulty, it appears that males are doing worse. When you allow for the conditionality of major, males fare better because they apply in relatively higher numbers to the easier majors. This shows why it's important to keep track of whom applies to where when making group comparisons.
 
 # 7.9
-
-9 Table7.23referstoapplicantstograduateschoolattheUniversityofCalifornia, Berkeley for the fall 1973 session. Admissions decisions are presented by gender of applicant, for the six largest graduate departments. Denote the three variables by A = whether admitted, F = female, and M = major Fit loglinear model (AM, AF, MF).
-
-a. Report the estimated AF conditional odds ratio, and compare it with the AF marginal odds ratio. Why are they so different?
-
-b. Report $G^2$ and df values, and comment on the quality of ﬁt. Conduct a residual analysis. Describe the lack of ﬁt.
-
-c. Deleting the data for major 1, re-ﬁt the model. Interpret.
-
-d. Deleting the data for Department 1 and treating A as the response variable, ﬁt an equivalent logistic model for model (AM, AF, MF) in (c). Show how to use each model to obtain an odds ratio estimate of the effect of F on A, controlling for D.
 
 ### (a)
 
@@ -222,4 +212,180 @@ True. Victim and defendent variables would both be coded as zero, meaning that t
 $$\dfrac {500 e^{\alpha + B_d d+ B_v v}} {(1 - e^{\alpha + B_d d+ B_v v})},$$
 $$= \dfrac {500 e^{-2.06 + 0.87 (0) - 2.40(0)}} {(1 - e^{-2.06 + 0.87 (0) - 2.40(0)})},$$
 $$= \dfrac {500 e^{-2.06}} {(1 - e^{-2.06})}.$$
+
+\begin{center}
+\bf{\Large Appendix}
+\end{center}
+
+```{r}
+# function for printing good-looking p-values
+pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
+
+  roundr <- function(x, digits = 1) {
+    res <- sprintf(paste0('%.', digits, 'f'), x)
+    zzz <- paste0('0.', paste(rep('0', digits), collapse = ''))
+    res[res == paste0('-', zzz)] <- zzz
+    res
+  }
+
+  sapply(pvals, function(x, sig.limit) {
+    if (x < sig.limit)
+      if (html)
+        return(sprintf('&lt; %s', format(sig.limit))) else
+          return(sprintf('< %s', format(sig.limit)))
+    if (x > .1)
+      return(roundr(x, digits = 2)) else
+        return(roundr(x, digits = digits))
+  }, sig.limit = sig.limit)
+}
+```
+
+\captionsetup{justification=raggedright,singlelinecheck=false}
+
+# 5.19
+
+
+### (b)
+
+```{r}
+# get p-value for deviance test
+dev <- pvalr(pchisq(21.7, df=6, lower.tail = FALSE))
+```
+
+
+
+# 7.9
+
+### (a)
+
+```{r, results="hide", fig.show="hide"}
+berk_admin$major <- as.factor(berk_admin$major)
+berk_admin$female <- as.factor(berk_admin$female)
+berk_admin$admit <- as.factor(berk_admin$admit)
+
+# fit the model
+fit <- glm(count ~ admit + female + major + 
+             admit:major + admit:female + major:female, 
+           family=poisson, 
+           data=berk_admin)
+
+print(xtable::xtable(summary(fit), 
+                     caption = "Model", 
+                     align = "lrrrr"), 
+      caption.placement = "top", 
+      latex.environments = "flushleft")
+
+# get fitted values
+fitted <- as.data.frame(predict(fit, type = "response"))
+berk_admin <- cbind(berk_admin,round(fitted,2))
+
+# make a table of fitted values
+Mno <- berk_admin[1:6,5]
+Fno <- berk_admin[7:12,5]
+Myes <- berk_admin[13:18,5]
+Fyes <- berk_admin[19:24,5]
+sum_Mno <- round(sum(berk_admin[1:6,5]),2)
+sum_Fno <- round(sum(berk_admin[7:12,5]),2)
+sum_Myes <- round(sum(berk_admin[13:18,5]),2)
+sum_Fyes <- round(sum(berk_admin[19:24,5]),2)
+
+margins <- as.data.frame(matrix(c(1,2,3,4,5,6, "", "Total",
+                                  Myes, "", sum_Myes,
+                                  Mno, "", sum_Mno,
+                                  Fyes, "", sum_Fyes,
+                                  Fno, "", sum_Fno),
+                                nrow=8, ncol=5))
+
+names(margins) <- c("Major", "Myes", "Mno", "Fyes", "Fno")
+print(xtable::xtable(margins, 
+                     caption = "Fitted Values", 
+                     align = "lrrrrr"),
+      caption.placement = "top", 
+      include.rownames=FALSE, 
+      latex.environments = "flushleft")
+
+# get marg odds
+marg_OR <- round((sum_Fno * sum_Myes)/(sum_Fyes * sum_Mno),2)
+```
+
+
+## (b)
+
+```{r, results="hide", fig.show="hide"}
+# deviance test
+dev <- round(fit$deviance,2) # deviance
+df <- fit$df.residual # df
+p <- pvalr(pchisq(dev, df=5, lower.tail = FALSE)) # p-value
+
+# standardized residuals
+SRs <- as.data.frame(resid(fit, type="pearson")/sqrt(1 - hatvalues(fit)))
+colnames(SRs) <- "Std Res"
+berk_admin <- cbind(berk_admin, SRs)
+
+print(xtable::xtable(berk_admin[,c(2:4,6)], 
+                     caption = "Predictors and Standardized Residuals", 
+                     align = "rcccr"), 
+      caption.placement = "top", 
+      include.rownames=FALSE, 
+      latex.environments = "flushleft")
+```
+
+
+## (c)
+
+```{r, results="hide", fig.show="hide"}
+# fit the model with the dropped level
+fit_drop <- glm(count ~ admit + female + major + 
+                  admit:major + admit:female + major:female, 
+                family=poisson, 
+                subset = (major != 1), 
+                data=berk_admin)
+
+print(xtable::xtable(summary(fit_drop), 
+                     caption = "Model Sans Major 1", 
+                     align = "lrrrr"), 
+      caption.placement = "top", 
+      latex.environments = "flushleft")
+
+# deviance test for drop model
+dev_drop <- round(fit_drop$deviance,2) # deviance
+df_drop <- fit_drop$df.residual # df
+p_drop <- pvalr(pchisq(dev_drop, df=5, lower.tail = FALSE)) # p-value
+```
+
+
+
+## (d)
+
+
+```{r, results="hide", fig.show="hide"}
+# run logit model
+logit <- glm(admit ~ female + major + 
+               major:female, 
+             weights = count, 
+             family=binomial, 
+             subset = (major != 1), 
+             data=berk_admin)
+
+print(xtable::xtable(summary(logit), 
+                     caption = "Logit Model Sans Major 1", 
+                     align = "lrrrr"), 
+      caption.placement = "top", 
+      latex.environments = "flushleft")
+
+# get odds ratio from logit model
+OR_logit <- round(exp(0.2200),2)
+
+# fit logit without gender term
+logit_nogender <- glm(admit ~ major, 
+                      weights = count, 
+                      family=binomial, 
+                      subset = (major != 1), 
+                      data=berk_admin)
+
+# deviance test between logit model and logit model without gender
+dev_comp <- round(logit_nogender$deviance - logit$deviance,2) # deviance
+df_comp <- logit_nogender$df.residual - logit$df.residual # df
+p_comp <- pvalr(pchisq(dev_comp, df = df_comp, lower.tail = FALSE)) # p-value
+```
 
