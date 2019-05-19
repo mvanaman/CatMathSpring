@@ -21,5 +21,32 @@ options(scipen = 999)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 ```
 
-Pick 3:
-3.9, 7.9, 7.11, 7.12, 9.10, 10.9
+
+# 7.11
+
+## (a)
+
+$$\frac {\partial} {\partial \beta_1} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Derivative of a constant is zero, so drop $\alpha$:
+$$= \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Break up across addition and subtration, then again across multiplication:
+$$= \frac {\partial} {\partial \beta_1}\beta_1  x_{i1} + \frac {\partial} {\partial \beta_1}\beta_2 \frac {\partial} {\partial \beta_1} x_{i2} + \frac {\partial} {\partial \beta_1}\beta_3 \frac {\partial} {\partial \beta_1}x_{i2}^2 + \frac {\partial} {\partial \beta_1}\beta_4 \frac {\partial} {\partial \beta_1}x_{i2}^3 + \frac {\partial} {\partial \beta_1}\beta_5 \frac {\partial} {\partial \beta_1}x_{i3} + \frac {\partial} {\partial \beta_1}\beta_6 \frac {\partial} {\partial \beta_1}x_{i4} + \frac {\partial} {\partial \beta_1}\beta_7 \frac {\partial} {\partial \beta_1}x_{i3} \frac {\partial} {\partial \beta_1}x_{i4},$$
+All other independent variables are treated as constants:
+$$= \frac {\partial} {\partial \beta_1}\beta_1 x_{i1} + 0 (0) + 0(0) + 0(0) + 0(0) + 0(0) + 0(0)(0),$$
+Bring the constant out:
+$$= \beta_1 \frac {\partial} {\partial \beta_1} x_{i1} = \beta_1(1) = \beta_1.$$
+
+
+
+
+
+
+
+
+
+
+
+# 9.10
+
+
+# 10.9
