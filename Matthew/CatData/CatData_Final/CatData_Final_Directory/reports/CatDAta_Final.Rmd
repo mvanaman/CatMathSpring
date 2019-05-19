@@ -7,13 +7,14 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{tikz,xcolor,listings}
+header-includes: \usepackage{tikz,xcolor,listings, caption}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
 ```{r, include=FALSE}
 library(ProjectTemplate); load.project()
 ```
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
@@ -45,6 +46,7 @@ pvalr <- function(pvals, sig.limit = .001, digits = 3, html = FALSE) {
 }
 ```
 
+\captionsetup{justification=raggedright,singlelinecheck=false}
 
 # 5.19
 
@@ -92,49 +94,106 @@ d. Deleting the data for Department 1 and treating A as the response variable, �
 
 
 ```{r, echo=FALSE, results="asis"}
-AM <- summary(glm(admit ~ major, weights = count, family=poisson, data=berk_admin))
-AF <- glm(admit ~ female, weights = count, family=poisson, data=berk_admin)
-MF <- summary(glm(major ~ female, weights = count, family=poisson, data=berk_admin))
+berk_admin$major <- as.factor(berk_admin$major)
+berk_admin$female <- as.factor(berk_admin$female)
+berk_admin$admit <- as.factor(berk_admin$admit)
 fit <- glm(count ~ admit + female + major + admit:major + admit:female + major:female, family=poisson, data=berk_admin)
-xtable(summary(fit))
-fitted <- as.data.frame(predict(fit, type="response"))
-berk_admin <- cbind(berk_admin, fitted)
+print(xtable::xtable(summary(fit), caption = "Model", align = "lrrrr"), caption.placement = "top", latex.environments = "flushleft")
+fitted <- as.data.frame(predict(fit, type = "response"))
+berk_admin <- cbind(berk_admin,round(fitted,2))
 ```
+
+
+
+To get the conditional odds ratio for AF (which is AG, except the gender variable is called F in this case), you exponentiate the admit:female coefficient: exp(-0.1084) = `r round(exp(-0.1084),2)`. \newpage
+
+```{r, echo=FALSE, results="asis"}
+Mno <- berk_admin[1:6,5]
+Fno <- berk_admin[7:12,5]
+Myes <- berk_admin[13:18,5]
+Fyes <- berk_admin[19:24,5]
+sum_Mno <- round(sum(berk_admin[1:6,5]),2)
+sum_Fno <- round(sum(berk_admin[7:12,5]),2)
+sum_Myes <- round(sum(berk_admin[13:18,5]),2)
+sum_Fyes <- round(sum(berk_admin[19:24,5]),2)
+
+margins <- as.data.frame(matrix(c(1,2,3,4,5,6, "", "Total",
+                                  
+                                  Myes, "", sum_Myes,
+                                  
+                                  Mno, "", sum_Mno,
+                                  
+                                  Fyes, "", sum_Fyes,
+                                  
+                                  Fno, "", sum_Fno),
+                                
+                                nrow=8, ncol=5))
+
+names(margins) <- c("Major", "Myes", "Mno", "Fyes", "Fno")
+print(xtable::xtable(margins, caption = "Fitted Values", align = "lrrrrr"), caption.placement = "top", include.rownames=FALSE, latex.environments = "flushleft")
+# get marg odds
+
+marg_OR <- round((sum_Fno * sum_Myes)/(sum_Fyes * sum_Mno),2)
+```
+
+
+To get the marginal odds, you can use use of the model fitted count values. In this case, we're ignoring the Major grouping. Using the totals of each column, with admission indicated by the subscrtipt, the calculation comes out to be 
+$$\frac {\textrm{F}_{no} \times \textrm{M}_{yes}} {\textrm{F}_{yes} \times \textrm{M}_{no}},$$ $$= \frac {`r sum_Fno` \times `r sum_Myes`} {`r sum_Fyes` \times `r sum_Mno`},$$
+$$= `r marg_OR`.$$
+This turns out to be nearly identical to the marginal odds ratio of the raw counts.
+
+
+## (b)
+
+```{r, results="asis", echo=FALSE}
+dev <- round(fit$deviance,2)
+df <- fit$df.residual
+p <- pvalr(pchisq(dev, df=5, lower.tail = FALSE))
+SRs <- as.data.frame(resid(fit, type="pearson")/sqrt(1 - hatvalues(fit)))
+colnames(SRs) <- "Std Res"
+berk_admin <- cbind(berk_admin, SRs)
+print(xtable::xtable(berk_admin[,c(2:4,6)], caption = "Predictors and Standardized Residuals", align = "rcccr"), caption.placement = "top", include.rownames=FALSE, latex.environments = "flushleft")
+```
+
+
+The deviance for this model is `r dev`, *df* = 5, $p$ = `r p`. Bad fit. 
+
+As can be seen from the table above, the standardized residuals show that there doesn't seem to be much misfit about the admit and female predictors, but major, specifically at level 1, is consistently problematic. 
+
+## (c)
+
+```{r, echo=FALSE, results="asis"}
+fit_drop <- glm(count ~ admit + female + major + admit:major + admit:female + major:female, family=poisson, subset = (major != 1), data=berk_admin)
+print(xtable::xtable(summary(fit_drop), caption = "Model Sans Major 1", align = "lrrrr"), caption.placement = "top", latex.environments = "flushleft")
+
+dev_drop <- round(fit_drop$deviance,2)
+df_drop <- fit_drop$df.residual
+p_drop <- pvalr(pchisq(dev_drop, df=5, lower.tail = FALSE))
+```
+
+The deviance for this new model is `r dev_drop`, *df* = `r df_drop`, $p$ = `r p_drop`. Fit has improved a lot. 
+
+## (d)
 
 
 ```{r, echo=FALSE, results="asis"}
-margins <- as.data.frame(matrix(c(1,2,3,4,5,6,
-                    
-                    262.82, 257.06, 251.43, 245.92, 240.53, 235.26,
-                    
-                    500.33, 301.35, 181.50, 109.32, 65.84, 39.66,
-                    
-                    73.24, 104.54, 149.22, 213.00, 304.03, 433.97,
-                    
-                    125.11, 109.96, 96.66, 84.96, 74.68, 65.64), nrow=6, ncol=5))
-names(margins) <- c("Major", "Myes", "Mno", "Fyes", "Fno")
-print(xtable(margins), include.rownames=FALSE)
+logit <- glm(admit ~ female + major + major:female, weights = count, family=binomial, subset = (major != 1), data=berk_admin)
+print(xtable::xtable(summary(logit), caption = "Logit Model Sans Major 1", align = "lrrrr"), caption.placement = "top", latex.environments = "flushleft")
+
+dev_drop <- round(fit_drop$deviance,2)
+df_drop <- fit_drop$df.residual
+p_drop <- pvalr(pchisq(dev_drop, df=5, lower.tail = FALSE))
+logit_nogender <- glm(admit ~ major, weights = count, family=binomial, subset = (major != 1), data=berk_admin)
+
+OR_logit <- round(exp(0.2200),2)
+dev_comp <- round(logit_nogender$deviance - logit$deviance,2)
+df_comp <- logit_nogender$df.residual - logit$df.residual 
+p_comp <- pvalr(pchisq(dev_comp, df = df_comp, lower.tail = FALSE))
 ```
 
-```{r}
-Fyes <- 73.24 + 104.54 + 149.22 + 213.00 + 304.03 + 433.97 
-Mno <- 500.33+ 301.35+ 181.50+ 109.32+ 65.84+ 39.66
-Fno <- 125.11+ 109.96+ 96.66+ 84.96+ 74.68+ 65.64
-Myes <- 262.82+ 257.06+ 251.43+ 245.92+ 240.53+ 235.26
-(Fyes * Mno) / (Fno * Myes)
-```
-
-$$\dfrac {} {}$$
-
-
-
-a. Estimated odds ratios are 0.9 for conditional and 1.8 for marginal. Men apply in greater numbers to departments (1, 2) having relatively high admissions rates and women apply in greater numbers to departments (3, 4, 5, 6) having relatively low admissions rates.
-
-b. Deviance G 2 = 20.2 (df = 5), poor ﬁt. Standardized residuals show lack of ﬁt only for Department 1.
-
-c. G 2 = 2.56, df = 4, good ﬁt.
-
-d. Logit model with main effects for department and gender has estimated conditional odds ratio = 1.03 between gender and admissions. Model deleting gender term ﬁts essentially as well, with G 2 = 2.68 (df = 5); plausible that admissions and gender are conditionally independent for these departments.
+The equivalent logit model yields a conditional odds ratio between gender and admissions is exp(0.2200) = `r OR_logit`. Compare this to the OR from the previous model, which is exp(-0.0307) = `r round(exp(-0.0307),2)`. The logit model shows much less of an effect of gender on admissions than the poisson model. Given the negligibale effect of gender on admissions, it might be worth comparing a model with no gender terms. A deviance test between these models shows the the simpler model with no gender variable works just as well as the model with gender ($G^2$ = `r dev_comp`, $df$ = `r df_comp`, $p$ = `r p_comp`). Thus it is important to carefully consider model assumptions when choosing a test.
 
 # 4.37
+
+
 
