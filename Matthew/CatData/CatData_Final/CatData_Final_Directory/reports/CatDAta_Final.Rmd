@@ -87,11 +87,7 @@ c. Deleting the data for major 1, re-ﬁt the model. Interpret.
 
 d. Deleting the data for Department 1 and treating A as the response variable, ﬁt an equivalent logistic model for model (AM, AF, MF) in (c). Show how to use each model to obtain an odds ratio estimate of the effect of F on A, controlling for D.
 
-
-
 ### (a)
-
-
 
 ```{r, echo=FALSE, results="asis"}
 berk_admin$major <- as.factor(berk_admin$major)
@@ -102,8 +98,6 @@ print(xtable::xtable(summary(fit), caption = "Model", align = "lrrrr"), caption.
 fitted <- as.data.frame(predict(fit, type = "response"))
 berk_admin <- cbind(berk_admin,round(fitted,2))
 ```
-
-
 
 To get the conditional odds ratio for AF (which is AG, except the gender variable is called F in this case), you exponentiate the admit:female coefficient: exp(-0.1084) = `r round(exp(-0.1084),2)`. \newpage
 
@@ -195,5 +189,37 @@ The equivalent logit model yields a conditional odds ratio between gender and ad
 
 # 4.37
 
+### (a)
 
+This is true. To figure this out, find the $\textrm{log} (\hat \pi)$ for each coding scheme:
+$$\textrm{log} (\hat \pi) = −2.06 + .87d − 2.40v.$$
+Defendent white, victim black:
+$$`r - 2.06 + .87*(0) - 2.40*(1)` = \textrm{log}(`r round(exp(- 2.06 + .87*(0) - 2.40*(1)),2)`) = −2.06 + .87(0) − 2.40(1).$$
+Defendent black, victim white:
+$$`r - 2.06 + .87*(1) - 2.40*(0)` = \textrm{log}(`r round(exp(- 2.06 + .87*(1) - 2.40*(0)),2)`) = −2.06 + .87(1) − 2.40(0).$$
+
+Defendent black, victim black:
+$$`r - 2.06 + .87*(0) - 2.40*(0)` = \textrm{log}(`r round(exp(- 2.06 + .87*(0) - 2.40*(0)),2)`) = −2.06 + .87(0) − 2.40(0).$$
+Defendent white, victim white:
+$$`r - 2.06 + .87*(1) - 2.40*(1)` = \textrm{log}(`r round(exp(- 2.06 + .87*(1) - 2.40*(1)),2)`) = −2.06 + .87(0) − 2.40(0).$$
+
+### (b)
+
+False. An OR of 1.15 would indicate that whites have 15% greater odds of the death penalty. There's no reason why changing the coding should flip the effect since the relative relationships among the variables remain the same no matter how they are coded. Only now your coefficient will be 1.15, so to get the odds for whites you take 1/1.15, which is 0.87.
+
+### (c)
+
+True. This is the definition of an interaction: there is no multiplicative effect of one variable on the other; the effect of one variable remains constant across all levels of the other variable. You could have also said that the estimated odds ratio between the death penalty out come and victim’s race is the same for each category of defendent's race.
+
+
+### (d)
+
+Nope. The intercept is on the log-odds scale.
+
+### (e)
+
+True. Victim and defendent variables would both be coded as zero, meaning that the expected count for when v = 0 and d = 0 is just the logit with no other terms in the exponent. In other words:
+$$\dfrac {500 e^{\alpha + B_d d+ B_v v}} {(1 - e^{\alpha + B_d d+ B_v v})},$$
+$$= \dfrac {500 e^{-2.06 + 0.87 (0) - 2.40(0)}} {(1 - e^{-2.06 + 0.87 (0) - 2.40(0)})},$$
+$$= \dfrac {500 e^{-2.06}} {(1 - e^{-2.06})}.$$
 
