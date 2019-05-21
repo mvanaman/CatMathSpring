@@ -29,15 +29,7 @@ knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 
 ## (a)
 
-$$\frac {\partial} {\partial x_1} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
-Derivative of a constant is zero, so drop $\alpha$:
-$$= \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
-Break up across addition and subtraction, then bring out constants:
-$$= \beta_1 \frac {\partial} {\partial x_1} x_{i1} + \beta_2 \frac {\partial} {\partial x_1} x_{i2} + \beta_3 \frac {\partial} {\partial x_1}x_{i2}^2 + \beta_4 \frac {\partial} {\partial x_1}x_{i2}^3 + \beta_5 \frac {\partial} {\partial x_1}x_{i3} + \beta_6 \frac {\partial} {\partial x_1}x_{i4} + \beta_7 \frac {\partial} {\partial x_1}x_{i3} \frac {\partial} {\partial x_1}x_{i4},$$
-All other independent variables are treated as constants:
-$$= \frac {\partial} {\partial x_1}\beta_1 x_{i1} + 1 (0) + 1(0) + 1(0) + 1(0) + 1(0) + 1(0)(0),$$
-Bring the constant out:
-$$= \beta_1 \frac {\partial} {\partial x_1} x_{i1} = \beta_1(1) = \beta_1.$$
+$$\frac {\partial} {\partial x_1} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4} = \beta_1.$$
 
 ## (b)
 
@@ -61,15 +53,7 @@ In sum, the coefficient seen in regression output describes a linear relationshi
 
 ## (c)
 
-$$\frac {\partial} {\partial x_2} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
-Derivative of a constant is zero, so drop $\alpha$:
-$$= \frac {\partial} {\partial x_2} (\beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4}),$$
-Break up across addition and subtration, then again across multiplication:
-$$= \frac {\partial} {\partial x_2}\beta_1  x_{i1} + \frac {\partial} {\partial x_2}\beta_2  x_{i2} + \frac {\partial} {\partial x_2}\beta_3 x_{i2}^2 + \frac {\partial} {\partial x_2}\beta_4 x_{i2}^3 + \frac {\partial} {\partial x_2}\beta_5 x_{i3} + \frac {\partial} {\partial x_2}\beta_6 x_{i4} + \frac {\partial} {\partial x_2}\beta_7 x_{i3} x_{i4},$$
-The independent variables all get treated as constants:
-$$= 0 + \frac {\partial} {\partial x_2}\beta_2  x_{i2} + \frac {\partial} {\partial x_2}\beta_3  x_{i2}^2 + \frac {\partial} {\partial x_2}\beta_4  x_{i2}^3 + 0 + 0 + 0 +0,$$
-$$= \beta_2\frac {\partial} {\partial x_2} x_{i2} + \beta_3 \frac {\partial} {\partial x_2}  x_{i2}^2 + \beta_4 \frac {\partial} {\partial x_2}  x_{i2}^3,$$
-$$= \beta_2 + 2\beta_3  x_{i2} + 3 \beta_4 x_{i2}^2.$$
+$$\frac {\partial} {\partial x_2} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4} = \beta_2 + 2\beta_3  x_{i2} + 3 \beta_4 x_{i2}^2.$$
 
 ## (d)
 
@@ -97,13 +81,7 @@ There is a curvilinear relationship such that generally speaking, age is negativ
 
 ## (e)
 
-$$\frac {\partial} {\partial x_4} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
-Derivative of a constant is zero, so drop $\alpha$:
-$$= \frac {\partial} {\partial x_4} (\beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4}),$$
-$$= \frac {\partial} {\partial x_4} (\beta_1 x_{i1} + \frac {\partial} {\partial x_4}\beta_2 x_{i2} + \frac {\partial} {\partial x_4}\beta_3 x_{i2}^2 + \frac {\partial} {\partial x_4} \beta_4 x_{i2}^3 + \frac {\partial} {\partial x_4} \beta_5 x_{i3} + \frac {\partial} {\partial x_4}\beta_6 x_{i4} + \frac {\partial} {\partial x_4} \beta_7 x_{i3} x_{i4}),$$
-$$= 0 + 0 + 0 + 0 + 0 + \frac {\partial} {\partial x_4} \beta_6 x_{i4} + \frac {\partial} {\partial x_4} \beta_7 x_{i3} x_{i4},$$
-$$= \beta_6 \frac {\partial} {\partial x_4} x_{i4} + \beta_7 x_{i3} \frac {\partial} {\partial x_4} x_{i4},$$
-$$= \beta_6 + \beta_7 x_{i3}.$$
+$$\frac {\partial} {\partial x_4} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4} = \beta_6 + \beta_7 x_{i3}.$$
 
 ## (f)
 
@@ -150,60 +128,20 @@ E <- matrix(c("\\varepsilon_{\\textrm{USA}}", "\\varepsilon_{\\textrm{Peru}}", "
 ## (a)
 
 $$
-X'Y = `r matex(x_prime)` `r matex(y)`,
-$$
-$$
-= 1(10) + 1(7) + 1(2) + 1(8) + 1(10) + 1(6) + 1(2) + 1(10) + 1(8) + 1(5) = 68,
-$$
-$$
-\textrm{etc...}
-$$
-$$
-= `r matex(x_prime %*% y)`.
+X'Y = `r matex(x_prime %*% y)`.
 $$
 
 ## (b)
 
 $$
-X'X = `r matex(x_prime)` \times `r matex(x)`,
+X'X = `r matex(x_prime %*% x)`.
 $$
-$$
-1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) = 10,
-$$
-$$
-\textrm{etc...}
-$$
-$$
-`r matex(x_prime %*% x)`.
-$$
-
-```{r, echo=FALSE}
-# check work
-x_prime_times_x <- x_prime %*% x
-```
 
 
 ## (c)
 
 ```{r, echo=FALSE}
-# modify the function to print determinants
-print.matrix <- function(m){
-write.table(format(m, justify="right"),
-            row.names=F, col.names=F, quote=F)
-}
-# This function lets you call R matrices while in latex math mode
-matex_det <- function(x) {
-  begin <- "\\begin{vmatrix}"
-  end <- "\\end{vmatrix}"
-  X <-
-    apply(x, 1, function(x) {
-      paste(
-        paste(x, collapse = "&"),
-        "\\\\"
-      )
-    })
-  paste(c(begin, X, end), collapse = "")
-}
+x_prime_times_x <- x_prime %*% x
 
 # 2 x 2's for computing minor elements
 e_11 <- x_prime_times_x[-1,-1] # rm r1 & c1
@@ -215,38 +153,8 @@ e_23 <- x_prime_times_x[-2,-3] # rm r2 & c3
 e_31 <- x_prime_times_x[-3,-1] # rm r3 & c1
 e_32 <- x_prime_times_x[-2,-3] # rm r2 & c3
 e_33 <- x_prime_times_x[-3,-3] # rm r3 & c3
-```
 
-```{r, echo=FALSE}
-# check work
-inverse_x_xprime <- round(solve(x_prime %*% x),3)
-```
 
-Follow the formula for the inverse of a large square matrix:
-$$
-\dfrac {1} {|A|} \textrm{adj}(A) = \dfrac {1} {|X'X|} \textrm{adj}(X'X).
-$$
-First we have to get the adjoint matrix. To get the adjoint matrix, we have to find the minor elements, followed by the cofactor matrix, then we can derive the adjoint matrix. 
-
-To get the minor elements, we find the determinant of each possible 2 x 2 matrix. The determinant matrix is:
-$$
-\begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc,
-$$
-which we will have to do for all of the possible matrices. Starting with element (1,1):
-$$
-e_{11} = `r matex(e_11)` = 165(178) - 71(71) = 24,329.
-$$
-We continue this all the way down the line:
-$$e_{12} = `r matex_det(e_12)` = `r det(e_12)`.$$
-$$e_{13} = `r matex_det(e_13)` = `r det(e_13)`.$$
-$$e_{21} = `r matex_det(e_21)` = `r det(e_21)`.$$
-$$e_{22} = `r matex_det(e_22)` = `r det(e_22)`.$$
-$$e_{23} = `r matex_det(e_23)` = `r det(e_23)`.$$
-$$e_{31} = `r matex_det(e_31)` = `r det(e_31)`.$$
-$$e_{32} = `r matex_det(e_32)` = `r det(e_32)`.$$
-$$e_{33} = `r matex_det(e_33)` = `r det(e_33)`.$$
-```{r, echo=FALSE}
-# make matrix of minor elements
 MEs <- matrix(c(det(e_11), det(e_12), det(e_13),
                 det(e_21), det(e_22), det(e_23),
                 det(e_31), det(e_32), det(e_33)),
@@ -257,55 +165,24 @@ cofactor <- matrix(c(det(e_11), (-1 * det(e_12)), det(e_13),
                 (-1 * det(e_21)), det(e_22), (-1 * det(e_23)),
                 det(e_31), (-1 * det(e_32)), det(e_33)),
               nrow = 3, ncol = 3)
-```
-$$\textrm{Minor Elements Matrix} = `r matex(MEs)`.$$
 
-To get the cofactor matrix, you just multiple the cells by -1 if their row and columns number add up to an odd number:
-$$\textrm{Cofactor Matrix} = `r matex(cofactor)`.$$
-
-Lastly, you derive the adjoint matrix by transposing the cofactor matrix. But since it's symmetric, the cofactor matrix equals the adjoint matrix:
-$$\textrm{Adjoint Matrix} = `r matex(t(cofactor))`.$$
-
-Now that we have the adjoint matrix, we use it to find the determinant of the $X'X$ matrix. We do this by multiplying a row or column of $X'X$ by its corresponding elements in the cofactor matrix and then sum the product. 
-
-```{r, echo=FALSE}
-# check work
 xpx_col_1 <- matrix(x_prime_times_x[,2])
 cof_col1 <- matrix(cofactor[,2])
 prod <- xpx_col_1 * cof_col1
 sum <- sum(prod)
-```
-
-$$`r matex(xpx_col_1)` \times `r matex(cof_col1)` =  \sum `r matex(prod)` = `r sum`.$$
-
-Last, now that we have $|X'X|$, we can use the formula for matrix inversion:
-```{r, echo=FALSE}
 inverse <- (1/sum) * cofactor
 ```
 
 $$
-(X'X)^{-1} = \dfrac {1}{|X'X|}\textrm{adj}(X'X),
-$$
-$$
-= \dfrac{1}{`r sum`} \times `r matex(cofactor)` = `r matex(round(inverse,3))`.
+(X'X)^-1 = `r matex(round(inverse,3))`
 $$
 
-```{r, echo=FALSE}
-# check work with the inverse function
-solve <- solve(x_prime_times_x)
-```
 
 ## (d)
-
 $$
-\hat \beta = (X'X)^{-1}(X'Y),
+\hat \beta = `r matex(round(inverse %*% (x_prime %*% y),3))` = `r matex(B)`.
 $$
-$$
-=`r matex(round(inverse,3))` \times `r matex(x_prime %*% y)`,
-$$
-$$
-= `r matex(round(inverse %*% (x_prime %*% y),3))` = `r matex(B)`. 
-$$
+\newpage 
 
 ## Check with Regression
 
@@ -346,9 +223,434 @@ The measurement model is a principal components analysis in this case.
 ## (b)
 
 ```{r, echo=FALSE}
+ev1 <-( 1/1.33) * matrix(c(1, -0.87), nrow=2, ncol=1)
+ev1 <- round(ev1, 2)
+ev2 <-( 1/1.56) * matrix(c(1, 1.14), nrow=2, ncol=1)
+ev2 <- round(ev2, 2)
 covar <- matrix(c(6.32, 4.47, 4.47, 7.51), 
                 ncol = 2, nrow = 2)
 ```
+
+Eigenvalues: 2.41, 11.42.
+
+Eigenvectors: $`r matex(ev1)`$, $`r matex(ev2)`.$
+
+
+## (c)
+
+Because the eigenvalues are on the variance metric, the variance explained is a straightforward proportion:
+$$\dfrac {11.42} {11.42 + 2.41} = `r round(11.42 / (11.42 + 2.41),2)` \%.$$
+
+## (d)
+
+If we go with the single-component solution, then social capital is:
+$$0.64 \textrm{Trust} +  0.752\textrm{Civic Cooperation}.$$
+I'm not sure how to tell which values of the eigenvector go with which dimension, but it probably doesn't matter since we went with a unidimensional solution?
+
+Anyway, if you want to index the individuals in the dataset, you would calculate their scores with the formula above:
+```{r, echo=FALSE, results="asis"}
+formulas <- c("0.64(4) + 0.752(1)",
+              "0.64(7) + 0.752(10)",
+              "0.64(3) + 0.752(6)",
+              "0.64(8) + 0.752(9)",
+              "0.64(9) + 0.752(7)",
+              "0.64(2) + 0.752(3)",
+              "0.64(9) + 0.752(6)",
+              "0.64(5) + 0.752(3)",
+              "0.64(6) + 0.752(4)",
+              "0.64(8) + 0.752(8)"
+              )
+
+scores <- round(c(  0.64 * 4 + 0.752 * 2,
+              0.64 * 7 + 0.752 * 10,
+              0.64 * 3 + 0.752 * 6,
+              0.64 * 8 + 0.752 * 9,
+              0.64 * 9 + 0.752 * 7,
+              0.64 * 2 + 0.752 * 3,
+              0.64 * 9 + 0.752 * 6,
+              0.64 * 5 + 0.752 * 3,
+              0.64 * 6 + 0.752 * 4,
+              0.64 * 8 + 0.752 * 8
+              ),2)
+
+social.capital <- as.data.frame(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                           4, 7, 3, 8, 9, 2, 9, 5, 6, 8,
+                           1, 10, 6, 9, 7, 3, 6, 3, 4, 8,
+                           formulas,
+                           scores
+                           ), nrow = 10, ncol = 5)
+                           )
+
+colnames(social.capital) <- c("Person", "Trust", "Civic Cooperation", "Formula", "Score")
+papaja::apa_table(social.capital, placement = "h")
+```
+
+\newpage
+
+\begin{center}
+\newpage
+\Large Appendix
+\end{center}
+
+
+# 7.11
+
+## (a)
+
+
+**Work:**
+
+$$\frac {\partial} {\partial x_1} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Derivative of a constant is zero, so drop $\alpha$:
+$$= \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Break up across addition and subtraction, then bring out constants:
+$$= \beta_1 \frac {\partial} {\partial x_1} x_{i1} + \beta_2 \frac {\partial} {\partial x_1} x_{i2} + \beta_3 \frac {\partial} {\partial x_1}x_{i2}^2 + \beta_4 \frac {\partial} {\partial x_1}x_{i2}^3 + \beta_5 \frac {\partial} {\partial x_1}x_{i3} + \beta_6 \frac {\partial} {\partial x_1}x_{i4} + \beta_7 \frac {\partial} {\partial x_1}x_{i3} \frac {\partial} {\partial x_1}x_{i4},$$
+All other independent variables are treated as constants:
+$$= \frac {\partial} {\partial x_1}\beta_1 x_{i1} + 1 (0) + 1(0) + 1(0) + 1(0) + 1(0) + 1(0)(0),$$
+Bring the constant out:
+$$= \beta_1 \frac {\partial} {\partial x_1} x_{i1} = \beta_1(1) = \beta_1.$$
+
+## (b)
+
+NA 
+
+## (c)
+
+
+**Work:**
+$$\frac {\partial} {\partial x_2} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Derivative of a constant is zero, so drop $\alpha$:
+$$= \frac {\partial} {\partial x_2} (\beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4}),$$
+Break up across addition and subtration, then again across multiplication:
+$$= \frac {\partial} {\partial x_2}\beta_1  x_{i1} + \frac {\partial} {\partial x_2}\beta_2  x_{i2} + \frac {\partial} {\partial x_2}\beta_3 x_{i2}^2 + \frac {\partial} {\partial x_2}\beta_4 x_{i2}^3 + \frac {\partial} {\partial x_2}\beta_5 x_{i3} + \frac {\partial} {\partial x_2}\beta_6 x_{i4} + \frac {\partial} {\partial x_2}\beta_7 x_{i3} x_{i4},$$
+The independent variables all get treated as constants:
+$$= 0 + \frac {\partial} {\partial x_2}\beta_2  x_{i2} + \frac {\partial} {\partial x_2}\beta_3  x_{i2}^2 + \frac {\partial} {\partial x_2}\beta_4  x_{i2}^3 + 0 + 0 + 0 +0,$$
+$$= \beta_2\frac {\partial} {\partial x_2} x_{i2} + \beta_3 \frac {\partial} {\partial x_2}  x_{i2}^2 + \beta_4 \frac {\partial} {\partial x_2}  x_{i2}^3,$$
+$$= \beta_2 + 2\beta_3  x_{i2} + 3 \beta_4 x_{i2}^2.$$
+
+## (d)
+
+
+```{r, results="hide", fig.show="hide"}
+x <- seq(18, 100, length=10000)
+pd <- 0.653 - 0.146*x + 0.00162*x^2
+df <- as.data.frame(cbind(x,pd))
+ggplot2::ggplot(df, aes(x)) +
+  geom_line(aes(y = pd)) +
+  ylab("Age's Effect on Approval of Obama") + xlab("Age") +
+  labs(color = "Function") +
+  geom_hline(yintercept=0, linetype="dashed", color = "purple") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"))
+```
+
+
+## (e)
+
+**Work:**
+$$\frac {\partial} {\partial x_4} = \alpha + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4},$$
+Derivative of a constant is zero, so drop $\alpha$:
+$$= \frac {\partial} {\partial x_4} (\beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i2}^2 + \beta_4 x_{i2}^3 + \beta_5 x_{i3} + \beta_6 x_{i4} + \beta_7 x_{i3} x_{i4}),$$
+$$= \frac {\partial} {\partial x_4} (\beta_1 x_{i1} + \frac {\partial} {\partial x_4}\beta_2 x_{i2} + \frac {\partial} {\partial x_4}\beta_3 x_{i2}^2 + \frac {\partial} {\partial x_4} \beta_4 x_{i2}^3 + \frac {\partial} {\partial x_4} \beta_5 x_{i3} + \frac {\partial} {\partial x_4}\beta_6 x_{i4} + \frac {\partial} {\partial x_4} \beta_7 x_{i3} x_{i4}),$$
+$$= 0 + 0 + 0 + 0 + 0 + \frac {\partial} {\partial x_4} \beta_6 x_{i4} + \frac {\partial} {\partial x_4} \beta_7 x_{i3} x_{i4},$$
+$$= \beta_6 \frac {\partial} {\partial x_4} x_{i4} + \beta_7 x_{i3} \frac {\partial} {\partial x_4} x_{i4},$$
+$$= \beta_6 + \beta_7 x_{i3}.$$
+
+## (f)
+
+NA
+
+## (g)
+
+NA
+
+# 9.10
+```{r results="hide"}
+print.matrix <- function(m){
+write.table(format(m, justify="right"),
+            row.names=F, col.names=F, quote=F)
+}
+# This function lets you call R matrices while in latex math mode
+matex <- function(x) {
+  begin <- "\\begin{bmatrix}"
+  end <- "\\end{bmatrix}"
+  X <-
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+
+y <- matrix(c(10, 7, 2, 8, 10, 6, 2, 10, 8, 5),
+            nrow=10, ncol=1)
+x <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+              2, 1, 2, 0, 1, 3, 11, 0, 5, 0,
+              5, 1, 0, 2, 0, 0, 0, 0, 12, 2),
+            ncol = 3, nrow = 10)
+x_prime <- t(x)
+B <- matrix(c("\\alpha", "\\beta_1", "\\beta_2"), nrow=3, ncol=1)
+E <- matrix(c("\\varepsilon_{\\textrm{USA}}", 
+              "\\varepsilon_{\\textrm{Peru}}", 
+              "\\varepsilon_{\\textrm{Brazil}}", 
+              "\\varepsilon_{\\textrm{Spain}}", 
+              "\\varepsilon_{\\textrm{Norway}}", 
+              "\\varepsilon_{\\textrm{Zimbabwe}}", 
+              "\\varepsilon_{\\textrm{Turkey}}", 
+              "\\varepsilon_{\\textrm{Japan}}", 
+              "\\varepsilon_{\\textrm{India}}", 
+              "\\varepsilon_{\\textrm{Sri \ Lanka}}"), 
+            nrow=10, ncol=1)
+```
+
+## (a)
+
+**Work:**
+$$
+X'Y = `r matex(x_prime)` `r matex(y)`,
+$$
+$$
+= 1(10) + 1(7) + 1(2) + 1(8) + 1(10) + 1(6) + 1(2) + 1(10) + 1(8) + 1(5) = 68,
+$$
+$$
+\textrm{etc...}
+$$
+$$
+= `r matex(x_prime %*% y)`.
+$$
+
+## (b)
+
+
+**Work:**
+$$
+X'X = `r matex(x_prime)` \times `r matex(x)`,
+$$
+$$
+1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) + 1(1) = 10,
+$$
+$$
+\textrm{etc...}
+$$
+$$
+`r matex(x_prime %*% x)`.
+$$
+
+```{r}
+# check work
+x_prime_times_x <- x_prime %*% x
+```
+
+
+## (c)
+
+```{r}
+# 2 x 2's for computing minor elements
+e_11 <- x_prime_times_x[-1,-1] # rm r1 & c1
+e_12 <- x_prime_times_x[-1,-2] # rm r1 & c2
+e_13 <- x_prime_times_x[-3,-1] # rm r3 & c1
+e_21 <- x_prime_times_x[-2,-1] # rm r1 & c2
+e_22 <- x_prime_times_x[-2,-2] # rm r2 & c2
+e_23 <- x_prime_times_x[-2,-3] # rm r2 & c3
+e_31 <- x_prime_times_x[-3,-1] # rm r3 & c1
+e_32 <- x_prime_times_x[-2,-3] # rm r2 & c3
+e_33 <- x_prime_times_x[-3,-3] # rm r3 & c3
+
+
+
+MEs <- matrix(c(det(e_11), det(e_12), det(e_13),
+                det(e_21), det(e_22), det(e_23),
+                det(e_31), det(e_32), det(e_33)),
+              nrow = 3, ncol = 3)
+
+# make cofactor matrix
+cofactor <- matrix(c(det(e_11), (-1 * det(e_12)), det(e_13),
+                (-1 * det(e_21)), det(e_22), (-1 * det(e_23)),
+                det(e_31), (-1 * det(e_32)), det(e_33)),
+              nrow = 3, ncol = 3)
+
+xpx_col_1 <- matrix(x_prime_times_x[,2])
+cof_col1 <- matrix(cofactor[,2])
+prod <- xpx_col_1 * cof_col1
+sum <- sum(prod)
+inverse <- (1/sum) * cofactor
+```
+
+$$
+(X'X)^-1 = `r matex(round(inverse,3)
+$$
+
+**Work:**
+```{r}
+# modify the function to print determinants
+print.matrix <- function(m){
+write.table(format(m, justify="right"),
+            row.names=F, col.names=F, quote=F)
+}
+# This function lets you call R matrices while in latex math mode
+matex_det <- function(x) {
+  begin <- "\\begin{vmatrix}"
+  end <- "\\end{vmatrix}"
+  X <-
+    apply(x, 1, function(x) {
+      paste(
+        paste(x, collapse = "&"),
+        "\\\\"
+      )
+    })
+  paste(c(begin, X, end), collapse = "")
+}
+
+# 2 x 2's for computing minor elements
+e_11 <- x_prime_times_x[-1,-1] # rm r1 & c1
+e_12 <- x_prime_times_x[-1,-2] # rm r1 & c2
+e_13 <- x_prime_times_x[-3,-1] # rm r3 & c1
+e_21 <- x_prime_times_x[-2,-1] # rm r1 & c2
+e_22 <- x_prime_times_x[-2,-2] # rm r2 & c2
+e_23 <- x_prime_times_x[-2,-3] # rm r2 & c3
+e_31 <- x_prime_times_x[-3,-1] # rm r3 & c1
+e_32 <- x_prime_times_x[-2,-3] # rm r2 & c3
+e_33 <- x_prime_times_x[-3,-3] # rm r3 & c3
+```
+
+```{r}
+# check work
+inverse_x_xprime <- round(solve(x_prime %*% x),3)
+```
+
+Follow the formula for the inverse of a large square matrix:
+$$
+\dfrac {1} {|A|} \textrm{adj}(A) = \dfrac {1} {|X'X|} \textrm{adj}(X'X).
+$$
+First we have to get the adjoint matrix. To get the adjoint matrix, we have to find the minor elements, followed by the cofactor matrix, then we can derive the adjoint matrix. 
+
+To get the minor elements, we find the determinant of each possible 2 x 2 matrix. The determinant matrix is:
+$$
+\begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc,
+$$
+which we will have to do for all of the possible matrices. Starting with element (1,1):
+$$
+e_{11} = `r matex(e_11)` = 165(178) - 71(71) = 24,329.
+$$
+We continue this all the way down the line:
+$$e_{12} = `r matex_det(e_12)` = `r det(e_12)`.$$
+$$e_{13} = `r matex_det(e_13)` = `r det(e_13)`.$$
+$$e_{21} = `r matex_det(e_21)` = `r det(e_21)`.$$
+$$e_{22} = `r matex_det(e_22)` = `r det(e_22)`.$$
+$$e_{23} = `r matex_det(e_23)` = `r det(e_23)`.$$
+$$e_{31} = `r matex_det(e_31)` = `r det(e_31)`.$$
+$$e_{32} = `r matex_det(e_32)` = `r det(e_32)`.$$
+$$e_{33} = `r matex_det(e_33)` = `r det(e_33)`.$$
+```{r}
+# make matrix of minor elements
+MEs <- matrix(c(det(e_11), det(e_12), det(e_13),
+                det(e_21), det(e_22), det(e_23),
+                det(e_31), det(e_32), det(e_33)),
+              nrow = 3, ncol = 3)
+
+# make cofactor matrix
+cofactor <- matrix(c(det(e_11), (-1 * det(e_12)), det(e_13),
+                (-1 * det(e_21)), det(e_22), (-1 * det(e_23)),
+                det(e_31), (-1 * det(e_32)), det(e_33)),
+              nrow = 3, ncol = 3)
+```
+$$\textrm{Minor Elements Matrix} = `r matex(MEs)`.$$
+
+To get the cofactor matrix, you just multiple the cells by -1 if their row and columns number add up to an odd number:
+$$\textrm{Cofactor Matrix} = `r matex(cofactor)`.$$
+
+Lastly, you derive the adjoint matrix by transposing the cofactor matrix. But since it's symmetric, the cofactor matrix equals the adjoint matrix:
+$$\textrm{Adjoint Matrix} = `r matex(t(cofactor))`.$$
+
+Now that we have the adjoint matrix, we use it to find the determinant of the $X'X$ matrix. We do this by multiplying a row or column of $X'X$ by its corresponding elements in the cofactor matrix and then sum the product. 
+
+```{r}
+# check work
+xpx_col_1 <- matrix(x_prime_times_x[,2])
+cof_col1 <- matrix(cofactor[,2])
+prod <- xpx_col_1 * cof_col1
+sum <- sum(prod)
+```
+
+$$`r matex(xpx_col_1)` \times `r matex(cof_col1)` =  \sum `r matex(prod)` = `r sum`.$$
+
+Last, now that we have $|X'X|$, we can use the formula for matrix inversion:
+
+$$
+(X'X)^{-1} = \dfrac {1}{|X'X|}\textrm{adj}(X'X),
+$$
+$$
+= \dfrac{1}{`r sum`} \times `r matex(cofactor)` = `r matex(round(inverse,3))`.
+$$
+
+```{r}
+# check work with the inverse function
+solve <- solve(x_prime_times_x)
+```
+
+## (d)
+
+**Work:**
+$$
+\hat \beta = (X'X)^{-1}(X'Y),
+$$
+$$
+=`r matex(round(inverse,3))` \times `r matex(x_prime %*% y)`,
+$$
+$$
+= `r matex(round(inverse %*% (x_prime %*% y),3))` = `r matex(B)`. 
+$$
+
+## Check with Regression
+
+
+```{r, results="hide"}
+demo_data <- data.frame(c(c("USA", "Peru", "Brazil", "Spain", 
+                          "Norway", "Zimbabwe", "Turkey", 
+                          "Japan", "India", "Sri Lanka")),
+                          y, x[,2], x[,3]
+                        )
+
+colnames(demo_data) <- c("Country", "Democracy", 
+                         "Sanctions", "Riots")
+
+fit <- summary(lm(Democracy ~ Sanctions + Riots, 
+          data = demo_data)
+          )
+
+tab <- papaja::apa_print.summary.lm(fit)
+papaja::apa_table(tab$table, placement = "h")
+```
+
+
+
+
+
+# 10.9
+
+## (a)
+NA
+
+## (b)
+
+```{r, echo=FALSE}
+ev1 <-( 1/1.33) * matrix(c(1, -0.87), nrow=2, ncol=1)
+ev1 <- round(ev1, 2)
+ev2 <-( 1/1.56) * matrix(c(1, 1.14), nrow=2, ncol=1)
+ev2 <- round(ev2, 2)
+covar <- matrix(c(6.32, 4.47, 4.47, 7.51), 
+                ncol = 2, nrow = 2)
+```
+
+Eigenvalues: 2.41, 11.42.
+
+Eigenvectors: $`r matex(ev1)`$, $`r matex(ev2)`.$
+
+**Work:**
 
 The covariance matrix of the data is:
 $$`r matex(covar)`$$
@@ -367,7 +669,7 @@ $$\begin{vmatrix}  6.32 - \lambda & 4.47 \\ 4.47 & 7.51 -\lambda \end{vmatrix} =
 $$(6.32 − \lambda)(7.51 − \lambda) − 4.47^2 = 0,$$
 $$(6.32 − \lambda)(7.51 − \lambda) − 4.47^2 = 0,$$
 Let python do the algebra - eigenvalues equal:
-```{python, echo=FALSE}
+```{python, results = "hide"}
 # Check Work
 import sympy
 from sympy import *
@@ -396,10 +698,7 @@ $$= \begin{cases} x = x, \\ y = -0.87x, \end{cases}$$
 $$= \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x \\ -0.87x \end{bmatrix}=  x\begin{bmatrix} 1 \\ -0.87 \end{bmatrix}.$$
 To get unit eigenvector, get the vector length and divide the vector by its length:
 $$\begin{vmatrix} 1 \\ -0.87 \end{vmatrix} = \sqrt{1^2 + (-0.87)^2} = `r round(sqrt((1^2 + (-0.87)^2)),2)`.$$
-```{r, echo=FALSE}
-ev1 <-( 1/1.33) * matrix(c(1, -0.87), nrow=2, ncol=1)
-ev1 <- round(ev1, 2)
-```
+
 $$\dfrac {1} {1.33} \begin{bmatrix} 1 \\ -0.87 \end{bmatrix} = `r matex(ev1)`.$$
 
 
@@ -414,25 +713,25 @@ $$= \begin{cases} x = x, \\ y = 1.14x, \end{cases}$$
 $$= \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x \\ 1.14x \end{bmatrix}=  x\begin{bmatrix} 1 \\ 1.14 \end{bmatrix}.$$
 To get unit eigenvector, get the vector length and divide the vector by its length:
 $$\begin{vmatrix} 1 \\ 1.14 \end{vmatrix} = \sqrt{1^2 + 1.14^2} = `r round(sqrt((1^2 + 1.14^2)),2)`.$$
-```{r, echo=FALSE}
+
+$$\dfrac {1} {1.56} \begin{bmatrix} 1 \\ 1.14 \end{bmatrix} = `r matex(ev2)`.$$
+```{r, results="hide"}
+# check work
+ev1 <-( 1/1.33) * matrix(c(1, -0.87), nrow=2, ncol=1)
+ev1 <- round(ev1, 2)
 ev2 <-( 1/1.56) * matrix(c(1, 1.14), nrow=2, ncol=1)
 ev2 <- round(ev2, 2)
+covar <- matrix(c(6.32, 4.47, 4.47, 7.51), 
+                ncol = 2, nrow = 2)
 ```
-$$\dfrac {1} {1.56} \begin{bmatrix} 1 \\ 1.14 \end{bmatrix} = `r matex(ev2)`.$$
 
 ## (c)
-
-Because the eigenvalues are on the variance metric, the variance explained is a straightforward proportion:
-$$\dfrac {11.42} {11.42 + 2.41} = `r round(11.42 / (11.42 + 2.41),2)` \%.$$
+NA
 
 ## (d)
 
-If we go with the single-component solution, then social capital is:
-$$0.64 \textrm{Trust} +  0.752\textrm{Civic Cooperation}.$$
-I'm not sure how to tell which values of the eigenvector go with which dimension, but it probably doesn't matter since we went with a unidimensional solution?
 
-Anyway, if you want to index the individuals in the dataset, you would calculate their scores with the formula above:
-```{r, echo=FALSE, results="asis"}
+```{r, results="asis", results = "hide"}
 formulas <- c("0.64(4) + 0.752(1)",
               "0.64(7) + 0.752(10)",
               "0.64(3) + 0.752(6)",
