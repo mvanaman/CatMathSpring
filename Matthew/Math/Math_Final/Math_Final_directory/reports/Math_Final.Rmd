@@ -3,6 +3,7 @@ title: "Math Final"
 author: "Matthew Vanaman"
 date: '`r format(Sys.Date(), "%m-%d-%Y")`'
 monofont: Courier New
+figsintext: yes
 output:
   pdf_document: 
     latex_engine: xelatex
@@ -13,6 +14,7 @@ header-includes: \usepackage{tikz,xcolor,listings}
 
 ```{r, include=FALSE}
 library(ProjectTemplate); load.project()
+library(papaja)
 ```
 
 ```{r setup, include=FALSE}
@@ -79,7 +81,7 @@ Voting age starts at 18, so make age run from 18 to 100, let's say.
 x <- seq(18, 100, length=10000)
 pd <- 0.653 - 0.146*x + 0.00162*x^2
 df <- as.data.frame(cbind(x,pd))
-ggplot(df, aes(x)) +
+ggplot2::ggplot(df, aes(x)) +
   geom_line(aes(y = pd)) +
   ylab("Age's Effect on Approval of Obama") + xlab("Age") +
   labs(color = "Function") +
@@ -313,14 +315,104 @@ demo_data <- data.frame(c(c("USA", "Peru", "Brazil", "Spain",
                           y, x[,2], x[,3])
 colnames(demo_data) <- c("Country", "Democracy", "Sanctions", "Riots")
 
-fit <- glm(Democracy ~ Sanctions + Riots, 
+fit <- lm(Democracy ~ Sanctions + Riots, 
           data = demo_data)
-xtable::xtable(fit, single.row=TRUE)
+xtable::xtable(fit, align = "lrrrr")
 ```
+
+
 
 
 
 # 10.9
 
+## (a)
 
+#### Characterization:
+Social capital describes the level of cohesion members of a community have. It can be characterized as falling along two dimensions: trust in other members of the community and willingness to cooperate with others. That is, social capital is a function of both ambient levels of trust in a community as well as the general tendency to cooperate civically, such as by returning found money or being willing to contribute to public welfare through taxes and fares. Communities with the most social capital will on average score highest on both dimensions while those with lowest social capital will score lowest.
+
+#### Representation:
+To represent this construct, we'd need to identify indicators of the construct. What kinds of thoughts, experiences, and behaviors do individuals of a community with high social capital tend to do? The items should reflect these. Trust is represented by a single-item measure where the top of the scale represents the attitude that most people can be trusted and the low end represents the attitude that most people cannot be trusted. Those high in the trust dimension of social capital should score toward the high end of the scale and those low in trust should score toward the low end of the scale. Civic cooperation is represented by a set of statements describing situations where one could act for the benefit of the community but chose not to. The high end of the scale represents the attitude that these behaviors are never acceptable while the low represents the attitude that they are always acceptable. Those high in civic cooperation should score toward the high end of the scale and those low should score on the low end. 
+
+#### Measurement:
+The measurement model is a principal components analysis in this case. 
+
+## (b)
+
+```{r, echo=FALSE}
+covar <- matrix(c(6.32, 4.47, 4.47, 7.51), 
+                ncol = 2, nrow = 2)
+```
+
+The covariance matrix of the data is:
+$$`r matex(covar)`$$
+
+Find the eigenvalues and unit eigenvectors of the covariance matrix.
+
+
+There are 4 steps for finding the eigenvalues of a square matrix. The first step is to write out the matrix $(A - \lambda I)$, then find the determinant of this matrix $|A - \lambda I|$ in terms of $\lambda$:
+$$`r matex(covar)` \times \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \lambda \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},$$
+$$\Bigg( `r matex(covar)` - \lambda  \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \Bigg) \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix},$$
+$$\Bigg( `r matex(covar)` -  \begin{bmatrix} \lambda & 0 \\ 0 & \lambda \end{bmatrix} \Bigg) \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix},$$
+$$\Bigg( \begin{bmatrix}  6.32 - \lambda & 4.47 \\ 4.47 & 7.51 -\lambda \end{bmatrix} \Bigg) \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix},$$
+$$\begin{bmatrix}  6.32 - \lambda & 4.47 \\ 4.47 & 7.51 -\lambda \end{bmatrix}.$$
+Set the determinant equal to 0, then solve for $\lambda$:
+$$\begin{vmatrix}  6.32 - \lambda & 4.47 \\ 4.47 & 7.51 -\lambda \end{vmatrix} = 0,$$
+$$(6.32 − \lambda)(7.51 − \lambda) − 4.47^2 = 0,$$
+$$(6.32 − \lambda)(7.51 − \lambda) − 4.47^2 = 0,$$
+Let python do the algebra - eigenvalues equal:
+```{python, echo=FALSE}
+# Check Work
+import sympy
+from sympy import *
+from sympy import Symbol
+x = Symbol('x')
+#Solve
+lamb = solveset(Eq((6.32 - x)*(7.51 - x) - 4.47**2, 0),x)
+for a in preorder_traversal(lamb):
+    if isinstance(a, Float):
+        lamb = lamb.subs(a, round(a, 2))
+print("solveset(Eq((6.32 - x)*(7.51 - x) - 4.47**2, 0),x)")
+print(lamb)
+```
+
+To get the eigenvectors, start by substituting these back in for $\lambda$ and reduce them:
+$$\begin{bmatrix}  6.32 - \lambda & 4.47 \\ 4.47 & 7.51 -\lambda \end{bmatrix},$$
+$$= \begin{bmatrix}  6.32 - 2.41 & 4.47 \\ 4.47 & 7.51 - 2.41 \end{bmatrix},$$
+$$= \begin{bmatrix}  3.91 & 4.47 \\ 4.47 & 5.10 \end{bmatrix}.$$
+Multiply the second row by -0.87 ($\frac {-4.47}{5.10} = -0.87$):
+$$= \begin{bmatrix}  0 & 0 \\ 4.47 & 5.10 \end{bmatrix}.$$
+Because we made $(A - \lambda I) = 0$ earlier, we know the system of equations will be:
+$$\begin{bmatrix}  0 & 0 \\ 4.47 & 5.10 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix},$$
+$$= \begin{cases} x = x, \\ 4.47x + 5.10y = 0, \end{cases}$$
+$$= \begin{cases} x = x, \\ 5.10y = -4.47x, \end{cases}$$
+$$= \begin{cases} x = x, \\ y = -0.87x, \end{cases}$$
+$$= \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x \\ -0.87x \end{bmatrix}=  x\begin{bmatrix} 1 \\ -0.87 \end{bmatrix}.$$
+To get unit eigenvector, get the vector length and divide the vector by its length:
+$$\begin{vmatrix} 1 \\ -0.87 \end{vmatrix} = \sqrt{1^2 + (-0.87)^2} = `r round(sqrt((1^2 + (-0.87)^2)),2)`.$$
+```{r, echo=FALSE}
+ev1 <-( 1/1.33) * matrix(c(1, -0.87), nrow=2, ncol=1)
+ev1 <- round(ev1, 2)
+```
+$$\dfrac {1} {1.33} \begin{bmatrix} 1 \\ -0.87 \end{bmatrix} = `r matex(ev1)`.$$
+
+
+
+Now for the other one:
+$$= \begin{bmatrix}  6.32 - 11.42 & 4.47 \\ 4.47 & 7.51 - 11.42 \end{bmatrix},$$
+$$= \begin{bmatrix}  - 5.10 & 4.47 \\ 4.47 & - 3.91 \end{bmatrix},$$
+$$= \begin{bmatrix}  0 & 0 \\ 4.47 & -3.91 \end{bmatrix},$$
+$$= \begin{cases} x = x, \\ 4.47x - 3.91y = 0, \end{cases}$$
+$$= \begin{cases} x = x, \\ - 3.91y = -4.47x, \end{cases}$$
+$$= \begin{cases} x = x, \\ y = 1.14x, \end{cases}$$
+$$= \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x \\ 1.14x \end{bmatrix}=  x\begin{bmatrix} 1 \\ 1.14 \end{bmatrix}.$$
+To get unit eigenvector, get the vector length and divide the vector by its length:
+$$\begin{vmatrix} 1 \\ 1.14 \end{vmatrix} = \sqrt{1^2 + 1.14^2} = `r round(sqrt((1^2 + 1.14^2)),2)`.$$
+```{r, echo=FALSE}
+ev2 <-( 1/1.56) * matrix(c(1, 1.14), nrow=2, ncol=1)
+ev2 <- round(ev2, 2)
+```
+$$\dfrac {1} {1.56} \begin{bmatrix} 1 \\ 1.14 \end{bmatrix} = `r matex(ev2)`.$$
+
+## (c)
 
