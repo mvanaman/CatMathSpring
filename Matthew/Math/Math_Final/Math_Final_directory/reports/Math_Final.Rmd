@@ -8,7 +8,7 @@ output:
   pdf_document: 
     latex_engine: xelatex
   word_document: default
-header-includes: \usepackage{tikz,xcolor,listings}
+header-includes: \usepackage{tikz,xcolor,listings, caption}
 ---
 `r knitr::opts_knit$set(root.dir='..')`
 
@@ -19,10 +19,11 @@ library(papaja)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA)
-options(scipen = 999, xtable.comment = FALSE)
+options(scipen = 999, xtable.comment = FALSE, papaja.comment = FALSE)
 knitr::opts_chunk$set(engine.path = "/anaconda3/bin/python")
 ```
 
+\captionsetup{justification=raggedright,singlelinecheck=false}
 
 # 7.11
 
@@ -308,6 +309,7 @@ $$
 
 ## Check with Regression
 
+
 ```{r, echo=FALSE, results="asis"}
 demo_data <- data.frame(c(c("USA", "Peru", "Brazil", "Spain", 
                           "Norway", "Zimbabwe", "Turkey", 
@@ -315,9 +317,13 @@ demo_data <- data.frame(c(c("USA", "Peru", "Brazil", "Spain",
                           y, x[,2], x[,3])
 colnames(demo_data) <- c("Country", "Democracy", "Sanctions", "Riots")
 
-fit <- lm(Democracy ~ Sanctions + Riots, 
-          data = demo_data)
-xtable::xtable(fit, align = "lrrrr")
+fit <- summary(lm(Democracy ~ Sanctions + Riots, 
+          data = demo_data))
+```
+
+```{r, echo=FALSE, results="asis"}
+tab <- papaja::apa_print.summary.lm(fit)
+papaja::apa_table(tab$table, placement = "h")
 ```
 
 
@@ -415,4 +421,51 @@ ev2 <- round(ev2, 2)
 $$\dfrac {1} {1.56} \begin{bmatrix} 1 \\ 1.14 \end{bmatrix} = `r matex(ev2)`.$$
 
 ## (c)
+
+Because the eigenvalues are on the variance metric, the variance explained is a straightforward proportion:
+$$\dfrac {11.42} {11.42 + 2.41} = `r round(11.42 / (11.42 + 2.41),2)` \%.$$
+
+## (d)
+
+If we go with the single-component solution, then social capital is:
+$$0.64 \textrm{Trust} +  0.752\textrm{Civic Cooperation}.$$
+I'm not sure how to tell which values of the eigenvector go with which dimension, but it probably doesn't matter since we went with a unidimensional solution?
+
+Anyway, if you want to index the individuals in the dataset, you would calculate their scores with the formula above:
+```{r, echo=FALSE, results="asis"}
+formulas <- c("0.64(4) + 0.752(1)",
+              "0.64(7) + 0.752(10)",
+              "0.64(3) + 0.752(6)",
+              "0.64(8) + 0.752(9)",
+              "0.64(9) + 0.752(7)",
+              "0.64(2) + 0.752(3)",
+              "0.64(9) + 0.752(6)",
+              "0.64(5) + 0.752(3)",
+              "0.64(6) + 0.752(4)",
+              "0.64(8) + 0.752(8)"
+              )
+
+scores <- round(c(  0.64 * 4 + 0.752 * 2,
+              0.64 * 7 + 0.752 * 10,
+              0.64 * 3 + 0.752 * 6,
+              0.64 * 8 + 0.752 * 9,
+              0.64 * 9 + 0.752 * 7,
+              0.64 * 2 + 0.752 * 3,
+              0.64 * 9 + 0.752 * 6,
+              0.64 * 5 + 0.752 * 3,
+              0.64 * 6 + 0.752 * 4,
+              0.64 * 8 + 0.752 * 8
+              ),2)
+
+social.capital <- as.data.frame(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                           4, 7, 3, 8, 9, 2, 9, 5, 6, 8,
+                           1, 10, 6, 9, 7, 3, 6, 3, 4, 8,
+                           formulas,
+                           scores
+                           ), nrow = 10, ncol = 5)
+                           )
+
+colnames(social.capital) <- c("Person", "Trust", "Civic Cooperation", "Formula", "Score")
+papaja::apa_table(social.capital, placement = "h")
+```
 
